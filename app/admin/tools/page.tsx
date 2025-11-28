@@ -32,6 +32,7 @@ interface Tool {
   name: string;
   slug: string;
   tagline: string;
+  description?: string;
   status: "pending" | "approved" | "rejected";
   pricing_type: string;
   rating_avg: number;
