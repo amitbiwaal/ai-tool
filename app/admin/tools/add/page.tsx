@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Category, Tag } from "@/lib/types";
 import { Sparkles, Plus, X, ArrowLeft, Save, Upload, Image as ImageIcon } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export default function AdminAddToolPage({
   params: _params,

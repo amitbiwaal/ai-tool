@@ -19,7 +19,7 @@ import {
   Filter,
   RefreshCw
 } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface ContactMessage {
   id: string;

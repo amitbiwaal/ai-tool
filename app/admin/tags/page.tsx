@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Trash2, Tag, X, Save } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface Tag {
   id: string;

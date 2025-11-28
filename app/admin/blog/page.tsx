@@ -19,7 +19,7 @@ import {
   MoreVertical,
   RefreshCw,
 } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface BlogPost {
   id: string;

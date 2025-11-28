@@ -21,7 +21,7 @@ import {
   ArrowRight,
   CheckCircle
 } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import Link from "next/link";
 
 export default function ContactPage({

@@ -16,7 +16,7 @@ import {
   BookOpen,
   RefreshCw
 } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { slugify } from "@/lib/utils";
 
 interface BlogCategory {

@@ -23,7 +23,7 @@ import {
   X,
 } from "lucide-react";
 import { Select } from "@/components/ui/select";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface RichTextEditorProps {
   value: string;

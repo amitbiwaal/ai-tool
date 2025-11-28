@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Save, RefreshCw, Home, TrendingUp, Sparkles, FolderTree, MessageSquare, Mail, Info, Users, FileText, Shield, BookOpen, Wrench, Upload, GitCompare, Clock, Grid3x3, Search } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface HomeContent {
   // Hero Section

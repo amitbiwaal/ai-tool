@@ -31,7 +31,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { getBlogCoverUrl, getAvatarUrl, isDicebearUrl } from "@/lib/utils/images";
 import { useRouter, useParams } from "next/navigation";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { BlogPostStructuredData, BreadcrumbStructuredData } from "@/components/structured-data";
 
 export default function BlogPostPage() {

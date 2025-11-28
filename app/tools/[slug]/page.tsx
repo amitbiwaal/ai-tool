@@ -31,7 +31,7 @@ import { ToolCard } from "@/components/tool-card";
 import { Tool, Review } from "@/lib/types";
 import { getPricingBadgeColor } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { ToolStructuredData, BreadcrumbStructuredData } from "@/components/structured-data";
 
 // Mock data removed - using database instead

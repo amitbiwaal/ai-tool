@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Lock } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 declare global {
   interface Window {

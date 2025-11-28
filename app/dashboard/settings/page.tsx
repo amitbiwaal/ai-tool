@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase/client";
 import { Profile } from "@/lib/types";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { ArrowLeft, User, Save, Loader2, Upload, Mail } from "lucide-react";
 
 export default function SettingsPage({

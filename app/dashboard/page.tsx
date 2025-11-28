@@ -31,7 +31,7 @@ import { ToolCard } from "@/components/tool-card";
 import { Tool, Favorite, Profile } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface UserStats {
   totalViews: number;

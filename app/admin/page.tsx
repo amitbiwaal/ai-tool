@@ -21,7 +21,7 @@ import {
   AlertCircle,
   DollarSign,
 } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export default function AdminDashboardPage({
   params: _params,

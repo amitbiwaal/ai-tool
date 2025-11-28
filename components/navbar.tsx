@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { getAvatarUrl, isDicebearUrl } from "@/lib/utils/images";
 import { supabase } from "@/lib/supabase/client";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 const navigation = [
   { name: "Home", href: "/" },

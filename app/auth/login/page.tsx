@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase/client";
 import { Eye, EyeOff } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export default function LoginPage({
   params: _params,

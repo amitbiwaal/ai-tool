@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PaymentForm } from "@/components/payment-form";
 import { Category, Tag } from "@/lib/types";
 import { Sparkles, ArrowRight, FileText, Search, CheckCircle2, TrendingUp, Upload, X, Image as ImageIcon } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import Image from "next/image";

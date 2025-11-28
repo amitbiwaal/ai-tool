@@ -25,7 +25,7 @@ import {
   Save,
   Star
 } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface Tool {
   id: string;

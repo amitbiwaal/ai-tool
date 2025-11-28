@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 const navigation = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },

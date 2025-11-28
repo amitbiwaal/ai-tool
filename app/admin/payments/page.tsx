@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface Payment {
   id: string;

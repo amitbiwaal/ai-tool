@@ -18,7 +18,7 @@ import {
   Filter,
   AlertCircle,
 } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
 
 interface Comment {

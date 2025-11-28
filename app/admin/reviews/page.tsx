@@ -20,7 +20,7 @@ import {
   Calendar,
   TrendingUp
 } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface Review {
   id: string;

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase/client";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { Mail, ArrowLeft, CheckCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 

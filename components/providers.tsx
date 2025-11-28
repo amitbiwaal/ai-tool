@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
 
 export function Providers({ children }: { children: React.ReactNode }) {

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Users, Shield, Search, UserCheck, UserX, Plus, X, Ban, Trash2, CheckCircle } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 interface User {
   id: string;
@@ -72,7 +72,7 @@ export default function UsersPage({
           console.warn("⚠️ No users in response, setting empty array");
           setUsers([]);
           if (data.message) {
-            toast.info(data.message);
+            toast.success(data.message);
           }
         }
       } else {
