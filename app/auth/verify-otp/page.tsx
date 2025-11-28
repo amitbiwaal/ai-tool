@@ -11,7 +11,13 @@ import toast from "react-hot-toast";
 import { Mail, ArrowLeft, CheckCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 
-export default function VerifyOtpPage() {
+export default function VerifyOtpPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);

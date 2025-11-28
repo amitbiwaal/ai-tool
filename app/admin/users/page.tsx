@@ -21,7 +21,13 @@ interface User {
   created_at: string;
 }
 
-export default function UsersPage() {
+export default function UsersPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");

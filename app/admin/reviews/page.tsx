@@ -48,7 +48,13 @@ interface Review {
   };
 }
 
-export default function ReviewsPage() {
+export default function ReviewsPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");

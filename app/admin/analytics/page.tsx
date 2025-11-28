@@ -22,7 +22,13 @@ interface AnalyticsData {
   }>;
 }
 
-export default function AnalyticsPage() {
+export default function AnalyticsPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

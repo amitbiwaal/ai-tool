@@ -38,7 +38,13 @@ const sections = [
   { id: "contact", title: "Contact Information", icon: Mail },
 ];
 
-export default function TermsPage() {
+export default function TermsPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>("");
 

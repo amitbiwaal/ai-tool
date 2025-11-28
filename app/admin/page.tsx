@@ -23,7 +23,13 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function AdminDashboardPage() {
+export default function AdminDashboardPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [stats, setStats] = useState({
     totalTools: 0,
     pendingSubmissions: 0,

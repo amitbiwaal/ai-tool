@@ -20,6 +20,10 @@ interface Settings {
     metaDescription?: string;
     metaKeywords?: string;
   };
+  analytics?: {
+    googleAnalyticsId?: string;
+    googleSiteVerification?: string;
+  };
   email?: {
     smtpHost?: string;
     smtpPort?: string;
@@ -31,7 +35,13 @@ interface Settings {
   };
 }
 
-export default function SettingsPage() {
+export default function SettingsPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [settings, setSettings] = useState<Settings>({
@@ -39,6 +49,7 @@ export default function SettingsPage() {
     seo: {},
     email: {},
     payment: {},
+    analytics: {},
   });
 
   // Fetch settings on mount
@@ -75,6 +86,10 @@ export default function SettingsPage() {
           payment: {
             razorpayKeyId: "",
             razorpayKeySecret: "",
+          },
+          analytics: {
+            googleAnalyticsId: "",
+            googleSiteVerification: "",
           },
         });
       }
@@ -207,6 +222,41 @@ export default function SettingsPage() {
               onChange={(e) => updateSetting("seo", "metaKeywords", e.target.value)}
               placeholder="AI tools, artificial intelligence, AI directory"
             />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-2">
+        <CardHeader>
+          <CardTitle>Analytics & Verification</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label>Google Analytics ID (GA4)</Label>
+            <Input
+              value={settings.analytics?.googleAnalyticsId || ""}
+              onChange={(e) => updateSetting("analytics", "googleAnalyticsId", e.target.value)}
+              placeholder="G-XXXXXXXXXX"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Your Google Analytics 4 Measurement ID (starts with G-)
+            </p>
+          </div>
+          <div>
+            <Label>Google Site Verification Code</Label>
+            <Input
+              value={settings.analytics?.googleSiteVerification || ""}
+              onChange={(e) => updateSetting("analytics", "googleSiteVerification", e.target.value)}
+              placeholder="verification_code_from_google"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Get this from Google Search Console → Settings → Ownership verification
+            </p>
+          </div>
+          <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+            <p className="text-xs text-blue-800 dark:text-blue-300">
+              <strong>Note:</strong> After saving, add these values to your <code>.env.local</code> file as <code>NEXT_PUBLIC_GA_ID</code> and <code>NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION</code> for them to take effect.
+            </p>
           </div>
         </CardContent>
       </Card>

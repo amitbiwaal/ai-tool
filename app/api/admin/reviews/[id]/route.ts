@@ -3,7 +3,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createServerSupabaseClient();
@@ -15,7 +15,7 @@ export async function DELETE(
     }
 
     // Handle both sync and async params (Next.js 13+ compatibility)
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json({ error: "Review ID is required" }, { status: 400 });

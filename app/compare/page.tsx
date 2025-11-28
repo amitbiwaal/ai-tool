@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -166,7 +166,8 @@ export default function ComparePage() {
     }
     // Fetch popular comparisons
     fetchPopularComparisons();
-  }, [tool1Slug, tool2Slug]);
+    fetchTools();
+  }, [tool1Slug, tool2Slug, fetchTools]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -227,7 +228,7 @@ export default function ComparePage() {
     }
   };
 
-  const fetchTools = async () => {
+  const fetchTools = useCallback(async () => {
     if (!tool1Slug || !tool2Slug) return;
     
     setLoading(true);
@@ -246,7 +247,7 @@ export default function ComparePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [tool1Slug, tool2Slug]);
 
   // Handle tool selection
   const handleToolSelect = (tool: Tool, position: 1 | 2) => {
@@ -646,7 +647,7 @@ export default function ComparePage() {
               label="Description"
               icon={<Package className="w-4 h-4 text-muted-foreground" />}
               values={tools.map((tool) => (
-                <p className="text-sm leading-relaxed">{tool.description}</p>
+                <p key={tool.id} className="text-sm leading-relaxed">{tool.description}</p>
               ))}
             />
             
@@ -654,7 +655,7 @@ export default function ComparePage() {
               label="Pricing"
               icon={<DollarSign className="w-4 h-4 text-muted-foreground" />}
               values={tools.map((tool) => (
-                <Badge className={getPricingBadgeColor(tool.pricing_type)}>
+                <Badge key={tool.id} className={getPricingBadgeColor(tool.pricing_type)}>
                   {tool.pricing_type}
                 </Badge>
               ))}
@@ -664,7 +665,7 @@ export default function ComparePage() {
               label="Categories"
               icon={<Package className="w-4 h-4 text-muted-foreground" />}
               values={tools.map((tool) => (
-                <div className="flex flex-wrap gap-2">
+                <div key={tool.id} className="flex flex-wrap gap-2">
                   {tool.categories?.slice(0, 3).map((cat) => (
                     <Badge key={cat.id} variant="outline" className="text-xs">
                       {cat.icon} {cat.name}
@@ -802,4 +803,3 @@ export default function ComparePage() {
     </div>
   );
 }
-

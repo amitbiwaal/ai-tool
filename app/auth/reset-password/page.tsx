@@ -11,7 +11,13 @@ import { supabase } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
 import { ArrowLeft, Lock, CheckCircle, Eye, EyeOff } from "lucide-react";
 
-export default function ResetPasswordPage() {
+export default function ResetPasswordPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);

@@ -4,7 +4,7 @@ import { slugify } from "@/lib/utils";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createServerSupabaseClient();
 
@@ -35,7 +35,7 @@ export async function PUT(
   }
 
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     const { name, slug, icon, description } = body;
 
@@ -96,7 +96,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createServerSupabaseClient();
 
@@ -127,7 +127,7 @@ export async function DELETE(
   }
 
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
 
     // Check if category has tools
     const { data: toolsCount } = await supabase

@@ -32,7 +32,13 @@ interface ContactMessage {
   created_at: string;
 }
 
-export default function ContactManagementPage() {
+export default function ContactManagementPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "unread" | "read" | "replied">("all");
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);

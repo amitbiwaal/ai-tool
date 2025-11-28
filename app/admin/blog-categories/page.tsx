@@ -29,7 +29,13 @@ interface BlogCategory {
   posts_count: number;
 }
 
-export default function BlogCategoriesManagementPage() {
+export default function BlogCategoriesManagementPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);

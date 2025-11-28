@@ -4,7 +4,7 @@ import { slugify } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createServerSupabaseClient();
 
@@ -35,7 +35,7 @@ export async function GET(
   }
 
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
 
     const { data, error } = await supabase
       .from("blog_posts")
@@ -67,7 +67,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createServerSupabaseClient();
 
@@ -98,7 +98,7 @@ export async function PUT(
   }
 
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
     const body = await request.json();
     const {
       title,
@@ -204,7 +204,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createServerSupabaseClient();
 
@@ -235,7 +235,7 @@ export async function DELETE(
   }
 
   try {
-    const { id } = await Promise.resolve(params);
+    const { id } = await params;
 
     // Delete blog post tags first (if exists)
     await supabase

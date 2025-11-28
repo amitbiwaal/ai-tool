@@ -853,7 +853,13 @@ const defaultCompareContent: CompareContent = {
   loadingText: "Loading comparison...",
 };
 
-export default function ContentManagementPage() {
+export default function ContentManagementPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [activeTab, setActiveTab] = useState<"home" | "about" | "contact" | "privacy" | "terms" | "blog" | "tools" | "submit" | "categories" | "header" | "footer" | "compare">("home");
   const [homeContent, setHomeContent] = useState<HomeContent>(defaultHomeContent);
   const [aboutContent, setAboutContent] = useState<AboutContent>(defaultAboutContent);
@@ -2430,7 +2436,7 @@ export default function ContentManagementPage() {
                 <Textarea value={privacyContent.rightsDescription} onChange={(e) => setPrivacyContent({ ...privacyContent, rightsDescription: e.target.value })} rows={3} />
               </div>
               <div>
-                <Label>Children's Privacy</Label>
+                <Label>Children&apos;s Privacy</Label>
                 <Textarea value={privacyContent.childrenDescription} onChange={(e) => setPrivacyContent({ ...privacyContent, childrenDescription: e.target.value })} rows={3} />
               </div>
               <div>
@@ -3414,7 +3420,7 @@ export default function ContentManagementPage() {
                   rows={8}
                   placeholder='[{"name": "Home", "href": "/"}, {"name": "Tools", "href": "/tools"}]'
                 />
-                <p className="text-xs text-muted-foreground mt-1">Format: Array of objects with "name" and "href" properties</p>
+                <p className="text-xs text-muted-foreground mt-1">Format: Array of objects with &quot;name&quot; and &quot;href&quot; properties</p>
               </div>
             </CardContent>
           </Card>
@@ -3705,7 +3711,7 @@ export default function ContentManagementPage() {
               <div>
                 <Label>Visit Tool Button</Label>
                 <Input value={compareContent.visitToolButton} onChange={(e) => setCompareContent({ ...compareContent, visitToolButton: e.target.value })} placeholder="Visit" />
-                <p className="text-xs text-muted-foreground mt-1">Tool name will be appended automatically (e.g., "Visit ChatGPT")</p>
+                <p className="text-xs text-muted-foreground mt-1">Tool name will be appended automatically (e.g., &quot;Visit ChatGPT&quot;)</p>
               </div>
               <div>
                 <Label>View Full Details Button</Label>

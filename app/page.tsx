@@ -1075,7 +1075,7 @@ function TestimonialCard({ testimonial }: { testimonial: typeof mockTestimonials
       
       {/* Content */}
       <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-6 text-sm relative z-10">
-        "{testimonial.content}"
+        &quot;{testimonial.content}&quot;
       </p>
       
       {/* Author */}

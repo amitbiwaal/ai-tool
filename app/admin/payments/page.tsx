@@ -43,7 +43,13 @@ interface Payment {
   listing_type: "free" | "paid";
 }
 
-export default function PaymentsManagementPage() {
+export default function PaymentsManagementPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "completed" | "pending" | "failed" | "refunded">("all");
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);

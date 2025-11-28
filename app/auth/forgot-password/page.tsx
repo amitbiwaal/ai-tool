@@ -11,7 +11,13 @@ import { supabase } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
 import { ArrowLeft, Mail, CheckCircle } from "lucide-react";
 
-export default function ForgotPasswordPage() {
+export default function ForgotPasswordPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -52,7 +58,7 @@ export default function ForgotPasswordPage() {
             </div>
             <CardTitle className="text-2xl">Check Your Email</CardTitle>
             <CardDescription>
-              We've sent a password reset link to {email}
+              We&apos;ve sent a password reset link to {email}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -61,7 +67,7 @@ export default function ForgotPasswordPage() {
                 Click the link in the email to reset your password. The link will expire in 1 hour.
               </p>
               <p>
-                Didn't receive the email? Check your spam folder or try again.
+                Didn&apos;t receive the email? Check your spam folder or try again.
               </p>
             </div>
             <div className="flex flex-col gap-2">
@@ -96,7 +102,7 @@ export default function ForgotPasswordPage() {
             Forgot Password?
           </CardTitle>
           <CardDescription className="text-center">
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we&apos;ll send you a link to reset your password.
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { LayoutWrapper } from "@/components/layout-wrapper";
 import { Providers } from "@/components/providers";
+import { GoogleAnalytics } from "@/components/google-analytics";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -16,6 +17,9 @@ export const metadata: Metadata = {
     "Discover, compare, and find the best AI tools for your needs. Curated collection of cutting-edge artificial intelligence solutions.",
   keywords: ["AI tools", "artificial intelligence", "AI directory", "AI software"],
   authors: [{ name: "AI Tools Directory" }],
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -41,6 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={poppins.className} suppressHydrationWarning>
+        <GoogleAnalytics />
         <Providers>
           <LayoutWrapper>{children}</LayoutWrapper>
         </Providers>

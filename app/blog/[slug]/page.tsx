@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { 
@@ -29,16 +30,14 @@ import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { getBlogCoverUrl, getAvatarUrl, isDicebearUrl } from "@/lib/utils/images";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import toast from "react-hot-toast";
+import { BlogPostStructuredData, BreadcrumbStructuredData } from "@/components/structured-data";
 
-export default function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }> | { slug: string };
-}) {
+export default function BlogPostPage() {
   const router = useRouter();
-  const [slug, setSlug] = useState<string>("");
+  const params = useParams();
+  const slug = params.slug as string;
   
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
@@ -59,31 +58,18 @@ export default function BlogPostPage({
   // Content from database
   const [pageContent, setPageContent] = useState<Record<string, string>>({});
 
-  // Resolve params (handle both Promise and direct object)
-  useEffect(() => {
-    const resolveParams = async () => {
-      if (params instanceof Promise) {
-        const resolved = await params;
-        setSlug(resolved.slug);
-      } else {
-        setSlug(params.slug);
-      }
-    };
-    resolveParams();
-  }, [params]);
-
   useEffect(() => {
     if (slug) {
       fetchBlogPost();
       fetchPageContent();
     }
-  }, [slug]);
+  }, [slug, fetchPageContent]);
 
   useEffect(() => {
     if (post?.id) {
       fetchComments();
     }
-  }, [post?.id]);
+  }, [post?.id, fetchComments]);
 
   const fetchBlogPost = async () => {
     try {
@@ -177,7 +163,7 @@ export default function BlogPostPage({
     }
   };
 
-  const fetchPageContent = async () => {
+  const fetchPageContent = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/content?page=blog&t=${Date.now()}`, {
         cache: 'no-store',
@@ -199,9 +185,9 @@ export default function BlogPostPage({
     } catch (error) {
       console.error("Error fetching page content:", error);
     }
-  };
+  }, []);
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     if (!post?.id) {
       setComments([]);
       return;
@@ -241,7 +227,7 @@ export default function BlogPostPage({
     } finally {
       setCommentsLoading(false);
     }
-  };
+  }, [post?.id]);
 
   const handlePostComment = async () => {
     if (!commentText.trim() || !post?.id) {
@@ -432,7 +418,7 @@ export default function BlogPostPage({
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Post Not Found</h1>
-          <p className="text-muted-foreground mb-4">The blog post you're looking for doesn't exist.</p>
+          <p className="text-muted-foreground mb-4">The blog post you&apos;re looking for doesn&apos;t exist.</p>
           <Link href="/blog">
             <Button>Back to Blog</Button>
           </Link>
@@ -443,6 +429,17 @@ export default function BlogPostPage({
 
   return (
     <div className="min-h-screen">
+      {/* Structured Data */}
+      {post && <BlogPostStructuredData post={post} />}
+      {post && (
+        <BreadcrumbStructuredData
+          items={[
+            { name: "Home", url: "/" },
+            { name: "Blog", url: "/blog" },
+            { name: post.title, url: `/blog/${post.slug}` },
+          ]}
+        />
+      )}
       {/* Back Button */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-3 sm:py-4">
@@ -681,7 +678,7 @@ export default function BlogPostPage({
               ),
               img: ({node, ...props}: any) => (
                 <div className="my-8">
-                  <img className="rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 w-full" {...props} />
+                  <img className="rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 w-full" alt="" {...props} />
                 </div>
               ),
             }}
@@ -1091,4 +1088,3 @@ export default function BlogPostPage({
     </div>
   );
 }
-

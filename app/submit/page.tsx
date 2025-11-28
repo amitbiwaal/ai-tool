@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -654,11 +654,11 @@ export default function SubmitToolPage() {
                 <Label htmlFor="logo" className="text-sm sm:text-base font-semibold mb-2 block">
                   Tool Logo <span className="text-red-500">*</span>
                 </Label>
-                {logoPreview || formData.logo_url ? (
+                {(logoPreview && logoPreview.trim() !== "") || (formData.logo_url && formData.logo_url.trim() !== "") ? (
                   <div className="relative inline-block">
                     <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden border-2 border-border">
                       <Image
-                        src={logoPreview || formData.logo_url}
+                        src={(logoPreview && logoPreview.trim() !== "") ? logoPreview : (formData.logo_url || "")}
                         alt="Logo preview"
                         fill
                         className="object-cover"
@@ -717,11 +717,11 @@ export default function SubmitToolPage() {
                 <Label htmlFor="cover_image" className="text-sm sm:text-base font-semibold mb-2 block">
                   Cover Image (Optional)
                 </Label>
-                {coverPreview || formData.cover_image_url ? (
+                {(coverPreview && coverPreview.trim() !== "") || (formData.cover_image_url && formData.cover_image_url.trim() !== "") ? (
                   <div className="relative inline-block w-full">
                     <div className="relative w-full h-40 sm:h-48 rounded-lg overflow-hidden border-2 border-border">
                       <Image
-                        src={coverPreview || formData.cover_image_url}
+                        src={(coverPreview && coverPreview.trim() !== "") ? coverPreview : (formData.cover_image_url || "")}
                         alt="Cover preview"
                         fill
                         className="object-cover"
@@ -1029,7 +1029,7 @@ export default function SubmitToolPage() {
                         </li>
                         <li className="flex items-center gap-2">
                           <span className="text-primary flex-shrink-0">✓</span>
-                          <span className="font-medium">"Featured" highlighted badge</span>
+                          <span className="font-medium">&quot;Featured&quot; highlighted badge</span>
                         </li>
                         <li className="flex items-center gap-2">
                           <span className="text-primary flex-shrink-0">✓</span>

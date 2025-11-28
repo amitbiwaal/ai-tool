@@ -240,7 +240,7 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
       editor.removeEventListener("blur", handleBlur);
       document.removeEventListener("selectionchange", handleSelectionChange);
     };
-  }, [mode, checkActiveFormats]);
+  }, [mode, checkActiveFormats, handleInput]);
 
   const saveToHistory = () => {
     if (!editorRef.current) return;

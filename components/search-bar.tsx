@@ -283,7 +283,7 @@ export function SearchBar({
                 <Search className="h-8 w-8 mx-auto mb-2" />
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                No results found for "{query}"
+                No results found for &quot;{query}&quot;
               </p>
               <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
                 Try searching with different keywords

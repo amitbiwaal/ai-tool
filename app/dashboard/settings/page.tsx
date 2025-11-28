@@ -14,7 +14,13 @@ import { Profile } from "@/lib/types";
 import toast from "react-hot-toast";
 import { ArrowLeft, User, Save, Loader2, Upload, Mail } from "lucide-react";
 
-export default function SettingsPage() {
+export default function SettingsPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

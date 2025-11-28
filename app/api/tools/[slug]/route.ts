@@ -3,7 +3,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> | { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   const supabase = await createServerSupabaseClient();
   
@@ -13,8 +13,8 @@ export async function GET(
     }, { status: 503 });
   }
 
-  // Handle both sync and async params (Next.js 13+ compatibility)
-  const { slug } = await Promise.resolve(params);
+  // Next.js 15: params is always a Promise
+  const { slug } = await params;
 
   const { data, error } = await supabase
     .from("tools")
@@ -50,7 +50,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> | { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const supabase = await createServerSupabaseClient();
@@ -62,7 +62,7 @@ export async function PUT(
     }
 
     // Handle both sync and async params (Next.js 13+ compatibility)
-    const { slug } = await Promise.resolve(params);
+    const { slug } = await params;
 
     if (!slug) {
       return NextResponse.json({ error: "Tool slug is required" }, { status: 400 });
@@ -148,7 +148,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> | { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const supabase = await createServerSupabaseClient();
@@ -160,7 +160,7 @@ export async function DELETE(
     }
 
     // Handle both sync and async params (Next.js 13+ compatibility)
-    const { slug } = await Promise.resolve(params);
+    const { slug } = await params;
 
     const {
       data: { user },

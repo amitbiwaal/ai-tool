@@ -172,7 +172,7 @@ export function PaymentForm({ amount, onSuccess, onCancel, loading, setLoading }
       {/* Payment Info */}
       <div className="bg-blue-50 dark:bg-blue-950/20 p-3 sm:p-4 rounded-lg border border-blue-200 dark:border-blue-800">
         <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-300">
-          You will be redirected to Razorpay's secure payment gateway to complete your payment.
+          You will be redirected to Razorpay&apos;s secure payment gateway to complete your payment.
         </p>
       </div>
 

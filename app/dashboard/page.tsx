@@ -64,7 +64,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     checkAuthAndFetchData();
-  }, []);
+  }, [checkAuthAndFetchData]);
 
   // Additional effect to ensure user is set if session exists
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function DashboardPage() {
     }
   }, [user, loading]);
 
-  const checkAuthAndFetchData = async () => {
+  const checkAuthAndFetchData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -175,7 +175,7 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase, router]);
 
   const fetchUserProfile = async () => {
     try {

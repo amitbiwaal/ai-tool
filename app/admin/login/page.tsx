@@ -11,7 +11,13 @@ import { supabase } from "@/lib/supabase/client";
 import { Eye, EyeOff, Shield } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function AdminLoginPage() {
+export default function AdminLoginPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);

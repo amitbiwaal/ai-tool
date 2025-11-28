@@ -274,9 +274,9 @@ async function getRelatedCategories(categoryId: string) {
 export async function generateMetadata({ 
   params 
 }: { 
-  params: Promise<{ slug: string }> | { slug: string }
+  params: Promise<{ slug: string }>
 }) {
-  const { slug } = await Promise.resolve(params);
+  const { slug } = await params;
   const category = await getCategory(slug);
 
   if (!category) {
@@ -298,18 +298,19 @@ export default async function CategoryPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ slug: string }> | { slug: string };
-  searchParams?: { sort?: string; pricing?: string };
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ sort?: string; pricing?: string }>;
 }) {
-  const { slug } = await Promise.resolve(params);
+  const { slug } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
   const category = await getCategory(slug);
 
   if (!category) {
     notFound();
   }
 
-  const sortBy = searchParams?.sort || "rating";
-  const pricingFilter = searchParams?.pricing;
+  const sortBy = resolvedSearchParams?.sort || "rating";
+  const pricingFilter = resolvedSearchParams?.pricing;
 
   let tools = await getCategoryTools(category.id, sortBy);
   
@@ -579,7 +580,7 @@ export default async function CategoryPage({
         <div className="relative p-12 text-center">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
-              Can't find what you're looking for?
+              Can&apos;t find what you&apos;re looking for?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
               Submit your favorite AI tool or explore other categories to discover more amazing solutions.

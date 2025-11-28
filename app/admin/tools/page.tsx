@@ -41,7 +41,13 @@ interface Tool {
   created_at: string;
 }
 
-export default function ToolsManagementPage() {
+export default function ToolsManagementPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "pending" | "approved" | "rejected">("all");
   const [editingTool, setEditingTool] = useState<Tool | null>(null);

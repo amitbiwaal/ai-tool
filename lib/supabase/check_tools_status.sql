@@ -95,12 +95,91 @@ WHERE status = 'approved'
 ORDER BY created_at DESC;
 
 -- =====================================================
+-- CHECK RLS POLICIES FOR TOOLS TABLE
+-- =====================================================
+-- Verify that RLS is enabled and policies are correct
+
+-- Check if RLS is enabled on tools table
+SELECT 
+  schemaname,
+  tablename,
+  rowsecurity as rls_enabled
+FROM pg_tables
+WHERE schemaname = 'public' 
+  AND tablename = 'tools';
+
+-- List all RLS policies on tools table
+SELECT 
+  schemaname,
+  tablename,
+  policyname,
+  permissive,
+  roles,
+  cmd as command,
+  qual as using_expression,
+  with_check as with_check_expression
+FROM pg_policies
+WHERE schemaname = 'public' 
+  AND tablename = 'tools'
+ORDER BY policyname;
+
+-- Check if tools_select policy exists and allows public access
+SELECT 
+  policyname,
+  cmd,
+  qual,
+  CASE 
+    WHEN qual LIKE '%status%approved%' OR qual = 'true' THEN 'Public access allowed'
+    ELSE 'Restricted access'
+  END as access_level
+FROM pg_policies
+WHERE schemaname = 'public' 
+  AND tablename = 'tools'
+  AND policyname = 'tools_select';
+
+-- Test RLS policy: Try to select approved tools (should work for all users)
+-- This simulates what the frontend API does
+SELECT 
+  COUNT(*) as total_approved_tools_visible,
+  'Should match count from approved tools query above' as note
+FROM public.tools
+WHERE status = 'approved';
+
+-- Check if there are any tools that should be visible but aren't due to RLS
+-- Compare this with the approved tools count
+SELECT 
+  (SELECT COUNT(*) FROM public.tools WHERE status = 'approved') as approved_count,
+  (SELECT COUNT(*) FROM public.tools WHERE status = 'approved' AND listing_type IS NOT NULL) as with_listing_type,
+  'If these numbers differ, check RLS policies' as note;
+
+-- =====================================================
+-- FIX RLS POLICY IF NEEDED
+-- =====================================================
+-- If tools_select policy doesn't allow public access to approved tools,
+-- run this to fix it (uncomment if needed):
+
+/*
+-- Drop existing tools_select policy if it exists
+DROP POLICY IF EXISTS "tools_select" ON public.tools;
+
+-- Create new policy that allows public access to approved tools
+CREATE POLICY "tools_select" ON public.tools
+FOR SELECT
+USING (
+  status = 'approved' OR 
+  submitted_by = auth.uid() OR 
+  public.is_admin()
+);
+*/
+
+-- =====================================================
 -- NOTES:
 -- =====================================================
 -- 1. Tools must have status = 'approved' to show on frontend
 -- 2. Tools should have listing_type = 'free' or 'paid'
 -- 3. Tools should have at least one category assigned
 -- 4. Check browser console for API errors
--- 5. Check Supabase RLS policies if tools still don't show
+-- 5. RLS policy "tools_select" must allow public SELECT on approved tools
+-- 6. If RLS is blocking, the policy should be: status = 'approved' OR submitted_by = auth.uid() OR is_admin()
 -- =====================================================
 

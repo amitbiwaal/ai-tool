@@ -1,0 +1,6 @@
+﻿# OneDrive ignore file
+# Exclude Next.js build output to prevent sync conflicts
+.next/
+.next/**
+out/
+node_modules/

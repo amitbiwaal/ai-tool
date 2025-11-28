@@ -7,11 +7,10 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ params: string[] }> | { params: string[] } }
+  { params }: { params: Promise<{ params: string[] }> }
 ) {
   try {
-    const resolvedParams = await Promise.resolve(params);
-    const { params: pathParams } = resolvedParams;
+    const { params: pathParams } = await params;
     const searchParams = request.nextUrl.searchParams;
     
     // Get size from path (e.g., "64x64")

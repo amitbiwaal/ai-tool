@@ -36,7 +36,13 @@ const sections = [
   { id: "contact", title: "Contact Us", icon: Mail },
 ];
 
-export default function PrivacyPage() {
+export default function PrivacyPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>("");
 

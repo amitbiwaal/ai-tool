@@ -24,7 +24,13 @@ import {
 import toast from "react-hot-toast";
 import Link from "next/link";
 
-export default function ContactPage() {
+export default function ContactPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -35,7 +35,13 @@ interface SEOAnalysis {
   suggestions: string[];
 }
 
-export default function EditBlogPostPage() {
+export default function EditBlogPostPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<{ id: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const router = useRouter();
   const params = useParams();
   const postId = params?.id as string;
@@ -132,81 +138,7 @@ export default function EditBlogPostPage() {
     }
   }, [formData.title]);
 
-  // SEO Analysis
-  useEffect(() => {
-    analyzeSEO();
-  }, [formData.title, formData.seoDescription, formData.content, formData.focusKeyword]);
-
-  // Fetch blog categories from database
-  useEffect(() => {
-    fetchBlogCategories();
-  }, []);
-
-  const fetchBlogCategories = async () => {
-    try {
-      setLoadingCategories(true);
-      
-      const response = await fetch("/api/blog-categories", {
-        method: 'GET',
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-        }
-      });
-      
-      if (!response.ok) {
-        let errorData = {};
-        try {
-          errorData = await response.json();
-        } catch {
-          errorData = { error: response.statusText };
-        }
-        
-        console.error("Failed to fetch blog categories:", response.status, errorData);
-        
-        if (response.status === 500 && (errorData.code === '42P01' || errorData.error?.includes('does not exist'))) {
-          toast.error("Blog categories table not found. Please run the database migration first.");
-        } else if (response.status === 503) {
-          toast.error("Database connection not available. Please check your Supabase configuration.");
-        } else {
-          toast.error(`Failed to load blog categories (${response.status}). Please check your connection.`);
-        }
-        setBlogCategories([]);
-        return;
-      }
-      
-      const data = await response.json();
-      setBlogCategories(data.categories || []);
-      
-      if (!data.categories || data.categories.length === 0) {
-        console.info("No blog categories found. Create categories in admin panel.");
-      }
-    } catch (error: any) {
-      console.error("Error fetching blog categories:", error);
-      
-      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError')) {
-        toast.error("Network error: Could not connect to server. Please check if the server is running.");
-      } else {
-        toast.error(`Failed to load blog categories: ${error.message || 'Unknown error'}`);
-      }
-      
-      setBlogCategories([]);
-    } finally {
-      setLoadingCategories(false);
-    }
-  };
-
-  // Cleanup preview URL on unmount
-  useEffect(() => {
-    return () => {
-      if (featuredImagePreview && !featuredImagePreview.startsWith("http")) {
-        URL.revokeObjectURL(featuredImagePreview);
-      }
-    };
-  }, [featuredImagePreview]);
-
-  const analyzeSEO = () => {
+  const analyzeSEO = useCallback(() => {
     const issues: string[] = [];
     const suggestions: string[] = [];
     let score = 100;
@@ -317,7 +249,81 @@ export default function EditBlogPostPage() {
       issues,
       suggestions,
     });
+  }, [formData.title, formData.seoTitle, formData.seoDescription, formData.content, formData.focusKeyword]);
+
+  // SEO Analysis
+  useEffect(() => {
+    analyzeSEO();
+  }, [analyzeSEO]);
+
+  // Fetch blog categories from database
+  useEffect(() => {
+    fetchBlogCategories();
+  }, []);
+
+  const fetchBlogCategories = async () => {
+    try {
+      setLoadingCategories(true);
+      
+      const response = await fetch("/api/blog-categories", {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        }
+      });
+      
+      if (!response.ok) {
+        let errorData: { code?: string; error?: string } = {};
+        try {
+          errorData = await response.json();
+        } catch {
+          errorData = { error: response.statusText };
+        }
+        
+        console.error("Failed to fetch blog categories:", response.status, errorData);
+        
+        if (response.status === 500 && (errorData.code === '42P01' || errorData.error?.includes('does not exist'))) {
+          toast.error("Blog categories table not found. Please run the database migration first.");
+        } else if (response.status === 503) {
+          toast.error("Database connection not available. Please check your Supabase configuration.");
+        } else {
+          toast.error(`Failed to load blog categories (${response.status}). Please check your connection.`);
+        }
+        setBlogCategories([]);
+        return;
+      }
+      
+      const data = await response.json();
+      setBlogCategories(data.categories || []);
+      
+      if (!data.categories || data.categories.length === 0) {
+        console.info("No blog categories found. Create categories in admin panel.");
+      }
+    } catch (error: any) {
+      console.error("Error fetching blog categories:", error);
+      
+      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError')) {
+        toast.error("Network error: Could not connect to server. Please check if the server is running.");
+      } else {
+        toast.error(`Failed to load blog categories: ${error.message || 'Unknown error'}`);
+      }
+      
+      setBlogCategories([]);
+    } finally {
+      setLoadingCategories(false);
+    }
   };
+
+  // Cleanup preview URL on unmount
+  useEffect(() => {
+    return () => {
+      if (featuredImagePreview && !featuredImagePreview.startsWith("http")) {
+        URL.revokeObjectURL(featuredImagePreview);
+      }
+    };
+  }, [featuredImagePreview]);
 
   const handleFeaturedImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

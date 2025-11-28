@@ -13,7 +13,13 @@ import { Category, Tag } from "@/lib/types";
 import { Sparkles, Plus, X, ArrowLeft, Save, Upload, Image as ImageIcon } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function AdminAddToolPage() {
+export default function AdminAddToolPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);

@@ -77,6 +77,10 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 # Site Configuration
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_SITE_NAME=AI Tools Directory
+
+# Google Analytics & Verification (Optional)
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=your_verification_code
 ```
 
 4. **Set up Supabase**

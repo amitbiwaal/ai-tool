@@ -3,7 +3,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = await createServerSupabaseClient();
 
@@ -25,7 +25,7 @@ export async function POST(
   }
 
   try {
-    const { id: commentId } = await Promise.resolve(params);
+    const { id: commentId } = await params;
 
     // Check if comment exists
     const { data: comment, error: commentError } = await supabase

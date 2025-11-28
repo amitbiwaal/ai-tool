@@ -23,7 +23,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function AboutPage() {
+export default function AboutPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   // Content from database
   const [pageContent, setPageContent] = useState<Record<string, string>>({});
 

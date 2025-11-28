@@ -35,7 +35,13 @@ interface BlogPost {
   category?: string | { name?: string };
 }
 
-export default function BlogManagementPage() {
+export default function BlogManagementPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "draft" | "published" | "scheduled">("all");
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -296,13 +302,13 @@ export default function BlogManagementPage() {
                           {post.status === "published" && (
                             <span className="flex items-center gap-1">
                               <Eye className="h-3 w-3" />
-                              {post.views.toLocaleString()} views
+                              {(post.views || 0).toLocaleString()} views
                             </span>
                           )}
                           <Badge variant="outline" className="text-xs">
-                            {post.category}
+                            {typeof post.category === 'string' ? post.category : (post.category?.name || 'Uncategorized')}
                           </Badge>
-                          <span>By {post.author}</span>
+                          <span>By {typeof post.author === 'string' ? post.author : (post.author?.full_name || post.author?.email || 'Unknown')}</span>
                         </div>
                       </div>
                     </div>

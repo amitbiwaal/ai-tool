@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,13 @@ interface SEOAnalysis {
   suggestions: string[];
 }
 
-export default function NewBlogPostPage() {
+export default function NewBlogPostPage({
+  params: _params,
+  searchParams: _searchParams,
+}: {
+  params?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -87,89 +93,10 @@ export default function NewBlogPostPage() {
         .replace(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.title]);
 
-  // SEO Analysis
-  useEffect(() => {
-    analyzeSEO();
-  }, [formData.title, formData.seoDescription, formData.content, formData.focusKeyword]);
-
-  // Fetch blog categories from database
-  useEffect(() => {
-    fetchBlogCategories();
-  }, []);
-
-  const fetchBlogCategories = async () => {
-    try {
-      setLoadingCategories(true);
-      
-      // Try to fetch blog categories
-      const response = await fetch("/api/blog-categories", {
-        method: 'GET',
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-        }
-      });
-      
-      if (!response.ok) {
-        // Try to get error details
-        let errorData = {};
-        try {
-          errorData = await response.json();
-        } catch {
-          // If response is not JSON, use status text
-          errorData = { error: response.statusText };
-        }
-        
-        console.error("Failed to fetch blog categories:", response.status, errorData);
-        
-        // If table doesn't exist, show helpful message
-        if (response.status === 500 && (errorData.code === '42P01' || errorData.error?.includes('does not exist'))) {
-          toast.error("Blog categories table not found. Please run the database migration first.");
-        } else if (response.status === 503) {
-          toast.error("Database connection not available. Please check your Supabase configuration.");
-        } else {
-          toast.error(`Failed to load blog categories (${response.status}). Please check your connection.`);
-        }
-        setBlogCategories([]);
-        return;
-      }
-      
-      const data = await response.json();
-      setBlogCategories(data.categories || []);
-      
-      // If no categories, show info message
-      if (!data.categories || data.categories.length === 0) {
-        console.info("No blog categories found. Create categories in admin panel.");
-      }
-    } catch (error: any) {
-      console.error("Error fetching blog categories:", error);
-      
-      // More specific error messages
-      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError')) {
-        toast.error("Network error: Could not connect to server. Please check if the server is running.");
-      } else {
-        toast.error(`Failed to load blog categories: ${error.message || 'Unknown error'}`);
-      }
-      
-      setBlogCategories([]);
-    } finally {
-      setLoadingCategories(false);
-    }
-  };
-
-  // Cleanup preview URL on unmount
-  useEffect(() => {
-    return () => {
-      if (featuredImagePreview) {
-        URL.revokeObjectURL(featuredImagePreview);
-      }
-    };
-  }, [featuredImagePreview]);
-
-  const analyzeSEO = () => {
+  const analyzeSEO = useCallback(() => {
     const issues: string[] = [];
     const suggestions: string[] = [];
     let score = 100;
@@ -280,7 +207,87 @@ export default function NewBlogPostPage() {
       issues,
       suggestions,
     });
+  }, [formData.title, formData.seoTitle, formData.seoDescription, formData.content, formData.focusKeyword]);
+
+  // SEO Analysis
+  useEffect(() => {
+    analyzeSEO();
+  }, [analyzeSEO]);
+
+  // Fetch blog categories from database
+  useEffect(() => {
+    fetchBlogCategories();
+  }, []);
+
+  const fetchBlogCategories = async () => {
+    try {
+      setLoadingCategories(true);
+      
+      // Try to fetch blog categories
+      const response = await fetch("/api/blog-categories", {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        }
+      });
+      
+      if (!response.ok) {
+        // Try to get error details
+        let errorData: { code?: string; error?: string } = {};
+        try {
+          errorData = await response.json();
+        } catch {
+          // If response is not JSON, use status text
+          errorData = { error: response.statusText };
+        }
+        
+        console.error("Failed to fetch blog categories:", response.status, errorData);
+        
+        // If table doesn't exist, show helpful message
+        if (response.status === 500 && (errorData.code === '42P01' || errorData.error?.includes('does not exist'))) {
+          toast.error("Blog categories table not found. Please run the database migration first.");
+        } else if (response.status === 503) {
+          toast.error("Database connection not available. Please check your Supabase configuration.");
+        } else {
+          toast.error(`Failed to load blog categories (${response.status}). Please check your connection.`);
+        }
+        setBlogCategories([]);
+        return;
+      }
+      
+      const data = await response.json();
+      setBlogCategories(data.categories || []);
+      
+      // If no categories, show info message
+      if (!data.categories || data.categories.length === 0) {
+        console.info("No blog categories found. Create categories in admin panel.");
+      }
+    } catch (error: any) {
+      console.error("Error fetching blog categories:", error);
+      
+      // More specific error messages
+      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError')) {
+        toast.error("Network error: Could not connect to server. Please check if the server is running.");
+      } else {
+        toast.error(`Failed to load blog categories: ${error.message || 'Unknown error'}`);
+      }
+      
+      setBlogCategories([]);
+    } finally {
+      setLoadingCategories(false);
+    }
   };
+
+  // Cleanup preview URL on unmount
+  useEffect(() => {
+    return () => {
+      if (featuredImagePreview) {
+        URL.revokeObjectURL(featuredImagePreview);
+      }
+    };
+  }, [featuredImagePreview]);
 
   const handleFeaturedImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

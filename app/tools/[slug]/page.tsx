@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,6 +32,7 @@ import { Tool, Review } from "@/lib/types";
 import { getPricingBadgeColor } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
+import { ToolStructuredData, BreadcrumbStructuredData } from "@/components/structured-data";
 
 // Mock data removed - using database instead
 const _getMockTool_removed = (slug: string): Tool | null => {
@@ -362,7 +363,7 @@ export default function ToolDetailPage() {
     checkAuth();
   }, [slug]);
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     // Check demo mode
     const isDemoMode = typeof window !== "undefined" && localStorage.getItem("demo_mode") === "true";
     if (isDemoMode) {
@@ -378,7 +379,7 @@ export default function ToolDetailPage() {
         checkFavorite(tool.id);
       }
     }
-  };
+  }, [supabase, tool]);
 
   const checkFavorite = async (toolId: string) => {
     if (!supabase || !isAuthenticated) return;
@@ -470,7 +471,7 @@ export default function ToolDetailPage() {
     }
   };
 
-  const fetchToolData = async () => {
+  const fetchToolData = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -517,7 +518,7 @@ export default function ToolDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug, isAuthenticated, router]);
 
   const handleFavorite = async () => {
     if (!isAuthenticated) {
@@ -537,6 +538,10 @@ export default function ToolDetailPage() {
     }
 
     try {
+      if (!supabase) {
+        toast.error("Database connection not available");
+        return;
+      }
       if (isFavorite) {
         // Remove favorite
         const { data: { user } } = await supabase.auth.getUser();
@@ -605,7 +610,7 @@ export default function ToolDetailPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-2">Tool Not Found</h1>
-          <p className="text-muted-foreground mb-4">The tool you're looking for doesn't exist.</p>
+          <p className="text-muted-foreground mb-4">The tool you&apos;re looking for doesn&apos;t exist.</p>
           <Link href="/tools">
             <Button>Browse All Tools</Button>
           </Link>
@@ -616,9 +621,20 @@ export default function ToolDetailPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+      {/* Structured Data */}
+      {tool && <ToolStructuredData tool={tool} />}
+      {tool && (
+        <BreadcrumbStructuredData
+          items={[
+            { name: "Home", url: "/" },
+            { name: "Tools", url: "/tools" },
+            { name: tool.name, url: `/tools/${tool.slug}` },
+          ]}
+        />
+      )}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12 lg:px-8">
         {/* Cover Image */}
-        {tool.cover_image_url && (
+        {tool.cover_image_url && tool.cover_image_url.trim() !== "" && (
           <div className="relative w-full h-48 sm:h-64 md:h-96 mb-6 sm:mb-8 rounded-lg sm:rounded-xl overflow-hidden shadow-lg">
             <Image
               src={tool.cover_image_url}
@@ -633,7 +649,7 @@ export default function ToolDetailPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
           <div className="relative h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 rounded-lg sm:rounded-xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex-shrink-0 shadow-lg">
-            {tool.logo_url ? (
+            {tool.logo_url && tool.logo_url.trim() !== "" ? (
               <Image
                 src={tool.logo_url}
                 alt={tool.name}
@@ -771,19 +787,21 @@ export default function ToolDetailPage() {
               <section>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Screenshots</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  {tool.screenshots.map((screenshot: string, index: number) => (
-                    <div
-                      key={index}
-                      className="relative h-48 sm:h-56 md:h-64 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-lg transition-shadow"
-                    >
-                      <Image
-                        src={screenshot}
-                        alt={`${tool.name} screenshot ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
+                  {tool.screenshots
+                    .filter((screenshot: string) => screenshot && screenshot.trim() !== "")
+                    .map((screenshot: string, index: number) => (
+                      <div
+                        key={index}
+                        className="relative h-48 sm:h-56 md:h-64 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-lg transition-shadow"
+                      >
+                        <Image
+                          src={screenshot}
+                          alt={`${tool.name} screenshot ${index + 1}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
                 </div>
               </section>
             )}
@@ -1015,10 +1033,9 @@ export default function ToolDetailPage() {
                   value={reviewFormData.comment}
                   onChange={(e) => setReviewFormData({ ...reviewFormData, comment: e.target.value })}
                   placeholder="Share your experience with this tool..."
-                  className="text-sm sm:text-base mt-1"
+                  className="text-sm sm:text-base mt-1 resize-none"
                   rows={6}
                   disabled={submittingReview}
-                  className="resize-none"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Minimum 10 characters required

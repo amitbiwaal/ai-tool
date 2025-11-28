@@ -88,7 +88,8 @@ export function getToolLogoUrl(
 export function getBlogCoverUrl(
   coverImage: string | null | undefined
 ): string {
-  if (!coverImage) {
+  // Check for empty string, null, or undefined
+  if (!coverImage || coverImage.trim() === "") {
     // Fallback to a default blog cover
     return 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=630&fit=crop';
   }
