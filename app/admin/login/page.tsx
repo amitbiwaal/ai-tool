@@ -37,6 +37,13 @@ export default function AdminLoginPage({
     e.preventDefault();
     setLoading(true);
 
+    // Check if supabase is available
+    if (!supabase) {
+      toast.error("Database connection not available");
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
@@ -115,7 +122,9 @@ export default function AdminLoginPage({
 
       // Check admin role
       if (profile.role !== "admin" && profile.role !== "moderator") {
-        await supabase.auth.signOut();
+        if (supabase) {
+          await supabase.auth.signOut();
+        }
         throw new Error("You don't have admin access. Please contact an administrator to grant you admin privileges.");
       }
 
