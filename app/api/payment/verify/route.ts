@@ -40,6 +40,13 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createServerSupabaseClient();
     
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Database connection not available" },
+        { status: 503 }
+      );
+    }
+    
     const body = await request.json();
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 

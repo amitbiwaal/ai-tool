@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles, TrendingUp, Star, Clock, PenTool, Palette, Code2, Video, Music, BarChart3, MessageCircle, Image, Mic, Search, Smartphone, FlaskConical, DollarSign, BookOpen, TrendingUpIcon, Gamepad2, Users, Heart, Search as SearchIcon, GitCompare as Compare, CheckCircle2, ExternalLink } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Sparkles, TrendingUp, Star, Clock, PenTool, Palette, Code2, Video, Music, BarChart3, MessageCircle, Image as ImageIcon, Mic, Search, Smartphone, FlaskConical, DollarSign, BookOpen, TrendingUpIcon, Gamepad2, Users, Heart, Search as SearchIcon, GitCompare as Compare, CheckCircle2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SearchBar } from "@/components/search-bar";
@@ -1080,10 +1081,12 @@ function TestimonialCard({ testimonial }: { testimonial: typeof mockTestimonials
       
       {/* Author */}
       <div className="flex items-center gap-3">
-        <img 
-          src={testimonial.avatar} 
+        <Image
+          src={testimonial.avatar}
           alt={testimonial.name}
-          className="w-12 h-12 rounded-full border-2 border-blue-500/20 dark:border-blue-400/20"
+          width={48}
+          height={48}
+          className="rounded-full border-2 border-blue-500/20 dark:border-blue-400/20"
         />
         <div>
           <h4 className="font-semibold text-slate-900 dark:text-white text-sm">{testimonial.name}</h4>

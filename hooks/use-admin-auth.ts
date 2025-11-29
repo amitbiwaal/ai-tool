@@ -25,6 +25,11 @@ export function useAdminAuth() {
     }
 
     // Listen for auth state changes (only for sign out)
+    if (!supabase) {
+      console.error("Supabase client not initialized");
+      return;
+    }
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -65,6 +70,15 @@ export function useAdminAuth() {
     isCheckingRef.current = true;
 
     try {
+      if (!supabase) {
+        console.error("Supabase client not initialized");
+        setIsAuthenticated(false);
+        setIsAdmin(false);
+        setIsLoading(false);
+        isCheckingRef.current = false;
+        return;
+      }
+
       setIsLoading(true);
 
       // Add timeout to prevent infinite loading

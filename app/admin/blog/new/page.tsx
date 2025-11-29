@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -805,10 +806,11 @@ export default function NewBlogPostPage({
                   {featuredImagePreview ? (
                     <div className="relative group">
                       <div className="relative w-full h-40 sm:h-48 rounded-lg overflow-hidden border-2 border-border">
-                        <img
+                        <Image
                           src={featuredImagePreview}
                           alt="Featured image preview"
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                         <button
                           type="button"

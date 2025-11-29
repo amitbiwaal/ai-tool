@@ -130,12 +130,12 @@ export async function DELETE(
     const { id } = await params;
 
     // Check if category has tools
-    const { data: toolsCount } = await supabase
+    const { data: toolsCount, count } = await supabase
       .from("tool_categories")
       .select("tool_id", { count: "exact", head: true })
       .eq("category_id", id);
 
-    if (toolsCount && toolsCount > 0) {
+    if (count && count > 0) {
       return NextResponse.json(
         { error: "Cannot delete category with associated tools. Please remove tools first." },
         { status: 400 }

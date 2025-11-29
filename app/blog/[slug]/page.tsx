@@ -58,20 +58,73 @@ export default function BlogPostPage() {
   // Content from database
   const [pageContent, setPageContent] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    if (slug) {
-      fetchBlogPost();
-      fetchPageContent();
-    }
-  }, [slug, fetchPageContent]);
+  const fetchPageContent = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/admin/content?page=blog&t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        }
+      });
+      const content: Record<string, string> = {};
 
-  useEffect(() => {
-    if (post?.id) {
-      fetchComments();
-    }
-  }, [post?.id, fetchComments]);
+      if (response.ok) {
+        const data = await response.json();
+        data.content?.forEach((item: any) => {
+          const value = typeof item.value === 'object' ? JSON.stringify(item.value) : item.value;
+          content[item.key] = value;
+        });
+      }
 
-  const fetchBlogPost = async () => {
+      setPageContent(content);
+    } catch (error) {
+      console.error("Error fetching page content:", error);
+    }
+  }, []);
+
+  const fetchComments = useCallback(async () => {
+    if (!post?.id) {
+      setComments([]);
+      return;
+    }
+    
+    try {
+      setCommentsLoading(true);
+      
+      const response = await fetch(`/api/blog/comments?blog_id=${post.id}&t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Error fetching comments:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData.error || "Unknown error",
+        });
+        setComments([]);
+        return;
+      }
+
+      const data = await response.json();
+      setComments(data.comments || []);
+    } catch (error: any) {
+      console.error("Error fetching comments:", {
+        error,
+        message: error?.message,
+        stack: error?.stack,
+        name: error?.name,
+      });
+      setComments([]);
+    } finally {
+      setCommentsLoading(false);
+    }
+  }, [post?.id]);
+
+  const fetchBlogPost = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -161,73 +214,20 @@ export default function BlogPostPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug]);
 
-  const fetchPageContent = useCallback(async () => {
-    try {
-      const response = await fetch(`/api/admin/content?page=blog&t=${Date.now()}`, {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-        }
-      });
-      const content: Record<string, string> = {};
-
-      if (response.ok) {
-        const data = await response.json();
-        data.content?.forEach((item: any) => {
-          const value = typeof item.value === 'object' ? JSON.stringify(item.value) : item.value;
-          content[item.key] = value;
-        });
-      }
-
-      setPageContent(content);
-    } catch (error) {
-      console.error("Error fetching page content:", error);
+  useEffect(() => {
+    if (slug) {
+      fetchBlogPost();
+      fetchPageContent();
     }
-  }, []);
+  }, [slug, fetchBlogPost, fetchPageContent]);
 
-  const fetchComments = useCallback(async () => {
-    if (!post?.id) {
-      setComments([]);
-      return;
+  useEffect(() => {
+    if (post?.id) {
+      fetchComments();
     }
-    
-    try {
-      setCommentsLoading(true);
-      
-      const response = await fetch(`/api/blog/comments?blog_id=${post.id}&t=${Date.now()}`, {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-        }
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Error fetching comments:", {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorData.error || "Unknown error",
-        });
-        setComments([]);
-        return;
-      }
-
-      const data = await response.json();
-      setComments(data.comments || []);
-    } catch (error: any) {
-      console.error("Error fetching comments:", {
-        error,
-        message: error?.message,
-        stack: error?.stack,
-        name: error?.name,
-      });
-      setComments([]);
-    } finally {
-      setCommentsLoading(false);
-    }
-  }, [post?.id]);
+  }, [post?.id, fetchComments]);
 
   const handlePostComment = async () => {
     if (!commentText.trim() || !post?.id) {
@@ -677,8 +677,13 @@ export default function BlogPostPage() {
                 <blockquote className="border-l-4 border-primary bg-slate-50 dark:bg-slate-900/50 pl-6 pr-4 py-4 italic rounded-r-lg my-6" {...props} />
               ),
               img: ({node, ...props}: any) => (
-                <div className="my-8">
-                  <img className="rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 w-full" alt="" {...props} />
+                <div className="my-8 relative w-full h-64">
+                  <Image
+                    className="rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 object-cover"
+                    alt=""
+                    fill
+                    {...props}
+                  />
                 </div>
               ),
             }}

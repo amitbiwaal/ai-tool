@@ -56,6 +56,11 @@ export default function SettingsPage({
         }
       } else {
         // Fallback: get from session
+        if (!supabase) {
+          console.error("Database connection not available");
+          setLoading(false);
+          return;
+        }
         const { data: { user: sessionUser } } = await supabase.auth.getUser();
         if (sessionUser) {
           const profileData: Profile = {

@@ -38,6 +38,13 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createServerSupabaseClient();
     
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Database connection not available" },
+        { status: 503 }
+      );
+    }
+    
     // Get authenticated user
     const {
       data: { user },

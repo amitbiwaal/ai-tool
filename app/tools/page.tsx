@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { SearchBar } from "@/components/search-bar";
@@ -268,7 +268,7 @@ const defaultToolsContent: ToolsContent = {
   toolsFoundText: "{count} tools found",
 };
 
-export default function ToolsPage() {
+function ToolsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [tools, setTools] = useState<Tool[]>([]);
@@ -291,47 +291,7 @@ export default function ToolsPage() {
   const [selectedPricing, setSelectedPricing] = useState<string[]>([]);
   const [minRating, setMinRating] = useState<number>(0);
 
-  useEffect(() => {
-    // Fetch content for tools page
-    const fetchContent = async () => {
-      try {
-        const response = await fetch(`/api/admin/content?page=tools&section=hero&t=${Date.now()}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-          }
-        });
-        if (response.ok) {
-          const data = await response.json();
-          const fetched: Partial<ToolsContent> = {};
-          
-          if (data.content) {
-            data.content.forEach((item: any) => {
-              const key = item.key as keyof ToolsContent;
-              if (key in defaultToolsContent) {
-                // Handle both string and JSONB values
-                if (typeof item.value === "string") {
-                  fetched[key] = item.value;
-                } else if (item.value !== null && item.value !== undefined) {
-                  fetched[key] = JSON.stringify(item.value);
-                }
-              }
-            });
-            setToolsContent({ ...defaultToolsContent, ...fetched });
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching tools content:", error);
-      }
-    };
-    
-    fetchContent();
-    fetchData();
-    fetchCategoriesAndTags();
-  }, [currentPage, searchQuery, sortBy, selectedCategories, selectedTags, selectedPricing, minRating]);
-
-  const fetchCategoriesAndTags = async () => {
+  const fetchCategoriesAndTags = useCallback(async () => {
     try {
       if (categories.length === 0) {
         const categoriesRes = await fetch(`/api/categories?t=${Date.now()}`, {
@@ -355,9 +315,9 @@ export default function ToolsPage() {
     } catch (error) {
       console.error("Error fetching categories/tags:", error);
     }
-  };
+  }, [categories.length, tags.length]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams({
@@ -392,7 +352,7 @@ export default function ToolsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, searchQuery, sortBy, selectedCategories, selectedTags, selectedPricing, minRating]);
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -767,6 +727,67 @@ export default function ToolsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ToolsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen">
+        {/* Centered Hero Section */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20 border-b">
+          <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-background" />
+
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8 lg:px-8 lg:py-12">
+            <div className="text-center max-w-3xl mx-auto">
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="p-2 sm:p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
+                  <div className="w-5 h-5 sm:w-7 sm:h-7 bg-white/20 rounded animate-pulse" />
+                </div>
+                <div className="h-8 sm:h-10 bg-white/20 rounded animate-pulse w-48 sm:w-64" />
+              </div>
+
+              <div className="h-4 sm:h-6 bg-white/20 rounded animate-pulse w-96 mx-auto mb-6 sm:mb-8" />
+
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-5 py-2 sm:py-3 rounded-xl bg-white/80 dark:bg-white/5 backdrop-blur border shadow-sm">
+                    <div className="p-1.5 sm:p-2 rounded-lg bg-white/20">
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 bg-white/30 rounded animate-pulse" />
+                    </div>
+                    <div>
+                      <div className="w-8 h-4 bg-white/30 rounded animate-pulse mb-1" />
+                      <div className="w-12 h-3 bg-white/20 rounded animate-pulse" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12 lg:px-8">
+          <div className="h-12 bg-muted/50 rounded-xl animate-pulse mb-6 sm:mb-8" />
+
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+            <aside className="w-full lg:w-72 flex-shrink-0">
+              <div className="h-96 bg-muted/50 rounded-xl animate-pulse" />
+            </aside>
+            <div className="flex-1">
+              <div className="h-16 bg-muted/50 rounded-xl animate-pulse mb-4 sm:mb-6" />
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="h-80 bg-muted/50 animate-pulse rounded-xl" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <ToolsPageContent />
+    </Suspense>
   );
 }
 

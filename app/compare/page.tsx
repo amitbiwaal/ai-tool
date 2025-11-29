@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -102,7 +102,7 @@ const _mockTools_removed = [
   }
 ];
 
-export default function ComparePage() {
+function ComparePageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const tool1Slug = searchParams.get("tool1");
@@ -157,33 +157,7 @@ export default function ComparePage() {
     }
   }, [tool1Slug, tool2Slug, allToolsList]);
 
-  useEffect(() => {
-    if (tool1Slug && tool2Slug) {
-      fetchTools();
-    } else {
-      // If no specific tools selected, fetch all tools
-      fetchAllTools();
-    }
-    // Fetch popular comparisons
-    fetchPopularComparisons();
-    fetchTools();
-  }, [tool1Slug, tool2Slug, fetchTools]);
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef1.current && !dropdownRef1.current.contains(event.target as Node)) {
-        setIsOpen1(false);
-      }
-      if (dropdownRef2.current && !dropdownRef2.current.contains(event.target as Node)) {
-        setIsOpen2(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const fetchPopularComparisons = async () => {
+  const fetchPopularComparisons = useCallback(async () => {
     try {
       // Fetch popular/trending tools to create comparison pairs
       const response = await fetch("/api/tools?limit=10&sort=popular");
@@ -208,9 +182,9 @@ export default function ComparePage() {
       console.error("Error fetching popular comparisons:", error);
       setPopularComparisons([]);
     }
-  };
+  }, []);
 
-  const fetchAllTools = async () => {
+  const fetchAllTools = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch("/api/tools?limit=50&sort=popular");
@@ -226,7 +200,7 @@ export default function ComparePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const fetchTools = useCallback(async () => {
     if (!tool1Slug || !tool2Slug) return;
@@ -248,6 +222,31 @@ export default function ComparePage() {
       setLoading(false);
     }
   }, [tool1Slug, tool2Slug]);
+
+  useEffect(() => {
+    if (tool1Slug && tool2Slug) {
+      fetchTools();
+    } else {
+      // If no specific tools selected, fetch all tools
+      fetchAllTools();
+    }
+    // Fetch popular comparisons
+    fetchPopularComparisons();
+  }, [tool1Slug, tool2Slug, fetchTools, fetchAllTools, fetchPopularComparisons]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef1.current && !dropdownRef1.current.contains(event.target as Node)) {
+        setIsOpen1(false);
+      }
+      if (dropdownRef2.current && !dropdownRef2.current.contains(event.target as Node)) {
+        setIsOpen2(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Handle tool selection
   const handleToolSelect = (tool: Tool, position: 1 | 2) => {
@@ -801,5 +800,31 @@ export default function ComparePage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function ComparePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-8">
+            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-64 mx-auto mb-4 animate-pulse" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-96 mx-auto animate-pulse" />
+          </div>
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            {[1, 2].map((i) => (
+              <div key={i} className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm">
+                <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-32 mb-4 animate-pulse" />
+                <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+          <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+        </div>
+      </div>
+    }>
+      <ComparePageContent />
+    </Suspense>
   );
 }

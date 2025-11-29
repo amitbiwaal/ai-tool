@@ -358,30 +358,7 @@ export default function ToolDetailPage() {
     comment: "",
   });
 
-  useEffect(() => {
-    fetchToolData();
-    checkAuth();
-  }, [slug]);
-
-  const checkAuth = useCallback(async () => {
-    // Check demo mode
-    const isDemoMode = typeof window !== "undefined" && localStorage.getItem("demo_mode") === "true";
-    if (isDemoMode) {
-      setIsAuthenticated(true);
-      return;
-    }
-
-    // Check real auth
-    if (supabase) {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
-      if (session && tool) {
-        checkFavorite(tool.id);
-      }
-    }
-  }, [supabase, tool]);
-
-  const checkFavorite = async (toolId: string) => {
+  const checkFavorite = useCallback(async (toolId: string) => {
     if (!supabase || !isAuthenticated) return;
     
     try {
@@ -400,7 +377,79 @@ export default function ToolDetailPage() {
       // Not favorited
       setIsFavorite(false);
     }
-  };
+  }, [isAuthenticated]);
+
+  const checkAuth = useCallback(async () => {
+    // Check demo mode
+    const isDemoMode = typeof window !== "undefined" && localStorage.getItem("demo_mode") === "true";
+    if (isDemoMode) {
+      setIsAuthenticated(true);
+      return;
+    }
+
+    // Check real auth
+    if (supabase) {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+      if (session && tool) {
+        checkFavorite(tool.id);
+      }
+    }
+  }, [tool, checkFavorite]);
+
+  const fetchToolData = useCallback(async () => {
+    try {
+      setLoading(true);
+      
+      // Try to fetch from API first
+      try {
+        const response = await fetch(`/api/tools/${slug}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          setTool(data.tool);
+
+          // Fetch reviews
+          const reviewsRes = await fetch(`/api/reviews?toolId=${data.tool.id}`);
+          if (reviewsRes.ok) {
+            const reviewsData = await reviewsRes.json();
+            setReviews(reviewsData.reviews || []);
+          }
+
+          // Fetch similar tools
+          if (data.tool.categories && data.tool.categories.length > 0) {
+            const categoryIds = data.tool.categories.map((c: any) => c.id);
+            const similarRes = await fetch(`/api/tools?categories=${categoryIds.join(",")}&limit=3&exclude=${data.tool.id}`);
+            if (similarRes.ok) {
+              const similarData = await similarRes.json();
+              setSimilarTools(similarData.tools?.filter((t: Tool) => t.id !== data.tool.id).slice(0, 3) || []);
+            }
+          }
+
+          // Check favorite status
+          if (isAuthenticated) {
+            checkFavorite(data.tool.id);
+          }
+          
+          setLoading(false);
+          return;
+        }
+      } catch (apiError) {
+        console.error("API fetch failed:", apiError);
+        throw new Error("Tool not found");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to load tool");
+      router.push("/tools");
+    } finally {
+      setLoading(false);
+    }
+  }, [slug, isAuthenticated, router, checkFavorite]);
+
+  useEffect(() => {
+    fetchToolData();
+    checkAuth();
+  }, [slug, fetchToolData, checkAuth]);
 
   const handleSubmitReview = async () => {
     if (!tool) {
@@ -470,55 +519,6 @@ export default function ToolDetailPage() {
       setSubmittingReview(false);
     }
   };
-
-  const fetchToolData = useCallback(async () => {
-    try {
-      setLoading(true);
-      
-      // Try to fetch from API first
-      try {
-        const response = await fetch(`/api/tools/${slug}`);
-        
-        if (response.ok) {
-          const data = await response.json();
-          setTool(data.tool);
-
-          // Fetch reviews
-          const reviewsRes = await fetch(`/api/reviews?toolId=${data.tool.id}`);
-          if (reviewsRes.ok) {
-            const reviewsData = await reviewsRes.json();
-            setReviews(reviewsData.reviews || []);
-          }
-
-          // Fetch similar tools
-          if (data.tool.categories && data.tool.categories.length > 0) {
-            const categoryIds = data.tool.categories.map((c: any) => c.id);
-            const similarRes = await fetch(`/api/tools?categories=${categoryIds.join(",")}&limit=3&exclude=${data.tool.id}`);
-            if (similarRes.ok) {
-              const similarData = await similarRes.json();
-              setSimilarTools(similarData.tools?.filter((t: Tool) => t.id !== data.tool.id).slice(0, 3) || []);
-            }
-          }
-
-          // Check favorite status
-          if (isAuthenticated) {
-            checkFavorite(data.tool.id);
-          }
-          
-          setLoading(false);
-          return;
-        }
-      } catch (apiError) {
-        console.error("API fetch failed:", apiError);
-        throw new Error("Tool not found");
-      }
-    } catch (error: any) {
-      toast.error(error.message || "Failed to load tool");
-      router.push("/tools");
-    } finally {
-      setLoading(false);
-    }
-  }, [slug, isAuthenticated, router]);
 
   const handleFavorite = async () => {
     if (!isAuthenticated) {

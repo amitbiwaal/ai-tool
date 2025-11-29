@@ -4,6 +4,13 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 export async function GET() {
   const supabase = await createServerSupabaseClient();
 
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Database connection not available" },
+      { status: 503 }
+    );
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();

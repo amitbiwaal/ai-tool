@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -11,13 +11,7 @@ import { supabase } from "@/lib/supabase/client";
 import { Eye, EyeOff, Shield } from "lucide-react";
 import { toast } from "sonner";
 
-export default function AdminLoginPage({
-  params: _params,
-  searchParams: _searchParams,
-}: {
-  params?: Promise<Record<string, string | string[] | undefined>>;
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}) {
+function AdminLoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
@@ -221,6 +215,31 @@ export default function AdminLoginPage({
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-[calc(100vh-200px)] items-center justify-center px-6 py-12">
+        <div className="w-full max-w-md">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
+            <div className="text-center">
+              <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-gray-700 mx-auto mb-4 animate-pulse" />
+              <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded mb-2 animate-pulse" />
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto animate-pulse" />
+            </div>
+            <div className="mt-6 space-y-4">
+              <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <AdminLoginPageContent />
+    </Suspense>
   );
 }
 

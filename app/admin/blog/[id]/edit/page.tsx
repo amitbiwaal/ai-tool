@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -136,7 +137,7 @@ export default function EditBlogPostPage({
         .replace(/(^-|-$)/g, "");
       setFormData((prev) => ({ ...prev, slug }));
     }
-  }, [formData.title]);
+  }, [formData.title, formData.slug]);
 
   const analyzeSEO = useCallback(() => {
     const issues: string[] = [];
@@ -719,10 +720,11 @@ export default function EditBlogPostPage({
                   {featuredImagePreview ? (
                     <div className="relative group">
                       <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-border">
-                        <img
+                        <Image
                           src={featuredImagePreview}
                           alt="Featured image preview"
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                         <button
                           type="button"

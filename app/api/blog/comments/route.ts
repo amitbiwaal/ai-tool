@@ -274,34 +274,6 @@ export async function POST(request: NextRequest) {
       user: userData,
     };
 
-    if (error) {
-      console.error("Error posting comment:", error);
-      console.error("Error details:", {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint,
-      });
-
-      // More specific error messages
-      if (error.code === "42501" || error.message?.includes("permission") || error.message?.includes("policy")) {
-        return NextResponse.json(
-          { error: "You don't have permission to post comments. Please contact support." },
-          { status: 403 }
-        );
-      } else if (error.code === "23503" || error.message?.includes("foreign key")) {
-        return NextResponse.json(
-          { error: "Invalid blog post or user. Please refresh the page and try again." },
-          { status: 400 }
-        );
-      } else {
-        return NextResponse.json(
-          { error: error.message || "Failed to post comment. Please try again." },
-          { status: 500 }
-        );
-      }
-    }
-
     return NextResponse.json({
       comment: data,
       message: "Comment submitted! It will be visible after approval.",

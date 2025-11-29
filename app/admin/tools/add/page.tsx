@@ -674,10 +674,11 @@ export default function AdminAddToolPage({
                           key={index}
                           className="relative group aspect-video rounded-lg overflow-hidden border-2 border-border"
                         >
-                          <img
+                          <Image
                             src={preview}
                             alt={`Screenshot ${index + 1}`}
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                           />
                           <button
                             type="button"

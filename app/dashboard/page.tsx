@@ -62,40 +62,100 @@ export default function DashboardPage() {
     setActiveTab(tab);
   }, []);
 
-  useEffect(() => {
-    checkAuthAndFetchData();
-  }, [checkAuthAndFetchData]);
-
-  // Additional effect to ensure user is set if session exists
-  useEffect(() => {
-    const ensureUserFromSession = async () => {
-      if (!user && !loading && supabase) {
-        try {
-          const { data: { user: sessionUser } } = await supabase.auth.getUser();
-          if (sessionUser) {
-            setUser({
-              id: sessionUser.id,
-              email: sessionUser.email || "",
-              full_name: sessionUser.user_metadata?.full_name || null,
-              avatar_url: sessionUser.user_metadata?.avatar_url || null,
-              role: "user",
-              bio: null,
-              website: null,
-              created_at: sessionUser.created_at || new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-            });
-          }
-        } catch (error) {
-          console.error("Error ensuring user from session:", error);
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch("/api/user/profile");
+      if (response.ok) {
+        const data = await response.json();
+        if (data.profile) {
+        setUser(data.profile);
+        }
+      } else {
+        // If API fails, try to get user from session as fallback
+        if (!supabase) {
+          console.error("Database connection not available");
+          setLoading(false);
+          return;
+        }
+        const { data: { user: sessionUser } } = await supabase.auth.getUser();
+        if (sessionUser) {
+          setUser({
+            id: sessionUser.id,
+            email: sessionUser.email || "",
+            full_name: sessionUser.user_metadata?.full_name || null,
+            avatar_url: sessionUser.user_metadata?.avatar_url || null,
+            role: "user",
+            bio: null,
+            website: null,
+            created_at: sessionUser.created_at || new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          });
         }
       }
-    };
-    
-    // Only run if user is not set and not loading
-    if (!user && !loading) {
-      ensureUserFromSession();
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      // Fallback: use session user data
+      try {
+        if (!supabase) {
+          console.error("Database connection not available");
+          setLoading(false);
+          return;
+        }
+        const { data: { user: sessionUser } } = await supabase.auth.getUser();
+        if (sessionUser) {
+          setUser({
+            id: sessionUser.id,
+            email: sessionUser.email || "",
+            full_name: sessionUser.user_metadata?.full_name || null,
+            avatar_url: sessionUser.user_metadata?.avatar_url || null,
+            role: "user",
+            bio: null,
+            website: null,
+            created_at: sessionUser.created_at || new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          });
+        }
+      } catch (fallbackError) {
+        console.error("Error in fallback user fetch:", fallbackError);
+      }
     }
-  }, [user, loading]);
+  };
+
+  const fetchUserStats = async () => {
+    try {
+      const response = await fetch("/api/user/stats");
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data.stats || { submissions: 0, favorites: 0, views: 0 });
+      }
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  };
+
+  const fetchFavorites = async () => {
+    try {
+      const response = await fetch("/api/user/favorites");
+      if (response.ok) {
+        const data = await response.json();
+        setFavorites(data.favorites || []);
+      }
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
+    }
+  };
+
+  const fetchSubmissions = async () => {
+    try {
+      const response = await fetch("/api/user/submissions");
+      if (response.ok) {
+        const data = await response.json();
+        setSubmissions(data.submissions || []);
+      }
+    } catch (error) {
+      console.error("Error fetching submissions:", error);
+    }
+  };
 
   const checkAuthAndFetchData = useCallback(async () => {
     try {
@@ -175,103 +235,42 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, [supabase, router]);
+  }, [router]);
 
-  const fetchUserProfile = async () => {
-    try {
-      const response = await fetch("/api/user/profile");
-      if (response.ok) {
-        const data = await response.json();
-        if (data.profile) {
-        setUser(data.profile);
-        }
-      } else {
-        // If API fails, try to get user from session as fallback
-        const { data: { user: sessionUser } } = await supabase.auth.getUser();
-        if (sessionUser) {
-          setUser({
-            id: sessionUser.id,
-            email: sessionUser.email || "",
-            full_name: sessionUser.user_metadata?.full_name || null,
-            avatar_url: sessionUser.user_metadata?.avatar_url || null,
-            role: "user",
-            bio: null,
-            website: null,
-            created_at: sessionUser.created_at || new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          });
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-      // Fallback: use session user data
-      try {
-        const { data: { user: sessionUser } } = await supabase.auth.getUser();
-        if (sessionUser) {
-          setUser({
-            id: sessionUser.id,
-            email: sessionUser.email || "",
-            full_name: sessionUser.user_metadata?.full_name || null,
-            avatar_url: sessionUser.user_metadata?.avatar_url || null,
-            role: "user",
-            bio: null,
-            website: null,
-            created_at: sessionUser.created_at || new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          });
-        }
-      } catch (sessionError) {
-        console.error("Error getting session user:", sessionError);
-      }
-    }
-  };
+  useEffect(() => {
+    checkAuthAndFetchData();
+  }, [checkAuthAndFetchData]);
 
-  const fetchUserStats = async () => {
-    try {
-      const response = await fetch("/api/user/stats");
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      }
-    } catch (error) {
-      console.error("Error fetching stats:", error);
-    }
-  };
-
-  const fetchFavorites = async () => {
-    try {
-      const response = await fetch("/api/favorites");
-      if (response.ok) {
-        const data = await response.json();
-        setFavorites(data.favorites || []);
-      }
-    } catch (error) {
-      console.error("Error fetching favorites:", error);
-    }
-  };
-
-  const fetchSubmissions = async () => {
-    try {
-      const response = await fetch(`/api/user/submissions?t=${Date.now()}`, {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
+  // Additional effect to ensure user is set if session exists
+  useEffect(() => {
+    const ensureUserFromSession = async () => {
+      if (!user && !loading && supabase) {
+        try {
+          const { data: { user: sessionUser } } = await supabase.auth.getUser();
+          if (sessionUser) {
+            setUser({
+              id: sessionUser.id,
+              email: sessionUser.email || "",
+              full_name: sessionUser.user_metadata?.full_name || null,
+              avatar_url: sessionUser.user_metadata?.avatar_url || null,
+              role: "user",
+              bio: null,
+              website: null,
+              created_at: sessionUser.created_at || new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            });
+          }
+        } catch (error) {
+          console.error("Error ensuring user from session:", error);
         }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        console.log("✅ Fetched submissions:", data.submissions?.length || 0);
-        setSubmissions(data.submissions || []);
-      } else {
-        const error = await response.json();
-        console.error("❌ Failed to fetch submissions:", error);
-        toast.error(error.error || "Failed to load submissions");
       }
-    } catch (error) {
-      console.error("Error fetching submissions:", error);
-      toast.error("Failed to load submissions");
+    };
+    
+    // Only run if user is not set and not loading
+    if (!user && !loading) {
+      ensureUserFromSession();
     }
-  };
+  }, [user, loading]);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "";

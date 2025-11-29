@@ -5,6 +5,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitoolsdirectory.com";
   const supabase = await createServerSupabaseClient();
 
+  if (!supabase) {
+    throw new Error("Database connection not available");
+  }
+
   // Get all approved tools
   const { data: tools } = await supabase
     .from("tools")

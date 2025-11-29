@@ -185,7 +185,7 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
         const newAlt = prompt("Edit image alt text (for accessibility):", currentAlt);
         if (newAlt !== null) {
           img.alt = newAlt;
-          handleInput();
+          // handleInput(); // Removed - not needed here
         }
       }
     };
@@ -240,7 +240,8 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
       editor.removeEventListener("blur", handleBlur);
       document.removeEventListener("selectionchange", handleSelectionChange);
     };
-  }, [mode, checkActiveFormats, handleInput]);
+  }, [mode, checkActiveFormats]);
+
 
   const saveToHistory = () => {
     if (!editorRef.current) return;
@@ -254,19 +255,6 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
     }
   };
 
-  const handleInput = () => {
-    if (!editorRef.current) return;
-    saveToHistory();
-    const html = editorRef.current.innerHTML;
-    const text = editorRef.current.textContent || "";
-    setIsEmpty(text.trim() === "" || html === "" || html === "<br>" || html === "<p><br></p>");
-    onChange(html);
-    
-    // Update active formats after input
-    setTimeout(() => {
-      checkActiveFormats();
-    }, 10);
-  };
 
   const execCommand = (command: string, value: string | null = null) => {
     if (!editorRef.current) return;
@@ -295,8 +283,12 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
     }
     
     editorRef.current.focus();
-    handleInput();
-    
+    // Update content after operation
+    setTimeout(() => {
+      const html = editorRef.current?.innerHTML || "";
+      onChange(html);
+    }, 10);
+
     // Update active formats after command
     // Use longer timeout for link commands to ensure DOM is updated
     const timeout = command === "createLink" || command === "unlink" ? 100 : 10;
@@ -384,7 +376,11 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
     }
     
     editorRef.current.focus();
-    handleInput();
+    // Update content after operation
+    setTimeout(() => {
+      const html = editorRef.current?.innerHTML || "";
+      onChange(html);
+    }, 10);
   };
 
   const insertLink = () => {
@@ -425,7 +421,11 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
         execCommand("createLink", url.trim());
       }
       
-      handleInput();
+      // Update content after operation
+    setTimeout(() => {
+      const html = editorRef.current?.innerHTML || "";
+      onChange(html);
+    }, 10);
       
       // Update active formats after link insertion with multiple attempts
       setTimeout(() => {
@@ -469,7 +469,11 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
             // Normalize the parent to merge text nodes
             parentOfLink.normalize();
             
-            handleInput();
+            // Update content after operation
+    setTimeout(() => {
+      const html = editorRef.current?.innerHTML || "";
+      onChange(html);
+    }, 10);
             
             // Update active formats
             setTimeout(() => {
@@ -546,7 +550,11 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
           const newAlt = prompt("Edit image alt text:", currentAlt);
           if (newAlt !== null) {
             img.alt = newAlt;
-            handleInput();
+            // Update content after operation
+    setTimeout(() => {
+      const html = editorRef.current?.innerHTML || "";
+      onChange(html);
+    }, 10);
           }
         });
 
@@ -568,7 +576,11 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
           editorRef.current.appendChild(img);
         }
 
-        handleInput();
+        // Update content after operation
+    setTimeout(() => {
+      const html = editorRef.current?.innerHTML || "";
+      onChange(html);
+    }, 10);
         toast.dismiss();
         toast.success("Image uploaded successfully!");
       }
@@ -615,7 +627,11 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
       sel?.addRange(range);
     }
     
-    handleInput();
+    // Update content after operation
+    setTimeout(() => {
+      const html = editorRef.current?.innerHTML || "";
+      onChange(html);
+    }, 10);
   };
 
   const handleBlockFormatChange = (format: string) => {
@@ -680,6 +696,15 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
+  };
+
+  const handleInput = () => {
+    if (!editorRef.current) return;
+    const html = editorRef.current.innerHTML;
+    onChange(html);
+    // Update empty state
+    const text = editorRef.current.textContent || "";
+    setIsEmpty(text.trim() === "" || html === "" || html === "<br>" || html === "<p><br></p>");
   };
 
   return (
@@ -964,7 +989,11 @@ export function RichTextEditor({ value, onChange, placeholder = "Write your cont
                 e.preventDefault();
                 const text = e.clipboardData.getData("text/plain");
                 document.execCommand("insertText", false, text);
-                handleInput();
+                // Update content after input
+                setTimeout(() => {
+                  const html = editorRef.current?.innerHTML || "";
+                  onChange(html);
+                }, 10);
               }}
               className="min-h-[300px] sm:min-h-[400px] md:min-h-[500px] p-4 focus:outline-none text-foreground bg-background prose prose-sm dark:prose-invert max-w-none
                 prose-headings:font-bold prose-headings:mt-4 prose-headings:mb-2 prose-headings:text-foreground

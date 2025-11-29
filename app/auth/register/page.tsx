@@ -44,6 +44,12 @@ export default function RegisterPage({
 
     setLoading(true);
 
+    if (!supabase) {
+      toast.error("Database connection not available. Please configure Supabase.");
+      setLoading(false);
+      return;
+    }
+
     try {
       // Store signup data temporarily in sessionStorage
       // Account will be created after OTP verification

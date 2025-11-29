@@ -175,7 +175,7 @@ export async function GET(request: NextRequest) {
         return {
           ...profile,
           tools_count: count || 0,
-          status: profile.status || "active", // Use actual status from database or default
+          status: (profile as any)?.status || "active" as "active" | "banned" | "suspended",
         };
       })
     );

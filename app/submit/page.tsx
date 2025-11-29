@@ -55,47 +55,7 @@ export default function SubmitToolPage() {
     selectedTags: [] as string[],
   });
 
-  useEffect(() => {
-    checkAuth();
-    fetchData();
-    fetchPageContent();
-  }, []);
-
-  // Fetch page content from database
-  const fetchPageContent = async () => {
-    try {
-      const response = await fetch(`/api/admin/content?page=submit&t=${Date.now()}`, {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-        }
-      });
-      const content: Record<string, string> = {};
-
-      if (response.ok) {
-        const data = await response.json();
-        data.content?.forEach((item: any) => {
-          const value = typeof item.value === 'object' ? JSON.stringify(item.value) : item.value;
-          content[item.key] = value;
-        });
-      }
-
-      setPageContent(content);
-    } catch (error) {
-      console.error("Error fetching page content:", error);
-    }
-  };
-
-  // Cleanup preview URLs on unmount
-  useEffect(() => {
-    return () => {
-      if (logoPreview) URL.revokeObjectURL(logoPreview);
-      if (coverPreview) URL.revokeObjectURL(coverPreview);
-    };
-  }, [logoPreview, coverPreview]);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       if (!supabase) {
         toast.error("Database connection not available");
@@ -120,7 +80,41 @@ export default function SubmitToolPage() {
       router.push("/auth/login?redirect=/submit");
       setCheckingAuth(false);
     }
-  };
+  }, [router]);
+
+  // Fetch page content from database
+  const fetchPageContent = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/admin/content?page=submit&t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        }
+      });
+      const content: Record<string, string> = {};
+
+      if (response.ok) {
+        const data = await response.json();
+        data.content?.forEach((item: any) => {
+          const value = typeof item.value === 'object' ? JSON.stringify(item.value) : item.value;
+          content[item.key] = value;
+        });
+      }
+
+      setPageContent(content);
+    } catch (error) {
+      console.error("Error fetching page content:", error);
+    }
+  }, []);
+
+  // Cleanup preview URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (logoPreview) URL.revokeObjectURL(logoPreview);
+      if (coverPreview) URL.revokeObjectURL(coverPreview);
+    };
+  }, [logoPreview, coverPreview]);
 
   const fetchData = async () => {
     try {
