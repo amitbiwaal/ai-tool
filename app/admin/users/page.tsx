@@ -503,9 +503,9 @@ export default function UsersPage({
       <div className="space-y-4">
           {filteredUsers.map((user) => (
             <Card key={user.id} className="border-2 hover:shadow-lg transition-all">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4 flex-1">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                     <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-primary/20 flex-shrink-0">
                       <Image
                         src={getUserAvatar(user)}
@@ -514,73 +514,83 @@ export default function UsersPage({
                         className="object-cover"
                       />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-lg">{getUserName(user)}</h3>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                      <h3 className="font-bold text-base sm:text-lg truncate">{getUserName(user)}</h3>
                         {user.status === "banned" && (
-                          <Badge variant="destructive" className="text-xs">Banned</Badge>
+                          <Badge variant="destructive" className="text-xs w-fit">Banned</Badge>
                         )}
                         {user.status === "suspended" && (
-                          <Badge variant="secondary" className="text-xs bg-yellow-500">Suspended</Badge>
+                          <Badge variant="secondary" className="text-xs bg-yellow-500 w-fit">Suspended</Badge>
                         )}
                       </div>
-                  <p className="text-sm text-muted-foreground">{user.email}</p>
-                  <div className="flex gap-2 mt-2">
-                        <Badge 
+                  <p className="text-sm text-muted-foreground truncate">{user.email}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                        <Badge
                           variant={user.role === "admin" ? "default" : user.role === "moderator" ? "secondary" : "outline"}
+                          className="text-xs"
                         >
                           {user.role}
                         </Badge>
-                        <Badge variant="outline">{user.tools_count || 0} tools</Badge>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs">{user.tools_count || 0} tools</Badge>
+                        <Badge variant="outline" className="text-xs hidden sm:inline-flex">
                           Joined {new Date(user.created_at).toLocaleDateString()}
+                    </Badge>
+                        <Badge variant="outline" className="text-xs sm:hidden">
+                          {new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </Badge>
                       </div>
                   </div>
                 </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
                     <Select
                       id={`role-${user.id}`}
                       value={user.role}
                       onChange={(e) => handleRoleChange(user.id, e.target.value as "user" | "admin" | "moderator")}
                       disabled={changingRole === user.id}
-                      className="min-w-[130px]"
+                      className="w-full sm:min-w-[130px] h-9 sm:h-10 text-sm"
                     >
                       <option value="user">User</option>
                       <option value="moderator">Moderator</option>
                       <option value="admin">Admin</option>
                     </Select>
-                    {changingRole === user.id && (
-                      <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                    )}
-                    <Button
-                      variant={user.status === "banned" ? "default" : "outline"}
-                      size="icon"
-                      onClick={() => handleBanUser(user.id, user.status)}
-                      disabled={banningUser === user.id || user.role === "admin"}
-                      title={user.status === "banned" ? "Unban user" : "Ban user"}
-                    >
-                      {banningUser === user.id ? (
-                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                      ) : user.status === "banned" ? (
-                        <CheckCircle className="h-4 w-4" />
-                      ) : (
-                        <Ban className="h-4 w-4" />
+                    <div className="flex items-center gap-1">
+                      {changingRole === user.id && (
+                        <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                       )}
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => handleDeleteUser(user.id, getUserName(user))}
-                      disabled={deletingUser === user.id || user.role === "admin"}
-                      title="Delete user"
-                    >
-                      {deletingUser === user.id ? (
-                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                      ) : (
-                        <Trash2 className="h-4 w-4" />
-                      )}
-                    </Button>
+                      <Button
+                        variant={user.status === "banned" ? "default" : "outline"}
+                        size="sm"
+                        className="flex-1 sm:flex-initial h-9 sm:h-10 px-3"
+                        onClick={() => handleBanUser(user.id, user.status)}
+                        disabled={banningUser === user.id || user.role === "admin"}
+                        title={user.status === "banned" ? "Unban user" : "Ban user"}
+                      >
+                        {banningUser === user.id ? (
+                          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                        ) : user.status === "banned" ? (
+                          <CheckCircle className="h-4 w-4" />
+                        ) : (
+                          <Ban className="h-4 w-4" />
+                        )}
+                        <span className="ml-2 hidden sm:inline">{user.status === "banned" ? "Unban" : "Ban"}</span>
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="flex-1 sm:flex-initial h-9 sm:h-10 px-3"
+                        onClick={() => handleDeleteUser(user.id, getUserName(user))}
+                        disabled={deletingUser === user.id || user.role === "admin"}
+                        title="Delete user"
+                      >
+                        {deletingUser === user.id ? (
+                          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
+                        )}
+                        <span className="ml-2 hidden sm:inline">Delete</span>
+                      </Button>
+                    </div>
                 </div>
               </div>
             </CardContent>

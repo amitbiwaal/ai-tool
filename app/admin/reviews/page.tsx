@@ -258,14 +258,14 @@ export default function ReviewsPage({
     <div className="max-w-7xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Reviews Management
         </h1>
-        <p className="text-muted-foreground mt-2">Moderate user reviews</p>
+        <p className="text-sm sm:text-base text-muted-foreground mt-2">Moderate user reviews</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         <Card className="border-2">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">

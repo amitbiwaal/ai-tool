@@ -173,21 +173,22 @@ export default function CategoriesManagementPage({
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Categories Management
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-sm sm:text-base text-muted-foreground mt-2">
             Manage tool categories and organization
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={fetchCategories} variant="outline" className="gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Button onClick={fetchCategories} variant="outline" className="gap-2 w-full sm:w-auto order-2 sm:order-1">
             <RefreshCw className="h-4 w-4" />
-            Refresh
+            <span className="hidden sm:inline">Refresh</span>
           </Button>
-        <Button onClick={() => setShowAddForm(true)} className="gap-2 shadow-lg">
+        <Button onClick={() => setShowAddForm(true)} className="gap-2 shadow-lg w-full sm:w-auto order-1 sm:order-2">
           <Plus className="h-4 w-4" />
-          Add Category
+          <span className="hidden sm:inline">Add Category</span>
+          <span className="sm:hidden">Add</span>
         </Button>
         </div>
       </div>

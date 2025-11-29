@@ -144,22 +144,23 @@ export default function BlogManagementPage({
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Blog Posts
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-sm sm:text-base text-muted-foreground mt-2">
             Create and manage your blog content
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={fetchPosts} variant="outline" className="gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Button onClick={fetchPosts} variant="outline" className="gap-2 w-full sm:w-auto order-2 sm:order-1">
             <RefreshCw className="h-4 w-4" />
-            Refresh
+            <span className="hidden sm:inline">Refresh</span>
           </Button>
-        <Link href="/admin/blog/new">
-          <Button className="gap-2 shadow-lg">
+        <Link href="/admin/blog/new" className="w-full sm:w-auto order-1 sm:order-2">
+          <Button className="gap-2 shadow-lg w-full sm:w-auto">
             <Plus className="h-4 w-4" />
-            New Post
+            <span className="hidden sm:inline">New Post</span>
+            <span className="sm:hidden">New</span>
           </Button>
         </Link>
         </div>
@@ -276,66 +277,66 @@ export default function BlogManagementPage({
         {filteredPosts.length > 0 ? (
           filteredPosts.map((post) => (
             <Card key={post.id} className="border-2 hover:shadow-lg transition-all">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-start gap-4">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Link href={`/admin/blog/${post.id}/edit`}>
-                            <h3 className="font-bold text-lg hover:text-primary transition-colors cursor-pointer">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                          <Link href={`/admin/blog/${post.id}/edit`} className="flex-1 min-w-0">
+                            <h3 className="font-bold text-base sm:text-lg hover:text-primary transition-colors cursor-pointer truncate">
                               {post.title}
                             </h3>
                           </Link>
-                          <Badge className={getStatusColor(post.status)}>
+                          <Badge className={`${getStatusColor(post.status)} w-fit flex-shrink-0`}>
                             {post.status}
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground mb-3">
                           {post.excerpt}
                         </p>
-                        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(post.created_at).toLocaleDateString()}
+                            <Calendar className="h-3 w-3 flex-shrink-0" />
+                            <span className="truncate">{new Date(post.created_at).toLocaleDateString()}</span>
                           </span>
                           {post.status === "published" && (
                             <span className="flex items-center gap-1">
-                              <Eye className="h-3 w-3" />
+                              <Eye className="h-3 w-3 flex-shrink-0" />
                               {(post.views || 0).toLocaleString()} views
                             </span>
                           )}
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-xs w-fit">
                             {typeof post.category === 'string' ? post.category : (post.category?.name || 'Uncategorized')}
                           </Badge>
-                          <span>By {typeof post.author === 'string' ? post.author : (post.author?.full_name || post.author?.email || 'Unknown')}</span>
+                          <span className="truncate">By {typeof post.author === 'string' ? post.author : (post.author?.full_name || post.author?.email || 'Unknown')}</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                     {post.status === "published" && (
-                      <Link href={`/blog/${post.slug}`} target="_blank">
-                        <Button variant="outline" size="sm" className="gap-1">
+                      <Link href={`/blog/${post.slug}`} target="_blank" className="w-full sm:w-auto">
+                        <Button variant="outline" size="sm" className="gap-1 w-full sm:w-auto">
                           <Eye className="h-4 w-4" />
-                          View
+                          <span className="hidden sm:inline">View</span>
                         </Button>
                       </Link>
                     )}
-                    <Link href={`/admin/blog/${post.id}/edit`}>
-                      <Button variant="outline" size="sm" className="gap-1">
+                    <Link href={`/admin/blog/${post.id}/edit`} className="w-full sm:w-auto">
+                      <Button variant="outline" size="sm" className="gap-1 w-full sm:w-auto">
                         <Edit className="h-4 w-4" />
-                        Edit
+                        <span className="hidden sm:inline">Edit</span>
                       </Button>
                     </Link>
                     <Button
                       variant="destructive"
                       size="sm"
                       onClick={() => handleDelete(post.id, post.title)}
-                      className="gap-1"
+                      className="gap-1 w-full sm:w-auto hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20"
                     >
                       <Trash2 className="h-4 w-4" />
-                      Delete
+                      <span className="hidden sm:inline">Delete</span>
                     </Button>
                   </div>
                 </div>
