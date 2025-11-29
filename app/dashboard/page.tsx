@@ -51,6 +51,15 @@ export default function DashboardPage() {
     reviewsWritten: 0,
     monthlyGrowth: 0,
   });
+
+  // Ensure stats are always defined
+  const safeStats = stats || {
+    totalViews: 0,
+    totalFavorites: 0,
+    totalSubmissions: 0,
+    reviewsWritten: 0,
+    monthlyGrowth: 0,
+  };
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [submissions, setSubmissions] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
@@ -126,10 +135,24 @@ export default function DashboardPage() {
       const response = await fetch("/api/user/stats");
       if (response.ok) {
         const data = await response.json();
-        setStats(data.stats || { submissions: 0, favorites: 0, views: 0 });
+        setStats({
+          totalViews: data.totalViews || 0,
+          totalFavorites: data.totalFavorites || 0,
+          totalSubmissions: data.totalSubmissions || 0,
+          reviewsWritten: data.reviewsWritten || 0,
+          monthlyGrowth: data.monthlyGrowth || 0,
+        });
       }
     } catch (error) {
       console.error("Error fetching stats:", error);
+      // Set default values on error
+      setStats({
+        totalViews: 0,
+        totalFavorites: 0,
+        totalSubmissions: 0,
+        reviewsWritten: 0,
+        monthlyGrowth: 0,
+      });
     }
   };
 
@@ -279,8 +302,8 @@ export default function DashboardPage() {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   };
 
-  const formatNumber = (num: number) => {
-    if (num === 0) return "0";
+  const formatNumber = (num: number | undefined | null) => {
+    if (num === 0 || num === null || num === undefined) return "0";
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
@@ -461,14 +484,14 @@ export default function DashboardPage() {
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
                   <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
                 </div>
-                {stats.monthlyGrowth > 0 && (
+                {safeStats.monthlyGrowth > 0 && (
                 <Badge variant="secondary" className="gap-1 text-xs sm:text-sm">
                   <TrendingUp className="w-3 h-3" />
-                    +{stats.monthlyGrowth}%
+                    +{safeStats.monthlyGrowth}%
                 </Badge>
                 )}
               </div>
-              <div className="text-xl sm:text-2xl font-bold mb-1">{formatNumber(stats.totalViews)}</div>
+              <div className="text-xl sm:text-2xl font-bold mb-1">{formatNumber(safeStats.totalViews)}</div>
               <p className="text-xs sm:text-sm text-muted-foreground">Total Views</p>
             </CardContent>
           </Card>
@@ -480,7 +503,7 @@ export default function DashboardPage() {
                   <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-pink-600 dark:text-pink-400" />
                 </div>
               </div>
-              <div className="text-xl sm:text-2xl font-bold mb-1">{stats.totalFavorites}</div>
+              <div className="text-xl sm:text-2xl font-bold mb-1">{safeStats.totalFavorites}</div>
               <p className="text-xs sm:text-sm text-muted-foreground">Favorite Tools</p>
             </CardContent>
           </Card>
@@ -492,7 +515,7 @@ export default function DashboardPage() {
                   <Package className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-              <div className="text-xl sm:text-2xl font-bold mb-1">{stats.totalSubmissions}</div>
+              <div className="text-xl sm:text-2xl font-bold mb-1">{safeStats.totalSubmissions}</div>
               <p className="text-xs sm:text-sm text-muted-foreground">Your Submissions</p>
             </CardContent>
           </Card>
@@ -504,7 +527,7 @@ export default function DashboardPage() {
                   <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 dark:text-yellow-400" />
                 </div>
               </div>
-              <div className="text-xl sm:text-2xl font-bold mb-1">{stats.reviewsWritten}</div>
+              <div className="text-xl sm:text-2xl font-bold mb-1">{safeStats.reviewsWritten}</div>
               <p className="text-xs sm:text-sm text-muted-foreground">Reviews Written</p>
             </CardContent>
           </Card>
@@ -556,7 +579,7 @@ export default function DashboardPage() {
               aria-pressed={activeTab === "favorites"}
             >
               <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span>Favorites ({stats.totalFavorites})</span>
+              <span>Favorites ({safeStats.totalFavorites})</span>
             </button>
           </div>
         </div>
