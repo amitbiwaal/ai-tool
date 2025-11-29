@@ -57,26 +57,52 @@ export default function SubmitToolPage() {
 
   const checkAuth = useCallback(async () => {
     try {
+      console.log("Checking authentication...");
+
       if (!supabase) {
-        toast.error("Database connection not available");
-        router.push("/auth/login");
+        console.error("Supabase client is null");
+        toast.error("Database connection not available. Please check your configuration.");
+        setCheckingAuth(false);
         return;
       }
 
-      // Use getUser() instead of getSession() - faster and more reliable
-      const { data: { user }, error } = await supabase.auth.getUser();
-      
-      if (error || !user) {
-        toast.error("Please login to submit a tool");
+      console.log("Supabase client available, checking user...");
+
+      // Add timeout to prevent hanging
+      const authPromise = supabase.auth.getUser();
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Authentication check timed out")), 10000)
+      );
+
+      const { data: { user }, error } = await Promise.race([authPromise, timeoutPromise]) as any;
+
+      console.log("Auth result:", { user: !!user, error });
+
+      if (error) {
+        console.error("Auth error:", error);
+        toast.error(`Authentication error: ${error.message}`);
         router.push("/auth/login?redirect=/submit");
+        setCheckingAuth(false);
         return;
       }
-      
+
+      if (!user) {
+        console.log("No user found, redirecting to login");
+        toast.error("Please login to submit a tool");
+        router.push("/auth/login?redirect=/submit");
+        setCheckingAuth(false);
+        return;
+      }
+
+      console.log("User authenticated:", user.email);
       // Fast auth check - immediately hide loading once verified
       setCheckingAuth(false);
     } catch (error: any) {
       console.error("Auth check error:", error);
-      toast.error("Please login to submit a tool");
+      const errorMessage = error.message?.includes("timed out")
+        ? "Authentication check timed out. Please try refreshing the page."
+        : `Authentication failed: ${error.message || 'Unknown error'}`;
+      toast.error(errorMessage);
       router.push("/auth/login?redirect=/submit");
       setCheckingAuth(false);
     }
@@ -107,6 +133,11 @@ export default function SubmitToolPage() {
       console.error("Error fetching page content:", error);
     }
   }, []);
+
+  // Check authentication on mount
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   // Cleanup preview URLs on unmount
   useEffect(() => {
@@ -372,9 +403,19 @@ export default function SubmitToolPage() {
   if (checkingAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center max-w-md px-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Checking authentication...</p>
+          <p className="text-muted-foreground mb-4">Checking authentication...</p>
+          <p className="text-xs text-muted-foreground mb-4">
+            If this takes too long, please refresh the page or check your internet connection.
+          </p>
+          <Button
+            variant="outline"
+            onClick={() => window.location.reload()}
+            className="text-sm"
+          >
+            Refresh Page
+          </Button>
         </div>
       </div>
     );
