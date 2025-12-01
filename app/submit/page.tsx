@@ -139,6 +139,11 @@ export default function SubmitToolPage() {
     checkAuth();
   }, [checkAuth]);
 
+  // Fetch categories and tags on mount
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   // Cleanup preview URLs on unmount
   useEffect(() => {
     return () => {
@@ -929,9 +934,18 @@ export default function SubmitToolPage() {
             <CardContent className="space-y-4 sm:space-y-6 p-3 sm:p-4 lg:p-6 pt-0 w-full min-w-0">
               {/* Categories */}
               <div className="w-full min-w-0 max-w-full">
-                <Label htmlFor="categories" className="text-sm sm:text-base font-semibold mb-2 block">
-                  Categories <span className="text-red-500">*</span>
-                </Label>
+                <div className="flex items-center justify-between mb-2">
+                  <Label htmlFor="categories" className="text-sm sm:text-base font-semibold">
+                    Categories <span className="text-red-500">*</span>
+                  </Label>
+                  <button
+                    type="button"
+                    onClick={fetchData}
+                    className="text-xs text-blue-600 hover:text-blue-800 underline"
+                  >
+                    Refresh categories
+                  </button>
+                </div>
                 <p className="text-xs text-muted-foreground mb-2 sm:mb-3">
                   Select the primary category for your tool
                 </p>

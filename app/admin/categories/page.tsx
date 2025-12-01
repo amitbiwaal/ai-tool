@@ -23,9 +23,13 @@ interface Category {
   id: string;
   name: string;
   slug: string;
-  icon: string;
-  description: string;
+  icon: string | null;
+  description: string | null;
+  color: string;
+  parent_id: string | null;
   tools_count: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export default function CategoriesManagementPage({
@@ -52,7 +56,7 @@ export default function CategoriesManagementPage({
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/categories?showAll=true&t=${Date.now()}`, {
+      const response = await fetch(`/api/categories?t=${Date.now()}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -99,8 +103,11 @@ export default function CategoriesManagementPage({
 
       if (response.ok) {
         toast.success("Category updated successfully!");
-    setEditingId(null);
-        await fetchCategories();
+        setEditingId(null);
+        // Small delay to ensure database is updated
+        setTimeout(async () => {
+          await fetchCategories();
+        }, 500);
       } else {
         const errorData = await response.json();
         toast.error(errorData.error || "Failed to update category");
@@ -122,8 +129,11 @@ export default function CategoriesManagementPage({
       });
 
       if (response.ok) {
-      toast.success("Category deleted successfully!");
-        await fetchCategories();
+        toast.success("Category deleted successfully!");
+        // Small delay to ensure database is updated
+        setTimeout(async () => {
+          await fetchCategories();
+        }, 500);
       } else {
         const errorData = await response.json();
         toast.error(errorData.error || "Failed to delete category");
@@ -155,9 +165,12 @@ export default function CategoriesManagementPage({
 
       if (response.ok) {
         toast.success("Category added successfully!");
-    setFormData({ name: "", slug: "", description: "" });
-    setShowAddForm(false);
-        await fetchCategories();
+        setFormData({ name: "", slug: "", description: "" });
+        setShowAddForm(false);
+        // Small delay to ensure database is updated
+        setTimeout(async () => {
+          await fetchCategories();
+        }, 500);
       } else {
         const errorData = await response.json();
         toast.error(errorData.error || "Failed to add category");
@@ -348,7 +361,7 @@ export default function CategoriesManagementPage({
                     <div className="flex items-center gap-3">
                       <div>
                         <h3 className="font-bold text-lg">{category.name}</h3>
-                        <p className="text-sm text-muted-foreground">{category.description}</p>
+                        <p className="text-sm text-muted-foreground">{category.description || "No description"}</p>
                       </div>
                     </div>
                   </div>

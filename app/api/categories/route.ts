@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { slugify } from "@/lib/utils";
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const showAll = searchParams.get('showAll') === 'true'; // For admin use
+export async function GET() {
   try {
     const supabase = await createServerSupabaseClient();
     
@@ -16,16 +14,9 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch categories with tools count
-    let query = supabase
+    const { data: categories, error: categoriesError } = await supabase
       .from("categories")
-      .select("id, name, slug, icon, description, parent_id, created_at, updated_at");
-
-    if (!showAll) {
-      // For submit page: only parent categories
-      query = query.is("parent_id", null);
-    }
-
-    const { data: categories, error: categoriesError } = await query
+      .select("id, name, slug, icon, description, created_at, updated_at")
       .order("name", { ascending: true });
 
     if (categoriesError) {
