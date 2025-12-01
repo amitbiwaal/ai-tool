@@ -33,16 +33,33 @@ export async function GET(
     return NextResponse.json({ error: "Tool not found" }, { status: 404 });
   }
 
-  // Increment view count
-  await supabase
+  // ✅ Increment view count and get updated data
+  const newViewsCount = (data.views_count || 0) + 1;
+  const { data: updatedData, error: updateError } = await supabase
     .from("tools")
-    .update({ views_count: (data.views_count || 0) + 1 })
-    .eq("id", data.id);
+    .update({ views_count: newViewsCount })
+    .eq("id", data.id)
+    .select(
+      `
+      *,
+      categories:tool_categories(category:categories(*)),
+      tags:tool_tags(tag:tags(*))
+    `
+    )
+    .single();
+
+  // If update fails, log but continue with original data
+  if (updateError) {
+    console.error("Error updating view count:", updateError);
+  }
+
+  // Use updated data if available, otherwise use original data with incremented count
+  const toolData = updatedData || { ...data, views_count: newViewsCount };
 
   const tool = {
-    ...data,
-    categories: data.categories?.map((c: any) => c.category) || [],
-    tags: data.tags?.map((t: any) => t.tag) || [],
+    ...toolData,
+    categories: toolData.categories?.map((c: any) => c.category) || [],
+    tags: toolData.tags?.map((t: any) => t.tag) || [],
   };
 
   return NextResponse.json({ tool });

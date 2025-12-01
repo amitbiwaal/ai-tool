@@ -34,6 +34,40 @@ import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { ToolStructuredData, BreadcrumbStructuredData } from "@/components/structured-data";
 
+// ✅ Function to convert video URLs to embed format
+const getEmbedVideoUrl = (url: string | null | undefined): string | null => {
+  if (!url || url.trim() === "") return null;
+
+  const trimmedUrl = url.trim();
+
+  // If already an embed URL, return as is
+  if (trimmedUrl.includes("/embed/") || trimmedUrl.includes("player.vimeo.com")) {
+    return trimmedUrl;
+  }
+
+  // YouTube URL patterns
+  // https://youtube.com/watch?v=VIDEO_ID
+  // https://www.youtube.com/watch?v=VIDEO_ID
+  // https://youtu.be/VIDEO_ID
+  // https://youtube.com/shorts/VIDEO_ID
+  const youtubeRegex = /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const youtubeMatch = trimmedUrl.match(youtubeRegex);
+  if (youtubeMatch) {
+    return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+  }
+
+  // Vimeo URL patterns
+  // https://vimeo.com/VIDEO_ID
+  const vimeoRegex = /vimeo\.com\/(\d+)/;
+  const vimeoMatch = trimmedUrl.match(vimeoRegex);
+  if (vimeoMatch) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  }
+
+  // If no match, return original URL (might be a direct embed URL or other format)
+  return trimmedUrl;
+};
+
 // Mock data removed - using database instead
 const _getMockTool_removed = (slug: string): Tool | null => {
   const _mockTools_removed: Record<string, Tool> = {
@@ -503,7 +537,12 @@ export default function ToolDetailPage() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Review submitted successfully! It will be visible after approval.");
+        // Handle both new review (201) and updated review (200)
+        if (response.status === 201) {
+          toast.success("Review submitted successfully! It will be visible after approval.");
+        } else if (response.status === 200) {
+          toast.success(data.message || "Review updated successfully! It will be visible after approval.");
+        }
         setShowReviewForm(false);
         setReviewFormData({ rating: 0, title: "", comment: "" });
         // Refresh reviews
@@ -519,6 +558,10 @@ export default function ToolDetailPage() {
           toast.error("Please login to submit a review");
           setShowReviewForm(false);
           router.push("/auth/login");
+        } else if (response.status === 409) {
+          // ✅ FIX 4: Handle duplicate review error
+          toast.error(data.error || "You have already submitted a review for this tool.");
+          setShowReviewForm(false);
         } else {
           toast.error(data.error || "Failed to submit review");
         }
@@ -585,23 +628,50 @@ export default function ToolDetailPage() {
   };
 
   const handleShare = async () => {
-    const url = `${window.location.origin}/tools/${slug}`;
+    if (!tool) return;
     
-    if (navigator.share) {
+    const url = `${window.location.origin}/tools/${slug}`;
+    const title = tool.name || "AI Tool";
+    const text = tool.tagline || `Check out ${tool.name} on AI Tools Directory`;
+    
+    // ✅ Check if Web Share API is available and supported
+    if (navigator.share && navigator.canShare) {
       try {
-        await navigator.share({
-          title: tool?.name || "AI Tool",
-          text: tool?.tagline || "",
-          url: url,
-        });
-        toast.success("Shared successfully!");
-      } catch (error) {
-        // User cancelled or error
+        const shareData = {
+          title,
+          text,
+          url,
+        };
+        
+        // Check if data can be shared
+        if (navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+          toast.success("Shared successfully!");
+          return;
+        }
+      } catch (error: any) {
+        // User cancelled share dialog - don't show error
+        if (error.name === "AbortError") {
+          return;
+        }
+        // Other errors - fall through to clipboard fallback
+        console.error("Share error:", error);
       }
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(url);
+    }
+    
+    // ✅ Fallback: Copy to clipboard with better error handling
+    try {
+      await navigator.clipboard.writeText(url);
       toast.success("Link copied to clipboard!");
+    } catch (clipboardError) {
+      // If clipboard API fails, show URL in a prompt
+      const fallbackMessage = `Share this tool:\n\n${title}\n${url}`;
+      if (window.prompt) {
+        window.prompt("Copy this link:", url);
+        toast.success("Link ready to copy!");
+      } else {
+        toast.error("Unable to share. Please copy the URL manually.");
+      }
     }
   };
 
@@ -763,24 +833,30 @@ export default function ToolDetailPage() {
             </section>
 
             {/* Video */}
-            {tool.video_url && (
-              <section>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Video</h2>
-                <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black">
-                  <iframe
-                    src={tool.video_url}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              </section>
-            )}
+            {tool.video_url && (() => {
+              const embedUrl = getEmbedVideoUrl(tool.video_url);
+              if (!embedUrl) return null;
+              
+              return (
+                <section>
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Video</h3>
+                  <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black">
+                    <iframe
+                      src={embedUrl}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      title={`${tool.name} video`}
+                    />
+                  </div>
+                </section>
+              );
+            })()}
 
             {/* Features */}
             {tool.features && tool.features.length > 0 && (
               <section>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Key Features</h2>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Key Features</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                   {tool.features.map((feature: string, index: number) => (
                     <div key={index} className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg bg-slate-50 dark:bg-slate-900">
@@ -796,7 +872,7 @@ export default function ToolDetailPage() {
             {/* Screenshots */}
             {tool.screenshots && tool.screenshots.length > 0 && (
               <section>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Screenshots</h2>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Screenshots</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {tool.screenshots
                     .filter((screenshot: string) => screenshot && screenshot.trim() !== "")
@@ -820,10 +896,10 @@ export default function ToolDetailPage() {
             {/* Reviews */}
             <section>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
                   <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                   User Reviews ({reviews.length})
-                </h2>
+                </h3>
                 {isAuthenticated ? (
                   <Button onClick={() => {
                     if (!isAuthenticated) {
