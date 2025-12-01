@@ -75,16 +75,75 @@ export async function GET(request: NextRequest) {
       query = query.order("created_at", { ascending: false });
   }
 
-  // If we need to filter by categories/tags, fetch all first, then filter and paginate
-  // Otherwise, apply pagination directly
-  const needsPostFilter = (categories && categories.length > 0) || (tags && tags.length > 0);
-  
-  if (!needsPostFilter) {
-    // Apply pagination directly if no category/tag filtering needed
-    const from = (page - 1) * limit;
-    const to = from + limit - 1;
-    query = query.range(from, to);
+  // Apply pagination directly - we'll optimize category/tag filtering below
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  // For category/tag filtering, we need to use a different approach
+  if (categories && categories.length > 0) {
+    // Use subquery to filter by categories first
+    const { data: toolIds, error: categoryError } = await supabase
+      .from("tool_categories")
+      .select("tool_id")
+      .in("category_id", categories);
+
+    if (categoryError) {
+      console.error("Category filter error:", categoryError);
+      return NextResponse.json({
+        tools: [],
+        totalPages: 0,
+        currentPage: page,
+        total: 0,
+        error: "Failed to filter by categories"
+      }, { status: 500 });
+    }
+
+    const categoryToolIds = toolIds?.map(tc => tc.tool_id) || [];
+    if (categoryToolIds.length === 0) {
+      return NextResponse.json({
+        tools: [],
+        totalPages: 0,
+        currentPage: page,
+        total: 0
+      });
+    }
+
+    query = query.in("id", categoryToolIds);
   }
+
+  if (tags && tags.length > 0) {
+    // Use subquery to filter by tags first
+    const { data: toolIds, error: tagError } = await supabase
+      .from("tool_tags")
+      .select("tool_id")
+      .in("tag_id", tags);
+
+    if (tagError) {
+      console.error("Tag filter error:", tagError);
+      return NextResponse.json({
+        tools: [],
+        totalPages: 0,
+        currentPage: page,
+        total: 0,
+        error: "Failed to filter by tags"
+      }, { status: 500 });
+    }
+
+    const tagToolIds = toolIds?.map(tt => tt.tool_id) || [];
+    if (tagToolIds.length === 0) {
+      return NextResponse.json({
+        tools: [],
+        totalPages: 0,
+        currentPage: page,
+        total: 0
+      });
+    }
+
+    query = query.in("id", tagToolIds);
+  }
+
+  // Apply pagination
+  query = query.range(from, to);
 
   const { data, error, count } = await query;
 
@@ -106,38 +165,7 @@ export async function GET(request: NextRequest) {
       tags: tool.tags?.map((t: any) => t.tag) || [],
     })) || [];
 
-  // Category filter - filter after fetching
-  if (categories && categories.length > 0) {
-    tools = tools.filter((tool) => {
-      const toolCategoryIds = tool.categories?.map((c: any) => c.id) || [];
-      return categories.some((catId) => toolCategoryIds.includes(catId));
-    });
-  }
-
-  // Tag filter - filter after fetching
-  if (tags && tags.length > 0) {
-    tools = tools.filter((tool) => {
-      const toolTagIds = tool.tags?.map((t: any) => t.id) || [];
-      return tags.some((tagId) => toolTagIds.includes(tagId));
-    });
-  }
-
-  // Apply pagination after filtering if needed
-  let paginatedTools = tools;
-  let filteredTotal: number;
-  
-  if (needsPostFilter) {
-    // Filter was applied, so paginate the filtered results
-    const from = (page - 1) * limit;
-    const to = from + limit;
-    paginatedTools = tools.slice(from, to);
-    filteredTotal = tools.length;
-  } else {
-    // No filter was applied, use original count
-    filteredTotal = count || 0;
-  }
-
-  const totalPages = Math.ceil(filteredTotal / limit);
+  const totalPages = Math.ceil((count || 0) / limit);
 
   return NextResponse.json({
     tools: paginatedTools || [],

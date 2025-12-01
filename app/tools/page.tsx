@@ -282,6 +282,8 @@ function ToolsPageContent() {
   const [displayedTools, setDisplayedTools] = useState<Tool[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [toolsContent, setToolsContent] = useState<ToolsContent>(defaultToolsContent);
+  const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   const currentPage = parseInt(searchParams.get("page") || "1");
   const searchQuery = searchParams.get("search") || "";
@@ -293,32 +295,53 @@ function ToolsPageContent() {
 
   const fetchCategoriesAndTags = useCallback(async () => {
     try {
+      const promises = [];
+
       if (categories.length === 0) {
-        const categoriesRes = await fetch(`/api/categories?t=${Date.now()}`, {
-          cache: 'no-store',
-        });
-        if (categoriesRes.ok) {
-          const categoriesData = await categoriesRes.json();
-          setCategories(categoriesData.categories || []);
-        }
+        promises.push(
+          fetch(`/api/categories?t=${Date.now()}`, {
+            cache: 'no-store',
+          }).then(async (res) => {
+            if (res.ok) {
+              const data = await res.json();
+              setCategories(data.categories || []);
+            }
+          }).catch((error) => {
+            console.error("Error fetching categories:", error);
+          })
+        );
       }
 
       if (tags.length === 0) {
-        const tagsRes = await fetch(`/api/tags?t=${Date.now()}`, {
-          cache: 'no-store',
-        });
-        if (tagsRes.ok) {
-          const tagsData = await tagsRes.json();
-          setTags(tagsData.tags || []);
-        }
+        promises.push(
+          fetch(`/api/tags?t=${Date.now()}`, {
+            cache: 'no-store',
+          }).then(async (res) => {
+            if (res.ok) {
+              const data = await res.json();
+              setTags(data.tags || []);
+            }
+          }).catch((error) => {
+            console.error("Error fetching tags:", error);
+          })
+        );
+      }
+
+      // Load both in parallel
+      if (promises.length > 0) {
+        await Promise.all(promises);
       }
     } catch (error) {
-      console.error("Error fetching categories/tags:", error);
+      console.error("Error in fetchCategoriesAndTags:", error);
     }
   }, [categories.length, tags.length]);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (isRetry = false) => {
+    if (!isRetry) {
+      setLoading(true);
+      setError(null);
+    }
+
     try {
       const params = new URLSearchParams({
         page: currentPage.toString(),
@@ -338,21 +361,56 @@ function ToolsPageContent() {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
         }
       });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch tools: ${response.status} ${response.statusText}`);
+      }
+
       const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
 
       const fetchedTools = data.tools || [];
       setTools(fetchedTools);
       setDisplayedTools(fetchedTools.slice(0, 6));
       setTotalPages(data.totalPages || 1);
       setHasMore(fetchedTools.length > 6);
-    } catch (error) {
+      setRetryCount(0); // Reset retry count on success
+    } catch (error: any) {
       console.error("Error fetching tools:", error);
+
+      if (!isRetry && retryCount < 2) {
+        // Retry up to 2 times with exponential backoff
+        setTimeout(() => {
+          setRetryCount(prev => prev + 1);
+          fetchData(true);
+        }, Math.pow(2, retryCount) * 1000);
+        return;
+      }
+
+      setError(error.message || "Failed to load tools. Please try again.");
       setTools([]);
       setDisplayedTools([]);
+      setTotalPages(1);
+      setHasMore(false);
     } finally {
-      setLoading(false);
+      if (!isRetry) {
+        setLoading(false);
+      }
     }
-  }, [currentPage, searchQuery, sortBy, selectedCategories, selectedTags, selectedPricing, minRating]);
+  }, [currentPage, searchQuery, sortBy, selectedCategories, selectedTags, selectedPricing, minRating, retryCount]);
+
+  // Load categories and tags on mount
+  useEffect(() => {
+    fetchCategoriesAndTags();
+  }, [fetchCategoriesAndTags]);
+
+  // Load tools when dependencies change
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -628,8 +686,27 @@ function ToolsPageContent() {
               </div>
             )}
 
+            {/* Error State */}
+            {error && (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/20 mx-auto mb-4 flex items-center justify-center">
+                  <X className="w-8 h-8 text-red-600 dark:text-red-400" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-red-900 dark:text-red-100">Failed to Load Tools</h3>
+                <p className="text-muted-foreground mb-6 max-w-md mx-auto">{error}</p>
+                <div className="flex gap-3 justify-center">
+                  <Button onClick={() => fetchData()} variant="outline">
+                    Try Again
+                  </Button>
+                  <Button onClick={() => window.location.reload()} variant="default">
+                    Refresh Page
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {/* Tools Grid/List */}
-            {loading ? (
+            {!error && loading ? (
               <div className={cn(
                 "grid gap-6",
                 viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
