@@ -284,6 +284,8 @@ function ToolsPageContent() {
   const [toolsContent, setToolsContent] = useState<ToolsContent>(defaultToolsContent);
   const [error, setError] = useState<string | null>(null);
   const retryCountRef = useRef(0);
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const requestIdRef = useRef(0);
 
   const currentPage = parseInt(searchParams.get("page") || "1");
   const searchQuery = searchParams.get("search") || "";
@@ -337,7 +339,16 @@ function ToolsPageContent() {
   }, [categories.length, tags.length]);
 
   const fetchData = useCallback(async (isRetry = false) => {
+    // Generate a unique request ID for this fetch
+    const currentRequestId = ++requestIdRef.current;
+    
     if (!isRetry) {
+      // Cancel any pending retry when starting a new request
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
+      }
+      retryCountRef.current = 0;
       setLoading(true);
       setError(null);
     }
@@ -372,32 +383,54 @@ function ToolsPageContent() {
         throw new Error(data.error);
       }
 
-      const fetchedTools = data.tools || [];
-      setTools(fetchedTools);
-      setDisplayedTools(fetchedTools.slice(0, 6));
-      setTotalPages(data.totalPages || 1);
-      setHasMore(fetchedTools.length > 6);
-      retryCountRef.current = 0; // Reset retry count on success
+      // Only update state if this is still the current request (ignore stale responses)
+      if (currentRequestId === requestIdRef.current) {
+        const fetchedTools = data.tools || [];
+        setTools(fetchedTools);
+        setDisplayedTools(fetchedTools.slice(0, 6));
+        setTotalPages(data.totalPages || 1);
+        setHasMore(fetchedTools.length > 6);
+        retryCountRef.current = 0; // Reset retry count on success
+      }
     } catch (error: any) {
       console.error("Error fetching tools:", error);
+
+      // Only handle retry/error if this is still the current request
+      if (currentRequestId !== requestIdRef.current) {
+        return; // Ignore errors from stale requests
+      }
 
       if (!isRetry && retryCountRef.current < 2) {
         // Retry up to 2 times with exponential backoff
         const currentRetry = retryCountRef.current;
         retryCountRef.current = currentRetry + 1;
-        setTimeout(() => {
-          fetchData(true);
+        
+        // Clear any existing retry timeout
+        if (retryTimeoutRef.current) {
+          clearTimeout(retryTimeoutRef.current);
+        }
+        
+        retryTimeoutRef.current = setTimeout(() => {
+          // Check if this is still the current request before retrying
+          if (currentRequestId === requestIdRef.current) {
+            fetchData(true);
+          }
+          retryTimeoutRef.current = null;
         }, Math.pow(2, currentRetry) * 1000);
         return;
       }
 
-      setError(error.message || "Failed to load tools. Please try again.");
-      setTools([]);
-      setDisplayedTools([]);
-      setTotalPages(1);
-      setHasMore(false);
+      // Only set error state if this is still the current request
+      if (currentRequestId === requestIdRef.current) {
+        setError(error.message || "Failed to load tools. Please try again.");
+        setTools([]);
+        setDisplayedTools([]);
+        setTotalPages(1);
+        setHasMore(false);
+      }
     } finally {
-      if (!isRetry) {
+      // Only update loading state if this is still the current request
+      if (currentRequestId === requestIdRef.current && !isRetry) {
         setLoading(false);
       }
     }
@@ -410,6 +443,13 @@ function ToolsPageContent() {
 
   // Load tools when dependencies change
   useEffect(() => {
+    // Cancel any pending retry when dependencies change
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
+    retryCountRef.current = 0;
+    
     fetchData();
   }, [fetchData]);
 
