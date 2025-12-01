@@ -153,7 +153,7 @@ export default function SettingsPage({
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Settings
         </h1>
         <p className="text-muted-foreground mt-2">Configure your platform</p>

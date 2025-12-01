@@ -258,7 +258,7 @@ export default function ReviewsPage({
     <div className="max-w-7xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Reviews Management
         </h1>
         <p className="text-sm sm:text-base text-muted-foreground mt-2">Moderate user reviews</p>
@@ -539,7 +539,7 @@ export default function ReviewsPage({
             <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
               <MessageSquare className="w-10 h-10 text-muted-foreground" />
             </div>
-            <h3 className="text-xl font-bold mb-2">No Reviews Found</h3>
+            <h3 className="text-lg font-bold mb-2">No Reviews Found</h3>
             <p className="text-muted-foreground">
               {searchQuery || filterStatus !== "all" 
                 ? "Try adjusting your search or filters"

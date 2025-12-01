@@ -38,7 +38,7 @@ export default function AdminLayout({
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
         <div className="text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Access Denied</h2>
+          <h2 className="text-xl font-bold mb-2">Access Denied</h2>
           <p className="text-muted-foreground mb-4">You don&apos;t have permission to access this page.</p>
           <Link href="/">
             <Button>Go to Home</Button>

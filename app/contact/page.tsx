@@ -379,7 +379,7 @@ export default function ContactPage({
           <CardContent className="relative pt-6 sm:pt-8 pb-6 sm:pb-8 px-4 sm:px-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
               <div className="text-center md:text-left">
-                <h3 className="text-xl sm:text-2xl font-bold mb-2">{pageContent.faqTitle || "Looking for Quick Answers?"}</h3>
+                <h3 className="text-lg sm:text-xl font-bold mb-2">{pageContent.faqTitle || "Looking for Quick Answers?"}</h3>
                 <p className="text-sm sm:text-base text-white/90">
                   {pageContent.faqDescription || "Check out our FAQ section or browse our help documentation"}
                 </p>

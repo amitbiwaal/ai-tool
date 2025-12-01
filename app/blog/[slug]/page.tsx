@@ -646,7 +646,7 @@ export default function BlogPostPage() {
                 </h2>
               ),
               h3: ({node, ...props}: any) => (
-                <h3 className="scroll-mt-24 text-2xl font-bold tracking-tight mb-4 mt-8 text-slate-700 dark:text-slate-200" {...props} />
+                <h3 className="scroll-mt-24 text-xl font-bold tracking-tight mb-4 mt-8 text-slate-700 dark:text-slate-200" {...props} />
               ),
               h4: ({node, ...props}: any) => (
                 <h4 className="scroll-mt-24 text-xl font-bold tracking-tight mb-3 mt-6 text-foreground" {...props} />
@@ -751,7 +751,7 @@ export default function BlogPostPage() {
           {/* Comments Section */}
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold flex items-center gap-2">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold flex items-center gap-2">
                 <MessageCircle className="w-6 h-6 text-primary" />
                 {pageContent.commentsHeading || "Comments"} ({post?.comments_count || 0})
               </h3>

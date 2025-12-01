@@ -599,7 +599,7 @@ function ComparePageContent() {
                       )}
                     </div>
                     <Link href={`/tools/${tool.slug}`}>
-                      <h3 className="text-xl sm:text-2xl font-bold mb-2 hover:text-primary transition-colors break-words">
+                      <h3 className="text-lg sm:text-xl font-bold mb-2 hover:text-primary transition-colors break-words">
                         {tool.name}
                       </h3>
                     </Link>

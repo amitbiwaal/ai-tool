@@ -839,7 +839,7 @@ export default function ToolDetailPage() {
               
               return (
                 <section>
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Video</h3>
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4">Video</h3>
                   <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black">
                     <iframe
                       src={embedUrl}
@@ -856,7 +856,7 @@ export default function ToolDetailPage() {
             {/* Features */}
             {tool.features && tool.features.length > 0 && (
               <section>
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Key Features</h3>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4">Key Features</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                   {tool.features.map((feature: string, index: number) => (
                     <div key={index} className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg bg-slate-50 dark:bg-slate-900">
@@ -872,7 +872,7 @@ export default function ToolDetailPage() {
             {/* Screenshots */}
             {tool.screenshots && tool.screenshots.length > 0 && (
               <section>
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Screenshots</h3>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4">Screenshots</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {tool.screenshots
                     .filter((screenshot: string) => screenshot && screenshot.trim() !== "")
@@ -896,7 +896,7 @@ export default function ToolDetailPage() {
             {/* Reviews */}
             <section>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4">
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold flex items-center gap-2">
                   <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                   User Reviews ({reviews.length})
                 </h3>

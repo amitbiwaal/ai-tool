@@ -310,7 +310,7 @@ export default function UsersPage({
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Users Management
         </h1>
         <p className="text-muted-foreground mt-2">Manage platform users and their roles</p>
@@ -603,7 +603,7 @@ export default function UsersPage({
             <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
               <Users className="w-10 h-10 text-muted-foreground" />
             </div>
-            <h3 className="text-xl font-bold mb-2">No Users Found</h3>
+            <h3 className="text-lg font-bold mb-2">No Users Found</h3>
             <p className="text-muted-foreground">
               {searchQuery || roleFilter !== "all" 
                 ? "Try adjusting your search or filters"

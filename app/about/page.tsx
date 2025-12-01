@@ -243,7 +243,7 @@ export default function AboutPage({
                 <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 <h2 className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wide">{pageContent.storyBadge || "Our Story"}</h2>
               </div>
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">
                 {pageContent.storyTitle || "Born from a passion for AI innovation"}
               </h3>
               <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">

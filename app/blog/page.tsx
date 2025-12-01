@@ -408,7 +408,7 @@ export default function BlogPage() {
                         <Badge key={tag.id} variant="outline" className="text-xs">{tag.name}</Badge>
                       ))}
                     </div>
-                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 group-hover:text-primary transition-colors">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 group-hover:text-primary transition-colors">
                       {featuredPost.title}
                     </h3>
                     <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 line-clamp-3">
@@ -544,7 +544,7 @@ export default function BlogPage() {
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-muted mx-auto mb-4 sm:mb-6 flex items-center justify-center">
               <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-muted-foreground" />
             </div>
-            <h3 className="text-xl sm:text-2xl font-semibold mb-2">{pageContent.emptyStateTitle || "No articles found"}</h3>
+            <h3 className="text-lg sm:text-xl font-semibold mb-2">{pageContent.emptyStateTitle || "No articles found"}</h3>
             <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
               {searchQuery
                 ? (pageContent.emptyStateMessageSearch || `No articles match "${searchQuery}". Try a different search term.`).replace("{query}", searchQuery)

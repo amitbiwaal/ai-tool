@@ -446,7 +446,7 @@ export default function EditBlogPostPage({
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold">Edit Post</h1>
+            <h1 className="text-2xl font-bold">Edit Post</h1>
             <p className="text-sm text-muted-foreground">Update and optimize your blog content</p>
           </div>
         </div>

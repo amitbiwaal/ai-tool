@@ -827,7 +827,7 @@ function ToolsPageContent() {
                 <div className="w-20 h-20 rounded-full bg-muted mx-auto mb-6 flex items-center justify-center">
                   <Package className="w-10 h-10 text-muted-foreground" />
                 </div>
-                <h3 className="text-2xl font-semibold mb-2">{toolsContent.emptyStateTitle || "No tools found"}</h3>
+                <h3 className="text-xl font-semibold mb-2">{toolsContent.emptyStateTitle || "No tools found"}</h3>
                 <p className="text-muted-foreground mb-6">
                   {searchQuery
                     ? (toolsContent.emptyStateMessageSearch?.replace("{query}", searchQuery) || `No tools match "${searchQuery}". Try adjusting your filters or search term.`)

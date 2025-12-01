@@ -458,7 +458,7 @@ export default function NewBlogPostPage({
             Back
           </Button>
           <div className="flex-1 sm:flex-initial">
-            <h1 className="text-2xl sm:text-3xl font-bold">Create New Post</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">Create New Post</h1>
             <p className="text-xs sm:text-sm text-muted-foreground">Write and optimize your blog content</p>
           </div>
         </div>
