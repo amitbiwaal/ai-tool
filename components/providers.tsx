@@ -17,7 +17,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       forcedTheme={isAdmin ? "light" : undefined}
     >
       {children}
-      <Toaster 
+      <Toaster
         position="top-center"
         expand={true}
         richColors={true}

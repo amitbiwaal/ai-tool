@@ -936,8 +936,8 @@ export default function SubmitToolPage() {
               <div className="w-full min-w-0 max-w-full">
                 <div className="flex items-center justify-between mb-2">
                   <Label htmlFor="categories" className="text-sm sm:text-base font-semibold">
-                    Categories <span className="text-red-500">*</span>
-                  </Label>
+                  Categories <span className="text-red-500">*</span>
+                </Label>
                   <button
                     type="button"
                     onClick={fetchData}

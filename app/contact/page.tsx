@@ -272,12 +272,24 @@ export default function ContactPage({
                     />
                   </div>
 
-                  <Button 
-                    type="submit" 
-                    className="w-full h-10 sm:h-12 gap-2 text-sm sm:text-base shadow-lg hover:shadow-xl transition-all" 
-                    disabled={loading}
-                    size="lg"
-                  >
+                  <div className="flex gap-4">
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        console.log("Toast button clicked");
+                        toast.success("Test notification!");
+                      }}
+                      className="flex-1 h-10 sm:h-12 gap-2 text-sm sm:text-base shadow-lg hover:shadow-xl transition-all"
+                      size="lg"
+                    >
+                      Test Toast
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex-1 h-10 sm:h-12 gap-2 text-sm sm:text-base shadow-lg hover:shadow-xl transition-all"
+                      disabled={loading}
+                      size="lg"
+                    >
                     {loading ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -289,7 +301,8 @@ export default function ContactPage({
                         {pageContent.sendButton || "Send Message"}
                       </>
                     )}
-                  </Button>
+                    </Button>
+                  </div>
                 </form>
               </CardContent>
             </Card>

@@ -103,10 +103,10 @@ export default function CategoriesManagementPage({
 
       if (response.ok) {
         toast.success("Category updated successfully!");
-        setEditingId(null);
+    setEditingId(null);
         // Small delay to ensure database is updated
         setTimeout(async () => {
-          await fetchCategories();
+        await fetchCategories();
         }, 500);
       } else {
         const errorData = await response.json();
@@ -129,10 +129,10 @@ export default function CategoriesManagementPage({
       });
 
       if (response.ok) {
-        toast.success("Category deleted successfully!");
+      toast.success("Category deleted successfully!");
         // Small delay to ensure database is updated
         setTimeout(async () => {
-          await fetchCategories();
+        await fetchCategories();
         }, 500);
       } else {
         const errorData = await response.json();
@@ -165,11 +165,11 @@ export default function CategoriesManagementPage({
 
       if (response.ok) {
         toast.success("Category added successfully!");
-        setFormData({ name: "", slug: "", description: "" });
-        setShowAddForm(false);
+    setFormData({ name: "", slug: "", description: "" });
+    setShowAddForm(false);
         // Small delay to ensure database is updated
         setTimeout(async () => {
-          await fetchCategories();
+        await fetchCategories();
         }, 500);
       } else {
         const errorData = await response.json();
