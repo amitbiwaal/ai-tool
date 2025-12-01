@@ -52,7 +52,7 @@ export default function CategoriesManagementPage({
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/categories?t=${Date.now()}`, {
+      const response = await fetch(`/api/categories?showAll=true&t=${Date.now()}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',

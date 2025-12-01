@@ -1102,6 +1102,7 @@ export default function HomePage() {
   const [selectedPricing, setSelectedPricing] = useState<string>("");
   const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [isHydrated, setIsHydrated] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   // Content from database
@@ -1272,6 +1273,11 @@ export default function HomePage() {
     fetchCategories();
   }, []);
 
+  // Hydration effect
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
   // Scroll effect for micro-interactions
   useEffect(() => {
     const handleScroll = () => {
@@ -1359,7 +1365,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/1 to-white/5 dark:via-transparent dark:to-[#0a0f1e]/30" />
         
         {/* Floating AI Tool Icons - Scattered Layout */}
-        <div className="absolute inset-0 hidden lg:block z-[5] pointer-events-none">
+        <div className="absolute inset-0 hidden lg:block z-[5] pointer-events-none" suppressHydrationWarning>
           {/* Left Side - Top to Bottom */}
           <div 
             className="absolute left-24 top-20 w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 dark:from-blue-500/10 dark:to-indigo-500/10 backdrop-blur-xl shadow-xl border border-white/20 dark:border-white/10 flex items-center justify-center hover:scale-110 transition-all duration-300 pointer-events-auto group"
@@ -1481,50 +1487,55 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Hero Section */}
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20 relative z-[1]">
           <div className="mx-auto max-w-6xl text-center">
-            <div 
+            <div
               className="inline-flex items-center justify-center mb-4 sm:mb-6 transition-all duration-700 relative z-[1]"
               style={{
                 transform: `translateY(${scrollY * 0.1}px) scale(${Math.max(0.85, 1 - scrollY * 0.0003)})`,
                 opacity: Math.max(0, 1 - scrollY * 0.002)
               }}
+              suppressHydrationWarning
             >
               <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 dark:text-white animate-gradient bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 bg-[length:200%_200%] bg-clip-text text-transparent px-2">
                 {heroContent.heroTitle || "Discover the Best AI Tools for Your Business"}
               </span>
             </div>
-            <p 
+            <p
               className="text-base sm:text-lg leading-7 sm:leading-8 text-slate-600 dark:text-slate-300 mb-6 sm:mb-8 max-w-3xl mx-auto px-4 transition-all duration-700 relative z-[1]"
               style={{
                 transform: `translateY(${scrollY * 0.15}px)`,
                 opacity: Math.max(0, 1 - scrollY * 0.0025)
               }}
+              suppressHydrationWarning
             >
               {heroContent.heroDescription || "Explore our carefully curated collection of cutting-edge AI tools. Find the perfect solution to supercharge your productivity, creativity, and business growth."}
             </p>
-            <div 
+            <div
               className="mt-6 sm:mt-10 max-w-xl mx-auto px-4 transition-all duration-700 relative z-50"
               style={{
                 transform: `translateY(${scrollY * 0.2}px) scale(${Math.max(0.9, 1 - scrollY * 0.0002)})`,
                 opacity: Math.max(0, 1 - scrollY * 0.003)
               }}
+              suppressHydrationWarning
             >
-              <SearchBar 
+              <SearchBar
                 className="w-full rounded-2xl border border-blue-100 bg-white shadow-[0_20px_50px_rgba(99,102,241,0.15)] focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-200 text-slate-900 placeholder:text-slate-400 dark:border-white/15 dark:bg-white/5 dark:text-white dark:placeholder:text-slate-300 dark:focus-within:border-blue-400 dark:focus-within:ring-blue-500/40"
                 placeholder="Search AI tools, categories, or keywords..."
               />
             </div>
-            <div 
+            <div
               className="mt-6 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 lg:gap-6 transition-all duration-700 relative z-[1] px-4"
               style={{
                 transform: `translateY(${scrollY * 0.25}px)`,
                 opacity: Math.max(0, 1 - scrollY * 0.0035)
               }}
+              suppressHydrationWarning
             >
               <Link href="/tools" className="w-full sm:w-auto">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="group relative bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 border-0 text-white shadow-xl hover:shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105 rounded-full w-full sm:w-auto px-6 sm:px-10"
                 >
                   <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300"></span>
@@ -1533,9 +1544,9 @@ export default function HomePage() {
                 </Button>
               </Link>
               <Link href="/submit" className="w-full sm:w-auto">
-                <Button 
-                  size="lg" 
-                  variant="outline" 
+                <Button
+                  size="lg"
+                  variant="outline"
                   className="group relative border border-blue-600/50 dark:border-blue-500/50 text-blue-700 dark:text-blue-400 hover:text-white dark:hover:text-white bg-transparent hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 hover:border-transparent shadow-lg hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 hover:scale-105 rounded-full w-full sm:w-auto px-6 sm:px-10 font-semibold text-sm sm:text-base"
                 >
                   <span className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-300"></span>
@@ -1543,60 +1554,67 @@ export default function HomePage() {
                 </Button>
               </Link>
             </div>
-            <div 
+            <div
               className="mt-8 sm:mt-12 flex flex-wrap items-center justify-center gap-3 sm:gap-4 transition-all duration-700 relative z-[1] px-4"
               style={{
                 transform: `translateY(${scrollY * 0.3}px)`,
                 opacity: Math.max(0, 1 - scrollY * 0.004)
               }}
+              suppressHydrationWarning
             >
               {/* User avatars */}
               <div className="flex items-center -space-x-2 sm:-space-x-3">
-                <div 
+                <div
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
                   style={{
                     transform: `translateY(${Math.sin(scrollY * 0.01) * 2}px)`
                   }}
+                  suppressHydrationWarning
                 >
                   A
                 </div>
-                <div 
+                <div
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
                   style={{
                     transform: `translateY(${Math.sin(scrollY * 0.01 + 1) * 2}px)`
                   }}
+                  suppressHydrationWarning
                 >
                   M
                 </div>
-                <div 
+                <div
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
                   style={{
                     transform: `translateY(${Math.sin(scrollY * 0.01 + 2) * 2}px)`
                   }}
+                  suppressHydrationWarning
                 >
                   S
                 </div>
-                <div 
+                <div
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
                   style={{
                     transform: `translateY(${Math.sin(scrollY * 0.01 + 3) * 2}px)`
                   }}
+                  suppressHydrationWarning
                 >
                   R
                 </div>
-                <div 
+                <div
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
                   style={{
                     transform: `translateY(${Math.sin(scrollY * 0.01 + 4) * 2}px)`
                   }}
+                  suppressHydrationWarning
                 >
                   K
                 </div>
-                <div 
+                <div
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-slate-300 to-slate-500 flex items-center justify-center text-white font-bold text-[10px] sm:text-xs shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10 animate-pulse"
                   style={{
                     transform: `translateY(${Math.sin(scrollY * 0.01 + 5) * 2}px)`
                   }}
+                  suppressHydrationWarning
                 >
                   +50K
                 </div>
