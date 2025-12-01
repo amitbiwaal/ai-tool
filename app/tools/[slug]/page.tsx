@@ -391,11 +391,8 @@ export default function ToolDetailPage() {
     if (supabase) {
       const { data: { session } } = await supabase.auth.getSession();
       setIsAuthenticated(!!session);
-      if (session && tool) {
-        checkFavorite(tool.id);
-      }
     }
-  }, [tool, checkFavorite]);
+  }, []); // ✅ FIX 1: Remove tool and checkFavorite to break infinite loop
 
   const fetchToolData = useCallback(async () => {
     try {
@@ -416,19 +413,20 @@ export default function ToolDetailPage() {
             setReviews(reviewsData.reviews || []);
           }
 
-          // Fetch similar tools
+          // Fetch similar tools (filter client-side since API doesn't support exclude)
           if (data.tool.categories && data.tool.categories.length > 0) {
             const categoryIds = data.tool.categories.map((c: any) => c.id);
-            const similarRes = await fetch(`/api/tools?categories=${categoryIds.join(",")}&limit=3&exclude=${data.tool.id}`);
-            if (similarRes.ok) {
-              const similarData = await similarRes.json();
-              setSimilarTools(similarData.tools?.filter((t: Tool) => t.id !== data.tool.id).slice(0, 3) || []);
+            try {
+              const similarRes = await fetch(`/api/tools?categories=${categoryIds.join(",")}&limit=4`);
+              if (similarRes.ok) {
+                const similarData = await similarRes.json();
+                // ✅ FIX 3: Filter out current tool client-side
+                setSimilarTools(similarData.tools?.filter((t: Tool) => t.id !== data.tool.id).slice(0, 3) || []);
+              }
+            } catch (similarError) {
+              console.error("Error fetching similar tools:", similarError);
+              setSimilarTools([]);
             }
-          }
-
-          // Check favorite status
-          if (isAuthenticated) {
-            checkFavorite(data.tool.id);
           }
           
           setLoading(false);
@@ -444,12 +442,25 @@ export default function ToolDetailPage() {
     } finally {
       setLoading(false);
     }
-  }, [slug, isAuthenticated, router, checkFavorite]);
+  }, [slug, router]); // ✅ FIX 5: Remove isAuthenticated and checkFavorite to avoid circular dependencies
 
+  // ✅ FIX 4: Separate useEffects to break the loop
+  // Check auth only on mount (or when needed)
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  // Fetch tool data only when slug changes
   useEffect(() => {
     fetchToolData();
-    checkAuth();
-  }, [slug, fetchToolData, checkAuth]);
+  }, [slug, fetchToolData]);
+
+  // ✅ FIX 2: Check favorite only when both tool and auth are ready
+  useEffect(() => {
+    if (tool && isAuthenticated) {
+      checkFavorite(tool.id);
+    }
+  }, [tool?.id, isAuthenticated, checkFavorite]);
 
   const handleSubmitReview = async () => {
     if (!tool) {
