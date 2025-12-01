@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { SearchBar } from "@/components/search-bar";
@@ -283,7 +283,7 @@ function ToolsPageContent() {
   const [hasMore, setHasMore] = useState(false);
   const [toolsContent, setToolsContent] = useState<ToolsContent>(defaultToolsContent);
   const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const retryCountRef = useRef(0);
 
   const currentPage = parseInt(searchParams.get("page") || "1");
   const searchQuery = searchParams.get("search") || "";
@@ -377,16 +377,17 @@ function ToolsPageContent() {
       setDisplayedTools(fetchedTools.slice(0, 6));
       setTotalPages(data.totalPages || 1);
       setHasMore(fetchedTools.length > 6);
-      setRetryCount(0); // Reset retry count on success
+      retryCountRef.current = 0; // Reset retry count on success
     } catch (error: any) {
       console.error("Error fetching tools:", error);
 
-      if (!isRetry && retryCount < 2) {
+      if (!isRetry && retryCountRef.current < 2) {
         // Retry up to 2 times with exponential backoff
+        const currentRetry = retryCountRef.current;
+        retryCountRef.current = currentRetry + 1;
         setTimeout(() => {
-          setRetryCount(prev => prev + 1);
           fetchData(true);
-        }, Math.pow(2, retryCount) * 1000);
+        }, Math.pow(2, currentRetry) * 1000);
         return;
       }
 
@@ -400,7 +401,7 @@ function ToolsPageContent() {
         setLoading(false);
       }
     }
-  }, [currentPage, searchQuery, sortBy, selectedCategories, selectedTags, selectedPricing, minRating, retryCount]);
+  }, [currentPage, searchQuery, sortBy, selectedCategories, selectedTags, selectedPricing, minRating]);
 
   // Load categories and tags on mount
   useEffect(() => {
