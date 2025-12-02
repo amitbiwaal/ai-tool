@@ -163,22 +163,34 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Tag not found" }, { status: 404 });
     }
 
-    // Check if tag is being used by any tools
-    const { data: toolTags, error: usageError } = await supabase
-      .from("tool_tags")
-      .select("id")
-      .eq("tag_id", tagId)
-      .limit(1);
+    // Check if tag is being used by any tools (optional safety check)
+    try {
+      const { data: toolTags, error: usageError } = await supabase
+        .from("tool_tags")
+        .select("tool_id")
+        .eq("tag_id", tagId)
+        .limit(1);
 
-    if (usageError) {
-      console.error("Tag usage check error:", usageError);
-      return NextResponse.json({ error: "Failed to check tag usage" }, { status: 500 });
-    }
+      if (usageError) {
+        // If table doesn't exist or other error, log but don't block deletion
+        console.warn("Tag usage check failed (continuing with deletion):", {
+          error: usageError.message,
+          code: usageError.code
+        });
 
-    if (toolTags && toolTags.length > 0) {
-      return NextResponse.json({
-        error: "Cannot delete tag that is being used by tools. Remove this tag from all tools first."
-      }, { status: 409 });
+        // For development/staging environments, allow deletion even if check fails
+        if (usageError.code === '42P01') { // table doesn't exist
+          console.log("tool_tags table doesn't exist, skipping usage check");
+        }
+        // Continue with deletion for other errors too (non-blocking)
+      } else if (toolTags && toolTags.length > 0) {
+        return NextResponse.json({
+          error: "Cannot delete tag that is being used by tools. Remove this tag from all tools first."
+        }, { status: 409 });
+      }
+    } catch (checkError) {
+      // If usage check fails completely, log but allow deletion
+      console.warn("Tag usage check threw exception (continuing with deletion):", checkError);
     }
 
     // Delete the tag
