@@ -26,7 +26,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
-import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { getBlogCoverUrl, getAvatarUrl, isDicebearUrl } from "@/lib/utils/images";
@@ -633,63 +632,27 @@ export default function BlogPostPage() {
             [&_a]:text-primary [&_a]:font-semibold [&_a]:no-underline hover:[&_a]:underline [&_a]:transition-all
             [&_strong]:text-foreground [&_strong]:font-bold
             [&_hr]:my-10 [&_hr]:border-slate-200 dark:[&_hr]:border-slate-700
+            [&_h1]:scroll-mt-24 [&_h1]:text-4xl [&_h1]:font-bold [&_h1]:tracking-tight [&_h1]:mb-6 [&_h1]:mt-12 [&_h1]:pb-3 [&_h1]:border-b-2 [&_h1]:border-primary/20 [&_h1]:text-foreground
+            [&_h2]:scroll-mt-24 [&_h2]:text-2xl [&_h2]:sm:text-3xl [&_h2]:lg:text-4xl [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:mb-5 [&_h2]:mt-10 [&_h2]:pb-2 [&_h2]:border-b [&_h2]:border-slate-200 [&_h2]:dark:border-slate-700 [&_h2]:text-foreground [&_h2]:flex [&_h2]:items-center [&_h2]:gap-3
+            [&_h2_span:first-child]:w-1 [&_h2_span:first-child]:h-8 [&_h2_span:first-child]:bg-gradient-to-b [&_h2_span:first-child]:from-blue-500 [&_h2_span:first-child]:to-purple-500 [&_h2_span:first-child]:rounded-full [&_h2_span:first-child]:flex-shrink-0
+            [&_h3]:scroll-mt-24 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:tracking-tight [&_h3]:mb-4 [&_h3]:mt-8 [&_h3]:text-slate-700 [&_h3]:dark:text-slate-200
+            [&_h4]:scroll-mt-24 [&_h4]:text-xl [&_h4]:font-bold [&_h4]:tracking-tight [&_h4]:mb-3 [&_h4]:mt-6 [&_h4]:text-foreground
+            [&_p]:text-base [&_p]:leading-[1.8] [&_p]:mb-6 [&_p]:text-slate-700 [&_p]:dark:text-slate-200 [&_p]:font-normal
+            [&_ul]:space-y-3 [&_ul]:list-none [&_ul]:pl-0
+            [&_ol]:space-y-3 [&_ol]:pl-6
+            [&_li]:leading-relaxed
+            [&_ol_li]:pl-2
+            [&_ul_li]:flex [&_ul_li]:items-start [&_ul_li]:gap-3
+            [&_ul_li_span:first-child]:flex-shrink-0 [&_ul_li_span:first-child]:w-6 [&_ul_li_span:first-child]:h-6 [&_ul_li_span:first-child]:rounded-full [&_ul_li_span:first-child]:bg-primary/10 [&_ul_li_span:first-child]:flex [&_ul_li_span:first-child]:items-center [&_ul_li_span:first-child]:justify-center [&_ul_li_span:first-child]:mt-0.5
+            [&_ul_li_span:first-child_span]:text-primary [&_ul_li_span:first-child_span]:text-xs [&_ul_li_span:first-child_span]:font-bold
+            [&_ul_li_span:last-child]:flex-1
+            [&_code:not(pre_code)]:bg-slate-100 [&_code:not(pre_code)]:dark:bg-slate-800 [&_code:not(pre_code)]:text-primary [&_code:not(pre_code)]:px-2 [&_code:not(pre_code)]:py-1 [&_code:not(pre_code)]:rounded [&_code:not(pre_code)]:text-sm [&_code:not(pre_code)]:font-semibold
+            [&_pre]:bg-slate-100 [&_pre]:dark:bg-slate-800 [&_pre]:p-4 [&_pre]:rounded [&_pre]:overflow-x-auto [&_pre]:my-6
+            [&_pre_code]:bg-transparent [&_pre_code]:text-foreground [&_pre_code]:px-0 [&_pre_code]:py-0
+            [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:bg-slate-50 [&_blockquote]:dark:bg-slate-900/50 [&_blockquote]:pl-6 [&_blockquote]:pr-4 [&_blockquote]:py-4 [&_blockquote]:italic [&_blockquote]:rounded-r-lg [&_blockquote]:my-6
+            [&_img]:rounded-xl [&_img]:shadow-xl [&_img]:border [&_img]:border-slate-200 [&_img]:dark:border-slate-700 [&_img]:max-w-full [&_img]:h-auto [&_img]:my-8
           ">
-          <ReactMarkdown
-            components={{
-              h1: ({node, ...props}: any) => (
-                <h1 className="scroll-mt-24 text-4xl font-bold tracking-tight mb-6 mt-12 pb-3 border-b-2 border-primary/20 text-foreground" {...props} />
-              ),
-              h2: ({node, ...props}: any) => (
-                <h2 className="scroll-mt-24 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-5 mt-10 pb-2 border-b border-slate-200 dark:border-slate-700 text-foreground flex items-center gap-3" {...props}>
-                  <span className="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full flex-shrink-0"></span>
-                  <span>{props.children}</span>
-                </h2>
-              ),
-              h3: ({node, ...props}: any) => (
-                <h3 className="scroll-mt-24 text-xl font-bold tracking-tight mb-4 mt-8 text-slate-700 dark:text-slate-200" {...props} />
-              ),
-              h4: ({node, ...props}: any) => (
-                <h4 className="scroll-mt-24 text-xl font-bold tracking-tight mb-3 mt-6 text-foreground" {...props} />
-              ),
-              p: ({node, ...props}: any) => <p className="text-base leading-[1.8] mb-6 text-slate-700 dark:text-slate-200 font-normal" {...props} />,
-              ul: ({node, ...props}: any) => (
-                <ul className="space-y-3 list-none pl-0" {...props} />
-              ),
-              ol: ({node, ...props}) => <ol className="space-y-3 pl-6" {...props} />,
-              li: ({node, ordered, ...props}: any) => 
-                ordered ? (
-                  <li className="leading-relaxed pl-2" {...props} />
-                ) : (
-                  <li className="flex items-start gap-3 leading-relaxed" {...props}>
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
-                      <span className="text-primary text-xs font-bold">✓</span>
-                    </span>
-                    <span className="flex-1">{props.children}</span>
-                  </li>
-                ),
-              code: ({node, inline, ...props}: any) => 
-                inline ? (
-                  <code className="bg-slate-100 dark:bg-slate-800 text-primary px-2 py-1 rounded text-sm font-semibold" {...props} />
-                ) : (
-                  <code className="block" {...props} />
-                ),
-              blockquote: ({node, ...props}) => (
-                <blockquote className="border-l-4 border-primary bg-slate-50 dark:bg-slate-900/50 pl-6 pr-4 py-4 italic rounded-r-lg my-6" {...props} />
-              ),
-              img: ({node, ...props}: any) => (
-                <div className="my-8 relative w-full h-64">
-                  <Image
-                    className="rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 object-cover"
-                    alt=""
-                    fill
-                    {...props}
-                  />
-                </div>
-              ),
-            }}
-          >
-            {post?.content || ""}
-          </ReactMarkdown>
+          <div dangerouslySetInnerHTML={{ __html: post?.content || "" }} />
           </div>
 
           {/* Tags Section */}
