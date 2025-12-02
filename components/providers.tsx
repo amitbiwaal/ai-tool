@@ -21,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         position="top-center"
         expand={true}
         richColors={true}
-        closeButton={true}
+        closeButton={false}
         toastOptions={{
           duration: 4000,
           className: "!rounded-2xl !shadow-2xl !border-2 !backdrop-blur-md !ring-1 !ring-black/5",

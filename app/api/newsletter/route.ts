@@ -14,9 +14,24 @@ function generateVerificationToken(): string {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("Newsletter API called");
+
+    // Check environment variables
+    console.log("Environment check:", {
+      url: process.env.NEXT_PUBLIC_SUPABASE_URL ? "Set" : "Missing",
+      key: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? "Set" : "Missing",
+      serviceKey: process.env.SUPABASE_SERVICE_ROLE_KEY ? "Set" : "Missing"
+    });
+
     const supabase = await createServerSupabaseClient();
+    console.log("Supabase client created:", !!supabase);
 
     if (!supabase) {
+      console.log("Supabase client is null - environment variables missing");
+    }
+
+    if (!supabase) {
+      console.log("Supabase client is null");
       return NextResponse.json({
         error: "Database connection not available. Please configure Supabase environment variables."
       }, { status: 503 });
@@ -38,6 +53,31 @@ export async function POST(request: NextRequest) {
 
     const { email } = validationResult.data;
 
+    // First test basic database connection
+    console.log("Testing database connection...");
+    const { data: testData, error: testError } = await supabase
+      .from('profiles')
+      .select('count')
+      .limit(1)
+      .single();
+
+    console.log("Database connection test:", { success: !testError, error: testError?.message });
+
+    // Test if newsletter_subscribers table exists
+    console.log("Testing newsletter_subscribers table...");
+    const { data: tableTest, error: tableError } = await supabase
+      .from('newsletter_subscribers')
+      .select('count')
+      .limit(1);
+
+    console.log("Table existence test:", {
+      exists: !tableError,
+      error: tableError?.message,
+      code: tableError?.code
+    });
+
+    console.log("Checking for existing subscriber:", email.toLowerCase());
+
     // Check if email is already subscribed
     const { data: existingSubscriber, error: checkError } = await supabase
       .from('newsletter_subscribers')
@@ -45,10 +85,27 @@ export async function POST(request: NextRequest) {
       .eq('email', email.toLowerCase())
       .single();
 
+    console.log("Subscriber check result:", { data: existingSubscriber, error: checkError });
+
     if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "not found"
       console.error('Error checking existing subscriber:', checkError);
+      console.error('Error details:', {
+        message: checkError.message,
+        code: checkError.code,
+        hint: checkError.hint,
+        details: checkError.details
+      });
+
+      // Check if table exists
+      if (checkError.message?.includes('relation "public.newsletter_subscribers" does not exist')) {
+        return NextResponse.json(
+          { error: 'Newsletter system not configured. Please contact support.' },
+          { status: 503 }
+        );
+      }
+
       return NextResponse.json(
-        { error: 'Failed to process subscription' },
+        { error: 'Failed to process subscription. Please try again.' },
         { status: 500 }
       );
     }
@@ -74,8 +131,15 @@ export async function POST(request: NextRequest) {
 
         if (updateError) {
           console.error('Error reactivating subscription:', updateError);
+          console.error('Update error details:', {
+            message: updateError.message,
+            code: updateError.code,
+            hint: updateError.hint,
+            details: updateError.details
+          });
+
           return NextResponse.json(
-            { error: 'Failed to reactivate subscription' },
+            { error: 'Failed to reactivate subscription. Please try again.' },
             { status: 500 }
           );
         }
@@ -100,8 +164,30 @@ export async function POST(request: NextRequest) {
 
     if (insertError) {
       console.error('Error creating subscription:', insertError);
+      console.error('Insert error details:', {
+        message: insertError.message,
+        code: insertError.code,
+        hint: insertError.hint,
+        details: insertError.details
+      });
+
+      // Check for specific errors
+      if (insertError.message?.includes('duplicate key value')) {
+        return NextResponse.json(
+          { error: 'You are already subscribed to our newsletter.' },
+          { status: 409 }
+        );
+      }
+
+      if (insertError.message?.includes('relation "public.newsletter_subscribers" does not exist')) {
+        return NextResponse.json(
+          { error: 'Newsletter system not configured. Please contact support.' },
+          { status: 503 }
+        );
+      }
+
       return NextResponse.json(
-        { error: 'Failed to create subscription' },
+        { error: 'Failed to create subscription. Please try again.' },
         { status: 500 }
       );
     }
@@ -114,6 +200,11 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Newsletter subscription error:', error);
+    console.error('Error details:', {
+      message: error?.message,
+      stack: error?.stack,
+      name: error?.name
+    });
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -123,6 +214,8 @@ export async function POST(request: NextRequest) {
 
 // GET endpoint to verify subscription
 export async function GET(request: NextRequest) {
+  console.log("Newsletter GET endpoint called for verification");
+
   try {
     const supabase = await createServerSupabaseClient();
 

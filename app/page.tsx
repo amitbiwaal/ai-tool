@@ -1293,6 +1293,11 @@ export default function HomePage() {
     try {
       setSubscribing(true);
 
+      console.log("Making newsletter subscription request:", {
+        email: newsletterEmail.trim(),
+        method: "POST"
+      });
+
       const response = await fetch("/api/newsletter", {
         method: "POST",
         headers: {
@@ -1301,6 +1306,11 @@ export default function HomePage() {
         body: JSON.stringify({
           email: newsletterEmail.trim(),
         }),
+      });
+
+      console.log("Newsletter API response:", {
+        status: response.status,
+        ok: response.ok
       });
 
       const data = await response.json();

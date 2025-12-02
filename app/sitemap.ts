@@ -28,24 +28,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const toolUrls =
     tools?.map((tool) => ({
-      url: `${baseUrl}/tools/${tool.slug}`,
-      lastModified: new Date(tool.updated_at),
+      url: `${baseUrl}/tools/${encodeURIComponent(tool.slug)}`,
+      lastModified: tool.updated_at ? new Date(tool.updated_at) : new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })) || [];
 
   const categoryUrls =
     categories?.map((category) => ({
-      url: `${baseUrl}/category/${category.slug}`,
-      lastModified: new Date(category.updated_at),
+      url: `${baseUrl}/category/${encodeURIComponent(category.slug)}`,
+      lastModified: category.updated_at ? new Date(category.updated_at) : new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.7,
     })) || [];
 
   const blogUrls =
     posts?.map((post) => ({
-      url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.updated_at),
+      url: `${baseUrl}/blog/${encodeURIComponent(post.slug)}`,
+      lastModified: post.updated_at ? new Date(post.updated_at) : new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })) || [];
