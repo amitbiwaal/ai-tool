@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 import crypto from 'crypto';
 
@@ -14,6 +14,14 @@ function generateVerificationToken(): string {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createServerSupabaseClient();
+
+    if (!supabase) {
+      return NextResponse.json({
+        error: "Database connection not available. Please configure Supabase environment variables."
+      }, { status: 503 });
+    }
+
     const body = await request.json();
 
     // Validate input
@@ -116,6 +124,14 @@ export async function POST(request: NextRequest) {
 // GET endpoint to verify subscription
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createServerSupabaseClient();
+
+    if (!supabase) {
+      return NextResponse.json({
+        error: "Database connection not available. Please configure Supabase environment variables."
+      }, { status: 503 });
+    }
+
     const { searchParams } = new URL(request.url);
     const token = searchParams.get('token');
 
