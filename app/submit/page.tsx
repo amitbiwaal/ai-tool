@@ -13,7 +13,7 @@ import { Category, Tag } from "@/lib/types";
 import { Sparkles, ArrowRight, FileText, Search, CheckCircle2, TrendingUp, Upload, X, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseClient } from "@/lib/supabase/client";
 import Image from "next/image";
 
 export default function SubmitToolPage() {
@@ -24,6 +24,7 @@ export default function SubmitToolPage() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
   
   // Content from database
   const [pageContent, setPageContent] = useState<Record<string, string>>({});
@@ -58,15 +59,46 @@ export default function SubmitToolPage() {
   const checkAuth = useCallback(async () => {
     try {
       console.log("Checking authentication...");
+      console.log("Environment check:", {
+        url: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 20) + "...",
+        key: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 20) + "..."
+      });
+
+      // Create fresh Supabase client each time
+      const supabase = getSupabaseClient();
 
       if (!supabase) {
-        console.error("Supabase client is null");
-        toast.error("Database connection not available. Please check your configuration.");
+        console.error("Supabase client is null - check environment variables");
+        toast.error("Authentication is not configured. Please check Supabase environment variables.");
         setCheckingAuth(false);
         return;
       }
 
-      console.log("Supabase client available, checking user...");
+      console.log("Supabase client available, checking session first...");
+
+      // First check session
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      console.log("Session check result:", {
+        hasSession: !!sessionData.session,
+        sessionError: sessionError?.message
+      });
+
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        toast.error(`Session error: ${sessionError.message}`);
+        router.push("/auth/login?redirect=/submit");
+        setCheckingAuth(false);
+        return;
+      }
+
+      if (!sessionData.session) {
+        console.log("No session found, redirecting to login");
+        router.push("/auth/login?redirect=/submit");
+        setCheckingAuth(false);
+        return;
+      }
+
+      console.log("Session found, checking user...");
 
       // Add timeout to prevent hanging
       const authPromise = supabase.auth.getUser();
@@ -76,7 +108,7 @@ export default function SubmitToolPage() {
 
       const { data: { user }, error } = await Promise.race([authPromise, timeoutPromise]) as any;
 
-      console.log("Auth result:", { user: !!user, error });
+      console.log("Auth result:", { user: !!user, error, userId: user?.id });
 
       if (error) {
         console.error("Auth error:", error);
@@ -88,7 +120,6 @@ export default function SubmitToolPage() {
 
       if (!user) {
         console.log("No user found, redirecting to login");
-        toast.error("Please login to submit a tool");
         router.push("/auth/login?redirect=/submit");
         setCheckingAuth(false);
         return;
@@ -133,6 +164,55 @@ export default function SubmitToolPage() {
       console.error("Error fetching page content:", error);
     }
   }, []);
+
+  // Ultra-fast auth check - redirect immediately if not logged in
+  useEffect(() => {
+    // Most aggressive approach: redirect immediately unless we can prove user is logged in
+    const checkAndRedirect = async () => {
+      try {
+        // Check environment variables
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          console.log("Supabase not configured");
+          router.push("/auth/login?redirect=/submit");
+          return;
+        }
+
+        // Try to get Supabase client
+        const supabase = getSupabaseClient();
+        if (!supabase) {
+          console.log("Supabase client creation failed");
+          router.push("/auth/login?redirect=/submit");
+          return;
+        }
+
+        // Check session (this will be fast if user is logged in)
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error) {
+          console.log("Session check error:", error.message);
+          router.push("/auth/login?redirect=/submit");
+          return;
+        }
+
+        if (!session) {
+          console.log("No session found");
+          router.push("/auth/login?redirect=/submit");
+          return;
+        }
+
+        // User is authenticated - show the page
+        console.log("User authenticated, showing page");
+        setAuthChecked(true);
+        setCheckingAuth(true);
+
+      } catch (error) {
+        console.error("Auth check failed:", error);
+        router.push("/auth/login?redirect=/submit");
+      }
+    };
+
+    checkAndRedirect();
+  }, [router]);
 
   // Check authentication on mount
   useEffect(() => {
@@ -405,22 +485,28 @@ export default function SubmitToolPage() {
   };
 
   // Show loading state while checking authentication
-  if (checkingAuth) {
+  if (!authChecked || checkingAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center max-w-md px-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground mb-4">Checking authentication...</p>
-          <p className="text-xs text-muted-foreground mb-4">
-            If this takes too long, please refresh the page or check your internet connection.
-          </p>
-          <Button
-            variant="outline"
-            onClick={() => window.location.reload()}
-            className="text-sm"
-          >
-            Refresh Page
-          </Button>
+          <div className="flex gap-2 justify-center">
+            <Button
+              variant="outline"
+              onClick={() => window.location.reload()}
+              className="text-sm"
+            >
+              Refresh Page
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/auth/login?redirect=/submit")}
+              className="text-sm"
+            >
+              Go to Login
+            </Button>
+          </div>
         </div>
       </div>
     );

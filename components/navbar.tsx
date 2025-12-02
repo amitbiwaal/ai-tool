@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { getAvatarUrl, isDicebearUrl } from "@/lib/utils/images";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
 const navigation = [
@@ -56,6 +56,7 @@ export function Navbar() {
 
   const checkAuth = async () => {
     // Check real authentication
+    const supabase = getSupabaseClient();
     if (supabase) {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {

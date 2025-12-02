@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseClient } from "@/lib/supabase/client";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
@@ -34,6 +34,7 @@ function LoginPageContent() {
     e.preventDefault();
     setLoading(true);
 
+    const supabase = getSupabaseClient();
     if (!supabase) {
       toast.error("Database connection not available. Please configure Supabase.");
       setLoading(false);

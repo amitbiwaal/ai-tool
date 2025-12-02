@@ -2,17 +2,23 @@ import { createBrowserClient } from "@supabase/ssr";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 export function createSupabaseBrowserClient() {
-  // Temporarily disabled for development without Supabase
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  // Check for environment variables dynamically
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error("Missing Supabase environment variables");
     return null;
   }
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+
+  return createBrowserClient(supabaseUrl, supabaseKey);
 }
 
-export const supabase = createSupabaseBrowserClient();
+// Create client dynamically instead of at module level
+export const getSupabaseClient = () => createSupabaseBrowserClient();
+
+// Keep the old export for backward compatibility but mark as deprecated
+export const supabase = getSupabaseClient();
 
 export const supabaseAdmin: SupabaseClient<any> | null = (() => {
   // Temporarily disabled for development without Supabase
