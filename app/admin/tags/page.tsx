@@ -126,11 +126,44 @@ export default function TagsPage({
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this tag?")) {
+    if (!confirm("Are you sure you want to delete this tag? This action cannot be undone.")) {
       return;
     }
-    // TODO: Implement delete API endpoint
-    toast.success("Delete functionality coming soon!");
+
+    try {
+      const response = await fetch(`/api/tags?id=${id}`, {
+        method: "DELETE",
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        toast.success(responseData.message || "Tag deleted successfully!");
+        // Refresh tags list
+        await fetchTags();
+      } else {
+        const errorMessage = responseData?.error || `HTTP ${response.status}: ${response.statusText}`;
+        console.error("Delete tag error:", {
+          status: response.status,
+          error: errorMessage,
+        });
+
+        if (response.status === 409) {
+          toast.error("Cannot delete tag that is being used by tools. Remove this tag from all tools first.");
+        } else if (response.status === 401) {
+          toast.error("Unauthorized. Please login again.");
+        } else if (response.status === 403) {
+          toast.error("You don't have permission to delete tags.");
+        } else if (response.status === 404) {
+          toast.error("Tag not found.");
+        } else {
+          toast.error(errorMessage || "Failed to delete tag");
+        }
+      }
+    } catch (error: any) {
+      console.error("Error deleting tag:", error);
+      toast.error(error?.message || "Network error. Please check your connection and try again.");
+    }
   };
 
   return (

@@ -104,8 +104,104 @@ export async function POST(request: NextRequest) {
     }, { status: 201 });
   } catch (error: any) {
     console.error("Unexpected error in POST tags route:", error);
-    return NextResponse.json({ 
-      error: error.message || "An unexpected error occurred" 
+    return NextResponse.json({
+      error: error.message || "An unexpected error occurred"
+    }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const supabase = await createServerSupabaseClient();
+
+    if (!supabase) {
+      return NextResponse.json({
+        error: "Database connection not available. Please configure Supabase environment variables."
+      }, { status: 503 });
+    }
+
+    // Check authentication
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Check if user is admin or moderator
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profileError) {
+      console.error("Profile fetch error:", profileError);
+      return NextResponse.json({ error: "Failed to verify user role" }, { status: 500 });
+    }
+
+    if (profile?.role !== "admin" && profile?.role !== "moderator") {
+      return NextResponse.json({ error: "Forbidden: Admin or moderator access required" }, { status: 403 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const tagId = searchParams.get('id');
+
+    if (!tagId) {
+      return NextResponse.json({ error: "Tag ID is required" }, { status: 400 });
+    }
+
+    // Check if tag exists and get its details
+    const { data: tag, error: fetchError } = await supabase
+      .from("tags")
+      .select("id, name")
+      .eq("id", tagId)
+      .single();
+
+    if (fetchError || !tag) {
+      return NextResponse.json({ error: "Tag not found" }, { status: 404 });
+    }
+
+    // Check if tag is being used by any tools
+    const { data: toolTags, error: usageError } = await supabase
+      .from("tool_tags")
+      .select("id")
+      .eq("tag_id", tagId)
+      .limit(1);
+
+    if (usageError) {
+      console.error("Tag usage check error:", usageError);
+      return NextResponse.json({ error: "Failed to check tag usage" }, { status: 500 });
+    }
+
+    if (toolTags && toolTags.length > 0) {
+      return NextResponse.json({
+        error: "Cannot delete tag that is being used by tools. Remove this tag from all tools first."
+      }, { status: 409 });
+    }
+
+    // Delete the tag
+    const { error: deleteError } = await supabase
+      .from("tags")
+      .delete()
+      .eq("id", tagId);
+
+    if (deleteError) {
+      console.error("Tag delete error:", deleteError);
+      return NextResponse.json({
+        error: deleteError.message || "Failed to delete tag"
+      }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      message: `Tag "${tag.name}" deleted successfully`
+    });
+
+  } catch (error: any) {
+    console.error("Unexpected error in DELETE tags route:", error);
+    return NextResponse.json({
+      error: error.message || "An unexpected error occurred"
     }, { status: 500 });
   }
 }
