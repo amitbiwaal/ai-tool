@@ -494,7 +494,7 @@ export default function ToolDetailPage() {
     if (tool && isAuthenticated) {
       checkFavorite(tool.id);
     }
-  }, [tool?.id, isAuthenticated, checkFavorite]);
+  }, [tool, isAuthenticated, checkFavorite]);
 
   const handleSubmitReview = async () => {
     if (!tool) {
