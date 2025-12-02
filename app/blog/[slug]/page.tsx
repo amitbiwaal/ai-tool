@@ -53,6 +53,8 @@ export default function BlogPostPage() {
   const [submittingReply, setSubmittingReply] = useState<string | null>(null);
   const [likedComments, setLikedComments] = useState<Set<string>>(new Set());
   const [likingComment, setLikingComment] = useState<string | null>(null);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
   
   // Content from database
   const [pageContent, setPageContent] = useState<Record<string, string>>({});
@@ -377,10 +379,10 @@ export default function BlogPostPage() {
 
   const handleShare = (platform: string) => {
     if (!post) return;
-    
+
     const url = `${typeof window !== 'undefined' ? window.location.origin : ''}/blog/${post.slug}`;
     const text = post.title;
-    
+
     const shareUrls: Record<string, string> = {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
       twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
@@ -395,8 +397,56 @@ export default function BlogPostPage() {
     } else if (shareUrls[platform]) {
       window.open(shareUrls[platform], '_blank', 'width=600,height=400');
     }
-    
+
     setShowShareMenu(false);
+  };
+
+  const handleNewsletterSubscribe = async () => {
+    if (!newsletterEmail.trim()) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newsletterEmail)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    try {
+      setSubscribing(true);
+
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: newsletterEmail.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to subscribe");
+      }
+
+      if (data.alreadySubscribed) {
+        toast.success(data.message);
+      } else if (data.verificationSent) {
+        toast.success(data.message);
+      } else {
+        toast.success(data.message);
+      }
+
+      setNewsletterEmail("");
+    } catch (error: any) {
+      console.error("Newsletter subscription error:", error);
+      toast.error(error?.message || "Failed to subscribe. Please try again.");
+    } finally {
+      setSubscribing(false);
+    }
   };
 
   // Loading state
@@ -908,11 +958,18 @@ export default function BlogPostPage() {
                 <div className="space-y-3">
                   <input
                     type="email"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
                     placeholder={pageContent.newsletterPlaceholder || "Enter your email"}
                     className="w-full px-4 py-2 rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                    disabled={subscribing}
                   />
-                  <Button className="w-full">
-                    {pageContent.newsletterButton || "Subscribe"}
+                  <Button
+                    className="w-full"
+                    onClick={handleNewsletterSubscribe}
+                    disabled={subscribing || !newsletterEmail.trim()}
+                  >
+                    {subscribing ? "Subscribing..." : (pageContent.newsletterButton || "Subscribe")}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">

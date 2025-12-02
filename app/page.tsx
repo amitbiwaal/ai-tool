@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SearchBar } from "@/components/search-bar";
 import { ToolCard } from "@/components/tool-card";
+import { toast } from "sonner";
 import { CategoryBadge } from "@/components/category-badge";
 import { Tool } from "@/lib/types";
 
@@ -1108,6 +1109,8 @@ export default function HomePage() {
   // Content from database
   const [heroContent, setHeroContent] = useState<Record<string, string>>({});
   const [contentLoaded, setContentLoaded] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
   
   // Tools from database
   const [featuredTools, setFeaturedTools] = useState<Tool[]>([]);
@@ -1272,6 +1275,56 @@ export default function HomePage() {
     fetchTools();
     fetchCategories();
   }, []);
+
+  const handleNewsletterSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!newsletterEmail.trim()) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newsletterEmail)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    try {
+      setSubscribing(true);
+
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: newsletterEmail.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to subscribe");
+      }
+
+      if (data.alreadySubscribed) {
+        toast.success(data.message);
+      } else if (data.verificationSent) {
+        toast.success(data.message);
+      } else {
+        toast.success(data.message);
+      }
+
+      setNewsletterEmail("");
+    } catch (error: any) {
+      console.error("Newsletter subscription error:", error);
+      toast.error(error?.message || "Failed to subscribe. Please try again.");
+    } finally {
+      setSubscribing(false);
+    }
+  };
 
   // Hydration effect
   useEffect(() => {
@@ -2267,15 +2320,22 @@ export default function HomePage() {
             {heroContent.newsletterDescription || "Get weekly updates on the latest AI tools, trends, and insights delivered straight to your inbox."}
           </p>
           <div className="max-w-md mx-auto mb-8">
-            <form className="flex flex-col sm:flex-row gap-4">
+            <form onSubmit={handleNewsletterSubscribe} className="flex flex-col sm:flex-row gap-4">
               <input
                 type="email"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
                 required
                 className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:border-white/20 dark:bg-white/5 dark:text-white dark:placeholder:text-slate-400 dark:focus:ring-blue-500/50"
                 placeholder="Enter your email"
+                disabled={subscribing}
               />
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600">
-                Subscribe
+              <Button
+                type="submit"
+                disabled={subscribing || !newsletterEmail.trim()}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 disabled:opacity-50"
+              >
+                {subscribing ? "Subscribing..." : "Subscribe"}
               </Button>
             </form>
           </div>

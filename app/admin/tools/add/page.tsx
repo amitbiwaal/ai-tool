@@ -290,27 +290,55 @@ export default function AdminAddToolPage({
         return;
       }
 
-      // In a real implementation, you would upload screenshots first
-      // and get URLs back, then include those URLs in the submission
+      // Validate category is selected
+      if (!formData.selectedCategories || formData.selectedCategories.length === 0) {
+        toast.error("Please select at least one category");
+        setLoading(false);
+        return;
+      }
+
+      // Prepare submit data
       const submitData = {
-        ...formData,
+        name: formData.name,
+        tagline: formData.tagline,
+        description: formData.description,
+        long_description: formData.long_description,
+        logo_url: formData.logo_url,
+        cover_image_url: formData.cover_image_url,
+        website_url: formData.website_url,
+        pricing_type: formData.pricing_type,
         features: formData.features.filter((f) => f.trim()),
+        video_url: formData.video_url,
         categories: formData.selectedCategories,
         tags: formData.selectedTags,
         status: formData.status,
-        screenshots: screenshots.length, // Screenshot count
-        // screenshots: await uploadScreenshots(screenshots), // In real implementation
+        // Note: Screenshots would need to be uploaded to storage first
+        // screenshots: screenshotUrls, // TODO: Implement screenshot upload
       };
 
-      console.log("Screenshots to upload:", screenshots);
-      console.log("Submit data:", submitData);
+      console.log("Submitting tool data:", submitData);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Make actual API call to save the tool
+      const response = await fetch("/api/admin/tools", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submitData),
+      });
 
-      toast.success(`Tool added successfully as ${formData.status}!`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create tool");
+      }
+
+      console.log("Tool created successfully:", data);
+
+      toast.success(`Tool "${formData.name}" added successfully as ${formData.status}!`);
       router.push("/admin/tools");
     } catch (error: any) {
+      console.error("Error creating tool:", error);
       toast.error(error.message || "Failed to add tool");
     } finally {
       setLoading(false);
