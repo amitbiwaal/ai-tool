@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitoolsdirectory.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mostpopularaitools.com";
   const supabase = await createServerSupabaseClient();
 
   if (!supabase) {
