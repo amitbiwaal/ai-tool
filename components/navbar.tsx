@@ -84,6 +84,7 @@ export function Navbar() {
   const handleLogout = async () => {
     try {
       // Sign out from Supabase
+      const supabase = getSupabaseClient();
       if (supabase) {
         const { error } = await supabase.auth.signOut();
         if (error) {
