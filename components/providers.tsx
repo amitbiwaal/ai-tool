@@ -33,8 +33,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
           },
           classNames: {
             toast: "!rounded-2xl !shadow-2xl !border-2 !backdrop-blur-md !ring-1 !ring-black/5 !pl-14 !pr-6 !pt-5 !pb-5 !min-w-[360px] !max-w-[500px] !sm:min-w-[380px] !sm:max-w-[520px] !relative !overflow-hidden !flex !items-start !gap-3",
-            title: "!font-semibold !text-base !mb-1 !leading-tight !flex-1",
-            description: "!text-sm !opacity-90 !leading-relaxed !flex-1",
+            title: "!font-semibold !text-base !mb-1 !leading-tight !flex-1 !text-black",
+            description: "!text-sm !opacity-90 !leading-relaxed !flex-1 !text-black",
             closeButton: "!flex-shrink-0 !w-8 !h-8 !rounded-xl !bg-gradient-to-br !from-red-500/20 !to-red-600/20 !hover:from-red-500/30 !hover:to-red-600/30 !dark:from-red-500/30 !dark:to-red-600/30 !dark:hover:from-red-500/40 !dark:hover:to-red-600/40 !flex !items-center !justify-center !transition-all !duration-300 !hover:scale-110 !border !border-red-500/30 !hover:border-red-500/50 !shadow-sm !hover:shadow-md",
             success: "!bg-gradient-to-br !from-green-50 !via-emerald-50 !to-green-100 !dark:from-green-950/40 !dark:via-emerald-950/40 !dark:to-green-950/60 !border-green-200/60 !dark:border-green-800/60 !shadow-green-500/10",
             error: "!bg-gradient-to-br !from-red-50 !via-rose-50 !to-red-100 !dark:from-red-950/40 !dark:via-rose-950/40 !dark:to-red-950/60 !border-red-200/60 !dark:border-red-800/60 !shadow-red-500/10",

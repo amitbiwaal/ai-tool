@@ -401,13 +401,13 @@ export default function SettingsPage({
         </Card>
 
         {/* Notification Preferences */}
-        <Card>
+        <Card className="dark:bg-gray-900 dark:border-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 dark:text-black">
               <Mail className="w-5 h-5" />
               Notification Preferences
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="dark:text-black">
               Choose which email notifications you&apos;d like to receive
             </CardDescription>
           </CardHeader>
@@ -416,8 +416,8 @@ export default function SettingsPage({
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label className="text-base font-medium">Newsletter Updates</Label>
-                    <p className="text-sm text-muted-foreground">
+                    <Label className="text-base font-medium dark:text-black">Newsletter Updates</Label>
+                    <p className="text-sm text-muted-foreground dark:text-black">
                       Receive weekly newsletters about new AI tools and updates
                     </p>
                   </div>
@@ -430,14 +430,14 @@ export default function SettingsPage({
                         email_newsletter: e.target.checked
                       })
                     }
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600"
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label className="text-base font-medium">Tool Updates</Label>
-                    <p className="text-sm text-muted-foreground">
+                    <Label className="text-base font-medium dark:text-black">Tool Updates</Label>
+                    <p className="text-sm text-muted-foreground dark:text-black">
                       Get notified when any tool in our directory is updated
                     </p>
                   </div>
@@ -450,14 +450,14 @@ export default function SettingsPage({
                         email_tool_updates: e.target.checked
                       })
                     }
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600"
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label className="text-base font-medium">Favorite Tool Updates</Label>
-                    <p className="text-sm text-muted-foreground">
+                    <Label className="text-base font-medium dark:text-black">Favorite Tool Updates</Label>
+                    <p className="text-sm text-muted-foreground dark:text-black">
                       Receive notifications when tools you&apos;ve favorited are updated
                     </p>
                   </div>
@@ -470,14 +470,14 @@ export default function SettingsPage({
                         email_favorite_updates: e.target.checked
                       })
                     }
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600"
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label className="text-base font-medium">Recently Viewed Tool Updates</Label>
-                    <p className="text-sm text-muted-foreground">
+                    <Label className="text-base font-medium dark:text-black">Recently Viewed Tool Updates</Label>
+                    <p className="text-sm text-muted-foreground dark:text-black">
                       Get updates about tools you&apos;ve viewed in the last 30 days
                     </p>
                   </div>
@@ -490,7 +490,7 @@ export default function SettingsPage({
                         email_visited_updates: e.target.checked
                       })
                     }
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600"
                   />
                 </div>
               </div>

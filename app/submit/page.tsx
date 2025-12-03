@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PaymentForm } from "@/components/payment-form";
 import { Category, Tag } from "@/lib/types";
 import { Sparkles, ArrowRight, FileText, Search, CheckCircle2, TrendingUp, Upload, X, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -21,8 +20,6 @@ export default function SubmitToolPage() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentLoading, setPaymentLoading] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [authChecked, setAuthChecked] = useState(false);
   
@@ -406,15 +403,8 @@ export default function SubmitToolPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Check if paid listing
-    if (formData.listing_type === "paid") {
-      // Open payment modal instead of submitting
-      setShowPaymentModal(true);
-      return;
-    }
-    
-    // For free listings, submit directly
+
+    // Both free and paid listings submit directly (paid listings get premium features for 1 month)
     await submitTool();
   };
 
@@ -1116,114 +1106,41 @@ export default function SubmitToolPage() {
             </CardHeader>
             <CardContent className="p-3 sm:p-4 lg:p-6 pt-0 w-full min-w-0">
               <div className="w-full min-w-0 max-w-full">
-                <Label htmlFor="listing_type" className="text-sm sm:text-base font-semibold">Listing Type *</Label>
-                <div className="w-full min-w-0 max-w-full mt-2 relative">
-                  <Select
-                    id="listing_type"
-                    required
-                    value={formData.listing_type}
-                    onChange={(e) =>
-                      setFormData({ ...formData, listing_type: e.target.value })
-                    }
-                    className="h-10 sm:h-12 text-sm sm:text-base w-full min-w-0 max-w-full"
-                  >
-                    <option value="free">🆓 Free Listing</option>
-                    <option value="paid">⭐ Paid Listing</option>
-                  </Select>
-                </div>
-                <div className="mt-3 sm:mt-4 p-3 sm:p-4 rounded-lg border-2 bg-white dark:bg-slate-900">
-                  {formData.listing_type === "free" ? (
-                    <div>
-                      <h4 className="font-bold mb-2 sm:mb-3 text-base sm:text-lg">Free Listing Includes:</h4>
-                      <ul className="text-xs sm:text-sm space-y-1.5 sm:space-y-2">
-                        <li className="flex items-center gap-2">
-                          <span className="text-green-500 flex-shrink-0">✓</span>
-                          <span>Basic tool listing</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-green-500 flex-shrink-0">✓</span>
-                          <span>Standard search visibility</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-green-500 flex-shrink-0">✓</span>
-                          <span>Basic features display</span>
-                        </li>
-                      </ul>
+                <div className="p-4 rounded-lg border-2 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                      <span className="text-white text-sm">✓</span>
                     </div>
-                  ) : (
-                    <div>
-                      <h4 className="font-bold mb-2 sm:mb-3 text-base sm:text-lg">Paid Listing Includes:</h4>
-                      <ul className="text-xs sm:text-sm space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
-                        <li className="flex items-center gap-2">
-                          <span className="text-primary flex-shrink-0">✓</span>
-                          <span className="font-medium">Featured placement on homepage</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-primary flex-shrink-0">✓</span>
-                          <span className="font-medium">Priority in search results</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-primary flex-shrink-0">✓</span>
-                          <span className="font-medium">&quot;Featured&quot; highlighted badge</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-primary flex-shrink-0">✓</span>
-                          <span className="font-medium">Enhanced visibility across platform</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-primary flex-shrink-0">✓</span>
-                          <span className="font-medium">Analytics dashboard access</span>
-                        </li>
-                      </ul>
-                      <div className="pt-2 sm:pt-3 border-t">
-                        <p className="text-xl sm:text-2xl font-bold text-green-600">FREE<span className="text-sm sm:text-base font-normal text-green-600"> for 1 month</span></p>
-                        <p className="text-xs text-muted-foreground mt-1">Limited time promotional offer • Get premium features at no cost</p>
-                      </div>
+                    <h4 className="font-bold text-base sm:text-lg text-blue-900 dark:text-blue-100">Free Tool Listing</h4>
+                  </div>
+                  <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+                    Submit your AI tool to our directory completely free of charge.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-green-600">✓</span>
+                      <span>Instant publication after review</span>
                     </div>
-                  )}
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-green-600">✓</span>
+                      <span>SEO-optimized listing</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-green-600">✓</span>
+                      <span>Community visibility</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Button type="submit" size="lg" disabled={loading} className="w-full text-sm sm:text-base h-11 sm:h-12">
-            {loading ? "Submitting..." : formData.listing_type === "paid" ? "Get Premium Features (FREE)" : "Submit Tool for Review"}
+            {loading ? "Submitting..." : "Submit Tool for Review"}
           </Button>
         </div>
       </form>
 
-      {/* Payment Modal */}
-      {showPaymentModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4">
-          <Card className="max-w-md w-full mx-auto shadow-2xl border-2 max-h-[90vh] overflow-y-auto">
-            <CardHeader className="space-y-2 p-4 sm:p-6">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg sm:text-xl lg:text-2xl">Complete Payment</CardTitle>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowPaymentModal(false)}
-                  className="h-7 w-7 sm:h-8 sm:w-8 p-0 flex-shrink-0"
-                >
-                  ✕
-                </Button>
-              </div>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                Free promotional upgrade to premium features for 1 month
-              </p>
-            </CardHeader>
-            <CardContent className="p-4 sm:p-6 pt-0">
-              <PaymentForm
-                amount={0}
-                onSuccess={handlePaymentSuccess}
-                onCancel={() => setShowPaymentModal(false)}
-                loading={paymentLoading}
-                setLoading={setPaymentLoading}
-              />
-            </CardContent>
-          </Card>
-        </div>
-      )}
       </div>
     </div>
   );
