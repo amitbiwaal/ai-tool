@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI Tools Directory";
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitoolsdirectory.com";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mostpopularaitools.com";
     const title = `${tool.name} - ${tool.tagline || "AI Tool"}`;
     const description = tool.description || tool.tagline || `Discover ${tool.name}, a powerful AI tool.`;
     const image = tool.cover_image_url || tool.logo_url || `${siteUrl}/og-image.png`;

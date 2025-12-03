@@ -236,7 +236,7 @@ This project is open source and available under the MIT License.
 
 For questions or issues:
 - Open an issue on GitHub
-- Contact: hello@aitoolsdirectory.com
+- Contact: hello@mostpopularaitools.com
 
 ## Roadmap
 

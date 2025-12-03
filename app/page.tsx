@@ -11,6 +11,7 @@ import { ToolCard } from "@/components/tool-card";
 import { toast } from "sonner";
 import { CategoryBadge } from "@/components/category-badge";
 import { Tool } from "@/lib/types";
+import { HomePageSkeleton } from "@/components/loading-skeleton";
 
 // Mock data removed - using database instead
 // Keeping only testimonials mock data
@@ -1398,6 +1399,11 @@ export default function HomePage() {
     }
     return true;
   });
+
+  // Show loading skeleton until content is loaded
+  if (!contentLoaded) {
+    return <HomePageSkeleton />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8f9ff] via-[#eef2ff] to-[#e6ebff] text-slate-900 dark:from-[#070a1a] dark:via-[#0f1732] dark:to-[#1a1440] dark:text-white transition-colors">

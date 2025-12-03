@@ -54,7 +54,7 @@ export function generateMetadata({
   type?: string;
 }) {
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "AI Tools Directory";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitoolsdirectory.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mostpopularaitools.com";
 
   return {
     title: `${title} | ${siteName}`,

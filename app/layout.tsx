@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://aitoolsdirectory.com",
+    url: "https://mostpopularaitools.com",
     siteName: "AI Tools Directory",
     title: "AI Tools Directory - Discover the Best AI Tools",
     description:

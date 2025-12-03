@@ -596,7 +596,7 @@ const defaultContactContent: ContactContent = {
   errorMessage: "Failed to send message. Please try again.",
   emailLabelText: "Email Us",
   emailDescription: "For general inquiries and support",
-  emailValue: "hello@aitoolsdirectory.com",
+  emailValue: "hello@mostpopularaitools.com",
   responseTitle: "Response Time",
   responseText1: "24-48 hours for general inquiries",
   responseText2: "Priority support for partners",
@@ -623,7 +623,7 @@ const defaultPrivacyContent: PrivacyContent = {
   rightsDescription: "You have the right to: Access your personal data, Correct inaccurate data, Request deletion of your data, Object to processing of your data, Export your data.",
   childrenDescription: "Our service is not intended for children under 13. We do not knowingly collect personal information from children under 13.",
   changesDescription: "We may update this privacy policy from time to time. We will notify you of significant changes by posting the new policy on this page.",
-  contactEmail: "privacy@aitoolsdirectory.com",
+  contactEmail: "privacy@mostpopularaitools.com",
 };
 
 const defaultTermsContent: TermsContent = {
@@ -645,7 +645,7 @@ const defaultTermsContent: TermsContent = {
   liabilityDescription: "We shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our service.",
   changesDescription: "We reserve the right to modify these terms at any time. Continued use of our service after changes constitutes acceptance of the new terms.",
   governingDescription: "These terms shall be governed by and construed in accordance with applicable laws.",
-  contactEmail: "legal@aitoolsdirectory.com",
+  contactEmail: "legal@mostpopularaitools.com",
 };
 
 const defaultBlogContent: BlogContent = {
@@ -775,7 +775,7 @@ const defaultHeaderContent: HeaderContent = {
   siteTagline: "EST. 2025",
   logoUrl: "",
   topBarText: "Curated tools • Premium insights •",
-  topBarContact: "Business inquiries: partner@aitoolsdirectory.com",
+  topBarContact: "Business inquiries: partner@mostpopularaitools.com",
   navigationItems: JSON.stringify([
     { name: "Home", href: "/" },
     { name: "Tools", href: "/tools" },
@@ -2313,7 +2313,7 @@ export default function ContentManagementPage({
               </div>
               <div>
                 <Label>Email Address</Label>
-                <Input value={contactContent.emailValue} onChange={(e) => setContactContent({ ...contactContent, emailValue: e.target.value })} placeholder="hello@aitoolsdirectory.com" />
+                <Input value={contactContent.emailValue} onChange={(e) => setContactContent({ ...contactContent, emailValue: e.target.value })} placeholder="hello@mostpopularaitools.com" />
               </div>
               <div className="pt-4 border-t">
                 <Label>Response Time Title</Label>
@@ -3401,7 +3401,7 @@ export default function ContentManagementPage({
               </div>
               <div>
                 <Label>Contact Email/Text</Label>
-                <Input value={headerContent.topBarContact} onChange={(e) => setHeaderContent({ ...headerContent, topBarContact: e.target.value })} placeholder="Business inquiries: partner@aitoolsdirectory.com" />
+                <Input value={headerContent.topBarContact} onChange={(e) => setHeaderContent({ ...headerContent, topBarContact: e.target.value })} placeholder="Business inquiries: partner@mostpopularaitools.com" />
               </div>
             </CardContent>
           </Card>

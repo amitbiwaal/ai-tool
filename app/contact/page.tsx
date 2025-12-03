@@ -321,10 +321,10 @@ export default function ContactPage({
                   {pageContent.emailDescription || "For general inquiries and support"}
                 </p>
                 <a
-                  href={`mailto:${pageContent.emailValue || "hello@aitoolsdirectory.com"}`}
+                  href={`mailto:${pageContent.emailValue || "hello@mostpopularaitools.com"}`}
                   className="text-primary hover:underline font-medium flex items-center gap-1 text-sm sm:text-base break-all"
                 >
-                  {pageContent.emailValue || "hello@aitoolsdirectory.com"}
+                  {pageContent.emailValue || "hello@mostpopularaitools.com"}
                   <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                 </a>
               </CardContent>

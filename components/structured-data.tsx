@@ -52,7 +52,7 @@ export function OrganizationStructuredData() {
 }
 
 export function BlogPostStructuredData({ post }: { post: any }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitoolsdirectory.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mostpopularaitools.com";
   
   const structuredData = {
     "@context": "https://schema.org",
@@ -93,7 +93,7 @@ export function BlogPostStructuredData({ post }: { post: any }) {
 }
 
 export function BreadcrumbStructuredData({ items }: { items: Array<{ name: string; url: string }> }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aitoolsdirectory.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mostpopularaitools.com";
   
   const structuredData = {
     "@context": "https://schema.org",

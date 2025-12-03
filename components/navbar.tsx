@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { getAvatarUrl, isDicebearUrl } from "@/lib/utils/images";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -29,6 +30,7 @@ export function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userAvatar, setUserAvatar] = useState(getAvatarUrl(null, undefined, "User"));
+  const [avatarLoaded, setAvatarLoaded] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -69,6 +71,7 @@ export function Navbar() {
             if (data.profile) {
               const avatarUrl = getAvatarUrl(data.profile.avatar_url, data.profile.email, data.profile.full_name);
               setUserAvatar(avatarUrl);
+              setAvatarLoaded(true);
               setIsAdmin(data.profile.role === "admin" || data.profile.role === "moderator");
             }
           }
@@ -130,7 +133,7 @@ export function Navbar() {
             AI Tools Directory
           </span>
           <span className="text-white/80 text-xs sm:text-sm text-center sm:text-left">
-            <span className="hidden lg:inline">Curated tools • Premium insights • </span>Business inquiries: partner@aitoolsdirectory.com
+            <span className="hidden lg:inline">Curated tools • Premium insights • </span>Business inquiries: partner@mostpopularaitools.com
           </span>
         </div>
       </div>
@@ -200,14 +203,18 @@ export function Navbar() {
                   <div className="group relative">
                     <Link href="/dashboard">
                       <div className="relative w-9 h-9 rounded-full border-2 border-blue-500/50 group-hover:border-blue-500 transition-all duration-300 group-hover:scale-110 shadow-md cursor-pointer overflow-hidden">
-                        <Image 
-                          src={userAvatar} 
-                          alt="User Avatar"
-                          width={36}
-                          height={36}
-                          className="object-cover w-full h-full"
-                          unoptimized={isDicebearUrl(userAvatar)}
-                        />
+                        {avatarLoaded ? (
+                          <Image
+                            src={userAvatar}
+                            alt="User Avatar"
+                            width={36}
+                            height={36}
+                            className="object-cover w-full h-full"
+                            unoptimized={isDicebearUrl(userAvatar)}
+                          />
+                        ) : (
+                          <Skeleton className="w-full h-full rounded-full" />
+                        )}
                         <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full z-10"></div>
                       </div>
                     </Link>

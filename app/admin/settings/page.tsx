@@ -71,7 +71,7 @@ export default function SettingsPage({
           site: {
             name: "AI Tools Directory",
             description: "Discover the best AI tools",
-            contactEmail: "hello@aitoolsdirectory.com",
+            contactEmail: "hello@mostpopularaitools.com",
           },
           seo: {
             metaTitle: "AI Tools Directory - Best AI Tools",
@@ -81,7 +81,7 @@ export default function SettingsPage({
           email: {
             smtpHost: "smtp.example.com",
             smtpPort: "587",
-            fromEmail: "noreply@aitoolsdirectory.com",
+            fromEmail: "noreply@mostpopularaitools.com",
           },
           payment: {
             razorpayKeyId: "",
@@ -187,7 +187,7 @@ export default function SettingsPage({
               type="email"
               value={settings.site?.contactEmail || ""}
               onChange={(e) => updateSetting("site", "contactEmail", e.target.value)}
-              placeholder="hello@aitoolsdirectory.com"
+              placeholder="hello@mostpopularaitools.com"
             />
           </div>
         </CardContent>
@@ -289,7 +289,7 @@ export default function SettingsPage({
               type="email"
               value={settings.email?.fromEmail || ""}
               onChange={(e) => updateSetting("email", "fromEmail", e.target.value)}
-              placeholder="noreply@aitoolsdirectory.com"
+              placeholder="noreply@mostpopularaitools.com"
             />
           </div>
         </CardContent>

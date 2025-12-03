@@ -423,11 +423,11 @@ export default function PrivacyPage({
                 </p>
                 <div className="space-y-3">
                   <a
-                    href="mailto:privacy@aitoolsdirectory.com"
+                    href="mailto:privacy@mostpopularaitools.com"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     <Mail className="h-4 w-4" />
-                    privacy@aitoolsdirectory.com
+                    privacy@mostpopularaitools.com
                   </a>
                   <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
                     <p className="text-sm text-slate-600 dark:text-slate-300">
