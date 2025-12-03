@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { sendNewsletterToolUpdate, sendUserSpecificToolUpdate } from "@/lib/email-service";
 
+interface NotificationRecipient {
+  user_id: string;
+  email: string;
+  full_name: string | null;
+  notification_reason: 'favorite' | 'visited';
+}
+
 // Function to trigger email notifications for tool updates
 async function triggerToolUpdateNotifications(updatedTool: any, changes: any) {
   try {
@@ -32,20 +39,22 @@ async function triggerToolUpdateNotifications(updatedTool: any, changes: any) {
 
     // Option 2: Send user-specific notifications
     console.log("Getting user-specific notification recipients...");
-    const { data: recipients, error: recipientsError } = await supabase
+    const { data: recipientsData, error: recipientsError } = await supabase
       .rpc('get_tool_notification_recipients', { p_tool_id: updatedTool.id });
 
-    if (!recipientsError && recipients && recipients.length > 0) {
+    const recipients: NotificationRecipient[] = recipientsData || [];
+
+    if (!recipientsError && recipients.length > 0) {
       console.log(`Found ${recipients.length} users to notify`);
 
       // Group recipients by notification reason
       const favoriteUsers = recipients
-        .filter(r => r.notification_reason === 'favorite')
-        .map(r => r.email);
+        .filter((r) => r.notification_reason === 'favorite')
+        .map((r) => r.email);
 
       const visitedUsers = recipients
-        .filter(r => r.notification_reason === 'visited')
-        .map(r => r.email);
+        .filter((r) => r.notification_reason === 'visited')
+        .map((r) => r.email);
 
       // Send notifications to favorite users
       if (favoriteUsers.length > 0) {
