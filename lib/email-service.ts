@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import nodemailer, { Transporter } from 'nodemailer';
 
 interface EmailConfig {
   host: string;
@@ -20,7 +20,7 @@ interface EmailOptions {
 
 // Email service class
 export class EmailService {
-  private transporter: nodemailer.Transporter | null = null;
+  private transporter: Transporter | null = null;
   private config: EmailConfig | null = null;
   private initialized: boolean = false;
 
@@ -76,7 +76,7 @@ export class EmailService {
           },
         };
 
-        this.transporter = nodemailer.createTransporter(this.config);
+        this.transporter = nodemailer.createTransport(this.config);
         console.log('Email service initialized with SMTP configuration');
       } else {
         console.warn('SMTP configuration not found in environment variables or database');
