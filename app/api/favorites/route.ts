@@ -104,6 +104,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    // Track favorite interaction for personalized notifications
+    try {
+      await supabase.rpc('track_tool_interaction', {
+        p_user_id: user.id,
+        p_tool_id: tool_id,
+        p_interaction_type: 'favorite'
+      });
+    } catch (interactionError) {
+      console.error("Error tracking favorite interaction:", interactionError);
+      // Don't fail the request if tracking fails
+    }
+
     return NextResponse.json({ favorite: data }, { status: 201 });
   } catch (error: any) {
     console.error("Unexpected error in favorites POST:", error);

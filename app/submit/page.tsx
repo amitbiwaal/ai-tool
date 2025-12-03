@@ -1176,8 +1176,8 @@ export default function SubmitToolPage() {
                         </li>
                       </ul>
                       <div className="pt-2 sm:pt-3 border-t">
-                        <p className="text-xl sm:text-2xl font-bold text-primary">₹8,250<span className="text-sm sm:text-base font-normal text-muted-foreground"> per listing</span></p>
-                        <p className="text-xs text-muted-foreground mt-1">Valid for 1 year • Renewal required after expiry</p>
+                        <p className="text-xl sm:text-2xl font-bold text-green-600">FREE<span className="text-sm sm:text-base font-normal text-green-600"> for 1 month</span></p>
+                        <p className="text-xs text-muted-foreground mt-1">Limited time promotional offer • Get premium features at no cost</p>
                       </div>
                     </div>
                   )}
@@ -1187,7 +1187,7 @@ export default function SubmitToolPage() {
           </Card>
 
           <Button type="submit" size="lg" disabled={loading} className="w-full text-sm sm:text-base h-11 sm:h-12">
-            {loading ? "Submitting..." : formData.listing_type === "paid" ? "Proceed to Payment (₹8,250)" : "Submit Tool for Review"}
+            {loading ? "Submitting..." : formData.listing_type === "paid" ? "Get Premium Features (FREE)" : "Submit Tool for Review"}
           </Button>
         </div>
       </form>
@@ -1209,12 +1209,12 @@ export default function SubmitToolPage() {
                 </Button>
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Secure payment to publish your AI tool with premium features
+                Free promotional upgrade to premium features for 1 month
               </p>
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0">
               <PaymentForm
-                amount={825000}
+                amount={0}
                 onSuccess={handlePaymentSuccess}
                 onCancel={() => setShowPaymentModal(false)}
                 loading={paymentLoading}

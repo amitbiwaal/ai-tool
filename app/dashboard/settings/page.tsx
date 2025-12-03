@@ -33,8 +33,16 @@ export default function SettingsPage({
     avatar_url: "",
   });
 
+  const [notificationPreferences, setNotificationPreferences] = useState({
+    email_tool_updates: true,
+    email_favorite_updates: true,
+    email_visited_updates: false,
+    email_newsletter: true,
+  });
+
   useEffect(() => {
     fetchUserProfile();
+    fetchNotificationPreferences();
   }, []);
 
   const fetchUserProfile = async () => {
@@ -89,6 +97,47 @@ export default function SettingsPage({
       toast.error("Failed to load profile");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchNotificationPreferences = async () => {
+    try {
+      const response = await fetch("/api/user/notification-preferences");
+      if (response.ok) {
+        const data = await response.json();
+        if (data.preferences) {
+          setNotificationPreferences(data.preferences);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching notification preferences:", error);
+    }
+  };
+
+  const handleNotificationPreferencesSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+
+    try {
+      const response = await fetch("/api/user/notification-preferences", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(notificationPreferences),
+      });
+
+      if (response.ok) {
+        toast.success("Notification preferences updated successfully!");
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || "Failed to update notification preferences");
+      }
+    } catch (error) {
+      console.error("Error updating notification preferences:", error);
+      toast.error("Failed to update notification preferences");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -343,6 +392,120 @@ export default function SettingsPage({
                     <>
                       <Save className="w-4 h-4" />
                       Save Changes
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+
+        {/* Notification Preferences */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Mail className="w-5 h-5" />
+              Notification Preferences
+            </CardTitle>
+            <CardDescription>
+              Choose which email notifications you'd like to receive
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleNotificationPreferencesSubmit} className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base font-medium">Newsletter Updates</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Receive weekly newsletters about new AI tools and updates
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={notificationPreferences.email_newsletter}
+                    onChange={(e) =>
+                      setNotificationPreferences({
+                        ...notificationPreferences,
+                        email_newsletter: e.target.checked
+                      })
+                    }
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base font-medium">Tool Updates</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Get notified when any tool in our directory is updated
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={notificationPreferences.email_tool_updates}
+                    onChange={(e) =>
+                      setNotificationPreferences({
+                        ...notificationPreferences,
+                        email_tool_updates: e.target.checked
+                      })
+                    }
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base font-medium">Favorite Tool Updates</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Receive notifications when tools you've favorited are updated
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={notificationPreferences.email_favorite_updates}
+                    onChange={(e) =>
+                      setNotificationPreferences({
+                        ...notificationPreferences,
+                        email_favorite_updates: e.target.checked
+                      })
+                    }
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base font-medium">Recently Viewed Tool Updates</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Get updates about tools you've viewed in the last 30 days
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={notificationPreferences.email_visited_updates}
+                    onChange={(e) =>
+                      setNotificationPreferences({
+                        ...notificationPreferences,
+                        email_visited_updates: e.target.checked
+                      })
+                    }
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 border-t">
+                <Button type="submit" disabled={saving} className="gap-2">
+                  {saving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4" />
+                      Save Preferences
                     </>
                   )}
                 </Button>
