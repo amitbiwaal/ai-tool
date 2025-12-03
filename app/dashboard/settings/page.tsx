@@ -408,7 +408,7 @@ export default function SettingsPage({
               Notification Preferences
             </CardTitle>
             <CardDescription>
-              Choose which email notifications you'd like to receive
+              Choose which email notifications you&apos;d like to receive
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -458,7 +458,7 @@ export default function SettingsPage({
                   <div className="space-y-0.5">
                     <Label className="text-base font-medium">Favorite Tool Updates</Label>
                     <p className="text-sm text-muted-foreground">
-                      Receive notifications when tools you've favorited are updated
+                      Receive notifications when tools you&apos;ve favorited are updated
                     </p>
                   </div>
                   <input
@@ -478,7 +478,7 @@ export default function SettingsPage({
                   <div className="space-y-0.5">
                     <Label className="text-base font-medium">Recently Viewed Tool Updates</Label>
                     <p className="text-sm text-muted-foreground">
-                      Get updates about tools you've viewed in the last 30 days
+                      Get updates about tools you&apos;ve viewed in the last 30 days
                     </p>
                   </div>
                   <input
