@@ -454,25 +454,6 @@ export default function SubmitToolPage() {
     }
   };
 
-  // Payment handler
-  const handlePaymentSuccess = async (paymentId: string) => {
-    setShowPaymentModal(false);
-    toast.success("Payment successful! Submitting your tool...");
-    
-    try {
-    await submitTool(paymentId);
-    } catch (error: any) {
-      // Payment is already completed, but tool submission failed
-      console.error("Tool submission error after payment:", error);
-      toast.error(
-        "Payment successful but tool submission failed. Your payment has been recorded. Please contact support or try submitting again.",
-        { duration: 6000 }
-      );
-      // Optionally redirect to dashboard or show retry option
-      // For now, we'll keep user on the page so they can retry
-      setLoading(false);
-    }
-  };
 
   // Show loading state while checking authentication
   if (!authChecked || checkingAuth) {
