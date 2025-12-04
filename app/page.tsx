@@ -1129,13 +1129,14 @@ export default function HomePage() {
       const role = heroContent[`testimonial${i}Role`];
       const content = heroContent[`testimonial${i}Content`];
       const rating = parseInt(heroContent[`testimonial${i}Rating`] || "5");
+      const avatar = heroContent[`testimonial${i}Avatar`];
 
       if (name && role && content) {
         testimonialList.push({
           id: i.toString(),
           name,
           role,
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
+          avatar: avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
           content,
           rating: isNaN(rating) ? 5 : Math.min(5, Math.max(1, rating)),
         });

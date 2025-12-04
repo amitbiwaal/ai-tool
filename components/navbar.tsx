@@ -12,6 +12,9 @@ import { getAvatarUrl, isDicebearUrl } from "@/lib/utils/images";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { handleAuthError, withAuthErrorHandling, isAuthError } from "@/lib/auth/error-handler";
+import { useAuthApi } from "@/hooks/use-auth-api";
+import { sessionManager } from "@/lib/auth/session-manager";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -31,97 +34,210 @@ export function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userAvatar, setUserAvatar] = useState(getAvatarUrl(null, undefined, "User"));
   const [avatarLoaded, setAvatarLoaded] = useState(false);
+  const authApi = useAuthApi();
 
   useEffect(() => {
     checkAuth();
-    
+
     // Listen for storage changes
     const handleStorageChange = () => {
       checkAuth();
     };
-    
+
     // Listen for auth state changes (e.g., after password reset)
     const handleAuthStateChanged = () => {
       checkAuth();
     };
-    
+
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("focus", checkAuth);
     window.addEventListener("authStateChanged", handleAuthStateChanged);
-    
+
+    // Set up Supabase auth state listener
+    const supabase = getSupabaseClient();
+    let authSubscription: any = null;
+
+    if (supabase) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          console.log("Auth state changed:", event, session ? "session exists" : "no session");
+
+          if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED' || event === 'SIGNED_IN') {
+            await checkAuth();
+          }
+        }
+      );
+      authSubscription = subscription;
+    }
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("focus", checkAuth);
       window.removeEventListener("authStateChanged", handleAuthStateChanged);
+
+      if (authSubscription) {
+        authSubscription.unsubscribe();
+      }
     };
   }, [pathname]); // Re-check when route changes
 
   const checkAuth = async () => {
-    // Check real authentication
     const supabase = getSupabaseClient();
-    if (supabase) {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
+    if (!supabase) {
+      setIsAuthenticated(false);
+      return;
+    }
+
+    try {
+      // Check session with error handling
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        console.error("Session check error:", sessionError);
+
+        // Handle auth errors (like refresh token issues)
+        if (handleAuthError(sessionError)) {
+          return; // Auth error was handled, function will redirect
+        }
+
+        // For other errors, just set as unauthenticated
+        setIsAuthenticated(false);
+        return;
+      }
+
+      if (session?.user) {
         setIsAuthenticated(true);
-        // Fetch user profile to get avatar and admin status
+        // Start session monitoring when user is authenticated
+        sessionManager.startSessionMonitoring();
+
+        // Fetch user profile with retry logic using authApi
         try {
-          const response = await fetch("/api/user/profile");
-          if (response.ok) {
-            const data = await response.json();
-            if (data.profile) {
-              const avatarUrl = getAvatarUrl(data.profile.avatar_url, data.profile.email, data.profile.full_name);
-              setUserAvatar(avatarUrl);
-              setAvatarLoaded(true);
-              setIsAdmin(data.profile.role === "admin" || data.profile.role === "moderator");
-            }
+          const data = await authApi.get<{ profile: any }>("/api/user/profile", {
+            maxRetries: 2,
+            showErrorToast: false, // Don't show error toast, handle errors manually
+            onAuthError: () => {
+              // Profile fetch failed due to auth error, mark as unauthenticated
+              setIsAuthenticated(false);
+              setIsAdmin(false);
+              setUserAvatar(getAvatarUrl(null, undefined, "User"));
+              setAvatarLoaded(false);
+              // Stop session monitoring
+              sessionManager.stopSessionMonitoring();
+            },
+          });
+
+          if (data?.profile) {
+            const avatarUrl = getAvatarUrl(data.profile.avatar_url, data.profile.email, data.profile.full_name);
+            setUserAvatar(avatarUrl);
+            setAvatarLoaded(true);
+            setIsAdmin(data.profile.role === "admin" || data.profile.role === "moderator");
           }
-        } catch (error) {
-          console.error("Error fetching user profile:", error);
+        } catch (profileError: any) {
+          console.error("Profile fetch error:", profileError);
+
+          // If it's an auth error, it was already handled by onAuthError callback
+          if (!isAuthError(profileError)) {
+            // For non-auth errors, keep the user authenticated but log the error
+            console.warn("Non-auth error fetching profile, keeping user authenticated");
+          }
         }
       } else {
+        // No session
         setIsAuthenticated(false);
+        setIsAdmin(false);
+        setUserAvatar(getAvatarUrl(null, undefined, "User"));
+        setAvatarLoaded(false);
+        // Stop session monitoring when user is not authenticated
+        sessionManager.stopSessionMonitoring();
       }
+    } catch (error: any) {
+      console.error("Unexpected error in checkAuth:", error);
+
+      // Handle any unexpected auth errors
+      if (handleAuthError(error)) {
+        return;
+      }
+
+      // For other errors, be conservative and don't change auth state
+      console.warn("Unexpected auth check error, preserving current state");
     }
   };
 
   const handleLogout = async () => {
     try {
-      // Sign out from Supabase
       const supabase = getSupabaseClient();
       if (supabase) {
         const { error } = await supabase.auth.signOut();
         if (error) {
           console.error("Logout error:", error);
-          throw error;
+
+          // Check if it's an auth error that needs special handling
+          if (isAuthError(error)) {
+            // Even if signOut fails due to auth issues, we still want to clear local state
+            console.warn("Auth error during logout, but proceeding with local cleanup");
+          } else {
+            throw error;
+          }
         }
       }
-      
-      // Clear local state
+
+      // Clear local state immediately
       setIsAuthenticated(false);
       setIsAdmin(false);
       setUserAvatar(getAvatarUrl(null, undefined, "User"));
-      
-      // Clear any cached data
+      setAvatarLoaded(false);
+
+      // Stop session monitoring
+      sessionManager.stopSessionMonitoring();
+
+      // Clear any cached data and storage
       if (typeof window !== "undefined") {
-        // Clear localStorage if needed
-        localStorage.removeItem("supabase.auth.token");
-        
+        try {
+          // Clear all auth-related storage
+          localStorage.clear();
+          sessionStorage.clear();
+
+          // Clear auth cookies
+          document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+              .replace(/^ +/, "")
+              .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+          });
+        } catch (storageError) {
+          console.warn("Error clearing storage during logout:", storageError);
+        }
+
         // Dispatch event to notify other components
         window.dispatchEvent(new Event("authStateChanged"));
       }
-      
+
       toast.success("Logged out successfully!");
-      
+
       // Redirect to home page
       router.push("/");
-      
-      // Force a hard refresh to clear all state
+
+      // Force a hard refresh to clear all state after a brief delay
       setTimeout(() => {
         window.location.href = "/";
-      }, 100);
+      }, 500);
     } catch (error: any) {
       console.error("Logout error:", error);
-      toast.error(error.message || "Failed to logout");
+
+      // If logout fails due to auth issues, still clear local state
+      if (isAuthError(error)) {
+        console.warn("Auth error during logout, clearing local state anyway");
+        setIsAuthenticated(false);
+        setIsAdmin(false);
+        setUserAvatar(getAvatarUrl(null, undefined, "User"));
+        setAvatarLoaded(false);
+
+        toast.success("Logged out (session cleared)");
+        router.push("/");
+        return;
+      }
+
+      // For other errors, show error message
+      toast.error(error.message || "Failed to logout completely");
     }
   };
 

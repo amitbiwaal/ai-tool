@@ -62,50 +62,62 @@ interface HomeContent {
   testimonial1Role: string;
   testimonial1Content: string;
   testimonial1Rating: string;
+  testimonial1Avatar: string;
   testimonial2Name: string;
   testimonial2Role: string;
   testimonial2Content: string;
   testimonial2Rating: string;
+  testimonial2Avatar: string;
   testimonial3Name: string;
   testimonial3Role: string;
   testimonial3Content: string;
   testimonial3Rating: string;
+  testimonial3Avatar: string;
   testimonial4Name: string;
   testimonial4Role: string;
   testimonial4Content: string;
   testimonial4Rating: string;
+  testimonial4Avatar: string;
   testimonial5Name: string;
   testimonial5Role: string;
   testimonial5Content: string;
   testimonial5Rating: string;
+  testimonial5Avatar: string;
   testimonial6Name: string;
   testimonial6Role: string;
   testimonial6Content: string;
   testimonial6Rating: string;
+  testimonial6Avatar: string;
   testimonial7Name: string;
   testimonial7Role: string;
   testimonial7Content: string;
   testimonial7Rating: string;
+  testimonial7Avatar: string;
   testimonial8Name: string;
   testimonial8Role: string;
   testimonial8Content: string;
   testimonial8Rating: string;
+  testimonial8Avatar: string;
   testimonial9Name: string;
   testimonial9Role: string;
   testimonial9Content: string;
   testimonial9Rating: string;
+  testimonial9Avatar: string;
   testimonial10Name: string;
   testimonial10Role: string;
   testimonial10Content: string;
   testimonial10Rating: string;
+  testimonial10Avatar: string;
   testimonial11Name: string;
   testimonial11Role: string;
   testimonial11Content: string;
   testimonial11Rating: string;
+  testimonial11Avatar: string;
   testimonial12Name: string;
   testimonial12Role: string;
   testimonial12Content: string;
   testimonial12Rating: string;
+  testimonial12Avatar: string;
   
   // Newsletter Section
   newsletterTitle: string;
@@ -463,50 +475,62 @@ const defaultHomeContent: HomeContent = {
   testimonial1Role: "Content Creator",
   testimonial1Content: "This directory has been a game-changer for my content creation workflow. I discovered tools I never knew existed!",
   testimonial1Rating: "5",
+  testimonial1Avatar: "",
   testimonial2Name: "Michael Chen",
   testimonial2Role: "Software Developer",
   testimonial2Content: "The best curated list of AI tools I've found. Saved me hours of research and helped me find the perfect tools for my projects.",
   testimonial2Rating: "5",
+  testimonial2Avatar: "",
   testimonial3Name: "Emily Rodriguez",
   testimonial3Role: "Marketing Manager",
   testimonial3Content: "Incredible resource! The categorization makes it so easy to find exactly what I need. Highly recommend to any marketer.",
   testimonial3Rating: "5",
+  testimonial3Avatar: "",
   testimonial4Name: "David Kim",
   testimonial4Role: "Designer",
   testimonial4Content: "As a designer, I'm always looking for AI tools to enhance my workflow. This directory is my go-to resource now.",
   testimonial4Rating: "5",
+  testimonial4Avatar: "",
   testimonial5Name: "Jessica Taylor",
   testimonial5Role: "Business Owner",
   testimonial5Content: "Found amazing AI tools that have transformed my business operations. The quality of tools listed here is top-notch!",
   testimonial5Rating: "5",
+  testimonial5Avatar: "",
   testimonial6Name: "Alex Martinez",
   testimonial6Role: "Data Scientist",
   testimonial6Content: "Comprehensive collection of AI tools with detailed information. Makes comparing different options so much easier.",
   testimonial6Rating: "5",
+  testimonial6Avatar: "",
   testimonial7Name: "Rachel Green",
   testimonial7Role: "Freelance Writer",
   testimonial7Content: "This platform has helped me discover tools that doubled my productivity. The AI writing tools section is particularly impressive!",
   testimonial7Rating: "5",
+  testimonial7Avatar: "",
   testimonial8Name: "James Wilson",
   testimonial8Role: "Product Manager",
   testimonial8Content: "An invaluable resource for anyone working with AI. The regular updates and new tool additions keep it relevant and useful.",
   testimonial8Rating: "5",
+  testimonial8Avatar: "",
   testimonial9Name: "Lisa Anderson",
   testimonial9Role: "Social Media Manager",
   testimonial9Content: "Love how easy it is to navigate and find tools specific to my needs. The filtering system is brilliant!",
   testimonial9Rating: "5",
+  testimonial9Avatar: "",
   testimonial10Name: "Tom Brown",
   testimonial10Role: "Entrepreneur",
   testimonial10Content: "Best AI tools directory out there. Helped me find cost-effective solutions for my startup. Absolutely essential!",
   testimonial10Rating: "5",
+  testimonial10Avatar: "",
   testimonial11Name: "Nina Patel",
   testimonial11Role: "UX Designer",
   testimonial11Content: "The user experience of this directory is exceptional. Finding the right AI design tools has never been easier!",
   testimonial11Rating: "5",
+  testimonial11Avatar: "",
   testimonial12Name: "Chris Lee",
   testimonial12Role: "Video Editor",
   testimonial12Content: "Discovered some incredible AI video tools that cut my editing time in half. This directory is a goldmine!",
   testimonial12Rating: "5",
+  testimonial12Avatar: "",
   newsletterTitle: "Stay Updated with AI Trends",
   newsletterDescription: "Get weekly updates on the latest AI tools, trends, and insights delivered straight to your inbox.",
   newsletterSubtext: "Join 10,000+ subscribers. No spam, ever. Unsubscribe anytime.",
@@ -1129,50 +1153,62 @@ export default function ContentManagementPage({
           { page: "home", section: "testimonials", key: "testimonial1Role", value: homeContent.testimonial1Role },
           { page: "home", section: "testimonials", key: "testimonial1Content", value: homeContent.testimonial1Content },
           { page: "home", section: "testimonials", key: "testimonial1Rating", value: homeContent.testimonial1Rating },
+          { page: "home", section: "testimonials", key: "testimonial1Avatar", value: homeContent.testimonial1Avatar },
           { page: "home", section: "testimonials", key: "testimonial2Name", value: homeContent.testimonial2Name },
           { page: "home", section: "testimonials", key: "testimonial2Role", value: homeContent.testimonial2Role },
           { page: "home", section: "testimonials", key: "testimonial2Content", value: homeContent.testimonial2Content },
           { page: "home", section: "testimonials", key: "testimonial2Rating", value: homeContent.testimonial2Rating },
+          { page: "home", section: "testimonials", key: "testimonial2Avatar", value: homeContent.testimonial2Avatar },
           { page: "home", section: "testimonials", key: "testimonial3Name", value: homeContent.testimonial3Name },
           { page: "home", section: "testimonials", key: "testimonial3Role", value: homeContent.testimonial3Role },
           { page: "home", section: "testimonials", key: "testimonial3Content", value: homeContent.testimonial3Content },
           { page: "home", section: "testimonials", key: "testimonial3Rating", value: homeContent.testimonial3Rating },
+          { page: "home", section: "testimonials", key: "testimonial3Avatar", value: homeContent.testimonial3Avatar },
           { page: "home", section: "testimonials", key: "testimonial4Name", value: homeContent.testimonial4Name },
           { page: "home", section: "testimonials", key: "testimonial4Role", value: homeContent.testimonial4Role },
           { page: "home", section: "testimonials", key: "testimonial4Content", value: homeContent.testimonial4Content },
           { page: "home", section: "testimonials", key: "testimonial4Rating", value: homeContent.testimonial4Rating },
+          { page: "home", section: "testimonials", key: "testimonial4Avatar", value: homeContent.testimonial4Avatar },
           { page: "home", section: "testimonials", key: "testimonial5Name", value: homeContent.testimonial5Name },
           { page: "home", section: "testimonials", key: "testimonial5Role", value: homeContent.testimonial5Role },
           { page: "home", section: "testimonials", key: "testimonial5Content", value: homeContent.testimonial5Content },
           { page: "home", section: "testimonials", key: "testimonial5Rating", value: homeContent.testimonial5Rating },
+          { page: "home", section: "testimonials", key: "testimonial5Avatar", value: homeContent.testimonial5Avatar },
           { page: "home", section: "testimonials", key: "testimonial6Name", value: homeContent.testimonial6Name },
           { page: "home", section: "testimonials", key: "testimonial6Role", value: homeContent.testimonial6Role },
           { page: "home", section: "testimonials", key: "testimonial6Content", value: homeContent.testimonial6Content },
           { page: "home", section: "testimonials", key: "testimonial6Rating", value: homeContent.testimonial6Rating },
+          { page: "home", section: "testimonials", key: "testimonial6Avatar", value: homeContent.testimonial6Avatar },
           { page: "home", section: "testimonials", key: "testimonial7Name", value: homeContent.testimonial7Name },
           { page: "home", section: "testimonials", key: "testimonial7Role", value: homeContent.testimonial7Role },
           { page: "home", section: "testimonials", key: "testimonial7Content", value: homeContent.testimonial7Content },
           { page: "home", section: "testimonials", key: "testimonial7Rating", value: homeContent.testimonial7Rating },
+          { page: "home", section: "testimonials", key: "testimonial7Avatar", value: homeContent.testimonial7Avatar },
           { page: "home", section: "testimonials", key: "testimonial8Name", value: homeContent.testimonial8Name },
           { page: "home", section: "testimonials", key: "testimonial8Role", value: homeContent.testimonial8Role },
           { page: "home", section: "testimonials", key: "testimonial8Content", value: homeContent.testimonial8Content },
           { page: "home", section: "testimonials", key: "testimonial8Rating", value: homeContent.testimonial8Rating },
+          { page: "home", section: "testimonials", key: "testimonial8Avatar", value: homeContent.testimonial8Avatar },
           { page: "home", section: "testimonials", key: "testimonial9Name", value: homeContent.testimonial9Name },
           { page: "home", section: "testimonials", key: "testimonial9Role", value: homeContent.testimonial9Role },
           { page: "home", section: "testimonials", key: "testimonial9Content", value: homeContent.testimonial9Content },
           { page: "home", section: "testimonials", key: "testimonial9Rating", value: homeContent.testimonial9Rating },
+          { page: "home", section: "testimonials", key: "testimonial9Avatar", value: homeContent.testimonial9Avatar },
           { page: "home", section: "testimonials", key: "testimonial10Name", value: homeContent.testimonial10Name },
           { page: "home", section: "testimonials", key: "testimonial10Role", value: homeContent.testimonial10Role },
           { page: "home", section: "testimonials", key: "testimonial10Content", value: homeContent.testimonial10Content },
           { page: "home", section: "testimonials", key: "testimonial10Rating", value: homeContent.testimonial10Rating },
+          { page: "home", section: "testimonials", key: "testimonial10Avatar", value: homeContent.testimonial10Avatar },
           { page: "home", section: "testimonials", key: "testimonial11Name", value: homeContent.testimonial11Name },
           { page: "home", section: "testimonials", key: "testimonial11Role", value: homeContent.testimonial11Role },
           { page: "home", section: "testimonials", key: "testimonial11Content", value: homeContent.testimonial11Content },
           { page: "home", section: "testimonials", key: "testimonial11Rating", value: homeContent.testimonial11Rating },
+          { page: "home", section: "testimonials", key: "testimonial11Avatar", value: homeContent.testimonial11Avatar },
           { page: "home", section: "testimonials", key: "testimonial12Name", value: homeContent.testimonial12Name },
           { page: "home", section: "testimonials", key: "testimonial12Role", value: homeContent.testimonial12Role },
           { page: "home", section: "testimonials", key: "testimonial12Content", value: homeContent.testimonial12Content },
           { page: "home", section: "testimonials", key: "testimonial12Rating", value: homeContent.testimonial12Rating },
+          { page: "home", section: "testimonials", key: "testimonial12Avatar", value: homeContent.testimonial12Avatar },
           { page: "home", section: "newsletter", key: "newsletterTitle", value: homeContent.newsletterTitle },
           { page: "home", section: "newsletter", key: "newsletterDescription", value: homeContent.newsletterDescription },
           { page: "home", section: "newsletter", key: "newsletterSubtext", value: homeContent.newsletterSubtext },
@@ -1757,14 +1793,91 @@ export default function ContentManagementPage({
                       </div>
                       <div>
                         <Label>Rating (1-5)</Label>
-                        <Input 
+                        <Input
                           type="number"
                           min="1"
                           max="5"
-                          value={(homeContent as any)[`testimonial${num}Rating`] || "5"} 
-                          onChange={(e) => setHomeContent({ ...homeContent, [`testimonial${num}Rating`]: e.target.value } as any)} 
+                          value={(homeContent as any)[`testimonial${num}Rating`] || "5"}
+                          onChange={(e) => setHomeContent({ ...homeContent, [`testimonial${num}Rating`]: e.target.value } as any)}
                           placeholder="5"
                         />
+                      </div>
+                      <div>
+                        <Label>Avatar Image</Label>
+                        <div className="space-y-2">
+                          {/* Current Avatar Preview */}
+                          {(homeContent as any)[`testimonial${num}Avatar`] && (
+                            <div className="flex items-center gap-2">
+                              <img
+                                src={(homeContent as any)[`testimonial${num}Avatar`]}
+                                alt={`Testimonial ${num} avatar`}
+                                className="w-12 h-12 rounded-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                }}
+                              />
+                              <span className="text-sm text-slate-600 dark:text-slate-400">Current avatar</span>
+                            </div>
+                          )}
+
+                          {/* Image URL Input */}
+                          <Input
+                            value={(homeContent as any)[`testimonial${num}Avatar`] || ""}
+                            onChange={(e) => setHomeContent({ ...homeContent, [`testimonial${num}Avatar`]: e.target.value } as any)}
+                            placeholder="Image URL or leave empty for DiceBear avatar"
+                          />
+
+                          {/* Upload Button */}
+                          <div className="flex gap-2">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+
+                                try {
+                                  const formData = new FormData();
+                                  formData.append('file', file);
+
+                                  const response = await fetch('/api/upload/testimonial', {
+                                    method: 'POST',
+                                    body: formData,
+                                  });
+
+                                  if (response.ok) {
+                                    const data = await response.json();
+                                    setHomeContent({
+                                      ...homeContent,
+                                      [`testimonial${num}Avatar`]: data.url
+                                    } as any);
+                                    toast.success('Avatar uploaded successfully!');
+                                  } else {
+                                    const errorData = await response.json().catch(() => ({}));
+                                    toast.error(errorData.error || 'Failed to upload avatar');
+                                  }
+                                } catch (error) {
+                                  console.error('Upload error:', error);
+                                  toast.error('Failed to upload avatar');
+                                }
+
+                                // Reset file input
+                                e.target.value = '';
+                              }}
+                              className="hidden"
+                              id={`testimonial-${num}-avatar`}
+                            />
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => document.getElementById(`testimonial-${num}-avatar`)?.click()}
+                            >
+                              <Upload className="h-4 w-4 mr-2" />
+                              Upload Image
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
