@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Sparkles, TrendingUp, Star, Clock, PenTool, Palette, Code2, Video, Music, BarChart3, MessageCircle, Image as ImageIcon, Mic, Search, Smartphone, FlaskConical, DollarSign, BookOpen, TrendingUpIcon, Gamepad2, Users, Heart, Search as SearchIcon, GitCompare as Compare, CheckCircle2, ExternalLink } from "lucide-react";
+import { ArrowRight, Sparkles, TrendingUp, Star, Clock, PenTool, Palette, Code2, Video, Music, BarChart3, MessageCircle, Image as ImageIcon, Mic, Search, Smartphone, FlaskConical, DollarSign, BookOpen, TrendingUpIcon, Gamepad2, Users, Heart, Search as SearchIcon, GitCompare as Compare, CheckCircle2, ExternalLink, Eye, Target, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SearchBar } from "@/components/search-bar";
@@ -1409,7 +1409,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8f9ff] via-[#eef2ff] to-[#e6ebff] text-slate-900 dark:from-[#070a1a] dark:via-[#0f1732] dark:to-[#1a1440] dark:text-white transition-colors">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-white/80 via-blue-50/50 to-purple-50/50 dark:from-[#0a0f1e]/90 dark:via-[#0f1428]/90 dark:to-[#1a1440]/90 backdrop-blur-xl">
+      <section className={`relative overflow-hidden backdrop-blur-xl ${heroContent.heroImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-gradient-to-br from-white/80 via-blue-50/50 to-purple-50/50 dark:from-[#0a0f1e]/90 dark:via-[#0f1428]/90 dark:to-[#1a1440]/90'}`} style={heroContent.heroImage ? { backgroundImage: `url(${heroContent.heroImage})` } : undefined}>
         {/* Animated Grid Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)] dark:bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)]"></div>
         
@@ -1624,76 +1624,51 @@ export default function HomePage() {
                 </Button>
               </Link>
             </div>
-            <div 
-              className="mt-8 sm:mt-12 flex flex-wrap items-center justify-center gap-3 sm:gap-4 transition-all duration-700 relative z-[1] px-4"
+            {/* User Avatars with Community Text - Responsive Layout */}
+            <div
+              className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center justify-center transition-all duration-700 relative z-[1] px-4 gap-3 sm:gap-0"
               style={{
-                transform: `translateY(${scrollY * 0.3}px)`,
-                opacity: Math.max(0, 1 - scrollY * 0.004)
+                transform: `translateY(${scrollY * 0.25}px)`,
+                opacity: Math.max(0, 1 - scrollY * 0.0035)
               }}
               suppressHydrationWarning
             >
-              {/* User avatars */}
-              <div className="flex items-center -space-x-2 sm:-space-x-3">
-                <div 
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
-                  style={{
-                    transform: `translateY(${Math.sin(scrollY * 0.01) * 2}px)`
-                  }}
-                  suppressHydrationWarning
-                >
-                  A
-                </div>
-                <div 
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
-                  style={{
-                    transform: `translateY(${Math.sin(scrollY * 0.01 + 1) * 2}px)`
-                  }}
-                  suppressHydrationWarning
-                >
-                  M
-                </div>
-                <div 
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
-                  style={{
-                    transform: `translateY(${Math.sin(scrollY * 0.01 + 2) * 2}px)`
-                  }}
-                  suppressHydrationWarning
-                >
-                  S
-                </div>
-                <div 
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
-                  style={{
-                    transform: `translateY(${Math.sin(scrollY * 0.01 + 3) * 2}px)`
-                  }}
-                  suppressHydrationWarning
-                >
-                  R
-                </div>
-                <div 
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10"
-                  style={{
-                    transform: `translateY(${Math.sin(scrollY * 0.01 + 4) * 2}px)`
-                  }}
-                  suppressHydrationWarning
-                >
-                  K
-                </div>
-                <div 
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br from-slate-300 to-slate-500 flex items-center justify-center text-white font-bold text-[10px] sm:text-xs shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10 animate-pulse"
-                  style={{
-                    transform: `translateY(${Math.sin(scrollY * 0.01 + 5) * 2}px)`
-                  }}
-                  suppressHydrationWarning
-                >
-                  +50K
-                </div>
+              {/* Avatars Section - With Custom Images */}
+              <div className="flex items-center justify-center -space-x-1 sm:-space-x-1 sm:mr-3">
+                {[
+                  { letter: "A", gradient: "from-blue-400 to-blue-600", image: (heroContent as any).heroAvatar1Image },
+                  { letter: "M", gradient: "from-purple-400 to-purple-600", image: (heroContent as any).heroAvatar2Image },
+                  { letter: "S", gradient: "from-indigo-400 to-indigo-600", image: (heroContent as any).heroAvatar3Image },
+                  { letter: "R", gradient: "from-pink-400 to-pink-600", image: (heroContent as any).heroAvatar4Image },
+                  { letter: "K", gradient: "from-green-400 to-green-600", image: (heroContent as any).heroAvatar5Image }
+                ].map((avatar, index) => (
+                  <div
+                    key={avatar.letter}
+                    className={`w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-full border-2 border-white dark:border-slate-900 bg-gradient-to-br ${avatar.gradient} flex items-center justify-center text-white font-semibold text-[10px] sm:text-xs lg:text-sm shadow-lg transition-transform duration-300 hover:scale-110 hover:z-10 ${avatar.image ? 'p-0.5' : ''}`}
+                    style={{
+                      transform: `translateY(${Math.sin(scrollY * 0.01 + index) * 2}px)`
+                    }}
+                    suppressHydrationWarning
+                  >
+                    {avatar.image ? (
+                      <img
+                        src={avatar.image}
+                        alt={`User ${avatar.letter}`}
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    ) : (
+                      avatar.letter
+                    )}
+                  </div>
+                ))}
+                {/* Plus indicator */}
+                <div className="text-white/80 font-bold text-[10px] sm:text-xs lg:text-sm ml-2 sm:ml-3">+</div>
               </div>
-              
-              {/* Text - now inline */}
-              <div className="text-center px-4">
+
+              {/* Community Text */}
+              <div className="text-center sm:text-left sm:flex-1 sm:ml-3">
                 <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
-                  {heroContent.heroStats || <><span className="font-bold text-blue-600 dark:text-blue-400">50,000+</span> innovators already discovering the future of AI tools • Join the community today</>}
+                  {heroContent.heroStats || "Thousands of innovative minds are already channeling popular AI tools with us. Join and be part of this fast-evolving community."}
                 </p>
               </div>
             </div>
@@ -1967,7 +1942,7 @@ export default function HomePage() {
               <Card className="relative h-full border-2 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
                 <CardContent className="pt-6 pb-8 px-6">
                   <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/10 to-blue-600/20 dark:from-blue-500/20 dark:to-blue-600/30 mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-                    <SearchIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                    <Eye className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="flex items-center justify-center mb-4">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold flex items-center justify-center text-sm">
@@ -2013,7 +1988,7 @@ export default function HomePage() {
               <Card className="relative h-full border-2 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
                 <CardContent className="pt-6 pb-8 px-6">
                   <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/10 to-pink-600/20 dark:from-pink-500/20 dark:to-pink-600/30 mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-                    <CheckCircle2 className="w-8 h-8 text-pink-600 dark:text-pink-400" />
+                    <Target className="w-8 h-8 text-pink-600 dark:text-pink-400" />
                   </div>
                   <div className="flex items-center justify-center mb-4">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-600 to-orange-600 text-white font-bold flex items-center justify-center text-sm">
@@ -2036,7 +2011,7 @@ export default function HomePage() {
               <Card className="relative h-full border-2 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
                 <CardContent className="pt-6 pb-8 px-6">
                   <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500/10 to-orange-600/20 dark:from-orange-500/20 dark:to-orange-600/30 mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-                    <ExternalLink className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+                    <Rocket className="w-8 h-8 text-orange-600 dark:text-orange-400" />
                   </div>
                   <div className="flex items-center justify-center mb-4">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-600 to-blue-600 text-white font-bold flex items-center justify-center text-sm">

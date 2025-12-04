@@ -18,6 +18,12 @@ interface HomeContent {
   secondaryButton: string;
   heroStats: string;
   heroImage: string;
+  // Hero Avatar Images (for A, M, S, R, K circles)
+  heroAvatar1Image: string; // A
+  heroAvatar2Image: string; // M
+  heroAvatar3Image: string; // S
+  heroAvatar4Image: string; // R
+  heroAvatar5Image: string; // K
   
   // Categories Section
   categoriesTitle: string;
@@ -125,7 +131,7 @@ interface HomeContent {
   testimonial10Image: string;
   testimonial11Image: string;
   testimonial12Image: string;
-
+  
   // Newsletter Section
   newsletterTitle: string;
   newsletterDescription: string;
@@ -456,8 +462,14 @@ const defaultHomeContent: HomeContent = {
   heroDescription: "Explore our carefully curated collection of cutting-edge AI tools. Find the perfect solution to supercharge your productivity, creativity, and business growth.",
   primaryButton: "Explore Tools",
   secondaryButton: "Submit Your Tool",
-  heroStats: "50,000+ innovators already discovering the future of AI tools • Join the community today",
+  heroStats: "Thousands of innovative minds are already channeling popular AI tools with us. Join and be part of this fast-evolving community.",
   heroImage: "",
+  // Hero Avatar Images
+  heroAvatar1Image: "",
+  heroAvatar2Image: "",
+  heroAvatar3Image: "",
+  heroAvatar4Image: "",
+  heroAvatar5Image: "",
   categoriesTitle: "Explore by Category",
   categoriesDescription: "Discover AI tools organized by their primary use cases and categories. Find the perfect tool for your specific needs.",
   categoriesButton: "View All Categories",
@@ -1184,6 +1196,11 @@ export default function ContentManagementPage({
           { page: "home", section: "hero", key: "secondaryButton", value: homeContent.secondaryButton },
           { page: "home", section: "hero", key: "heroStats", value: homeContent.heroStats },
           { page: "home", section: "hero", key: "heroImage", value: homeContent.heroImage },
+          { page: "home", section: "hero", key: "heroAvatar1Image", value: homeContent.heroAvatar1Image },
+          { page: "home", section: "hero", key: "heroAvatar2Image", value: homeContent.heroAvatar2Image },
+          { page: "home", section: "hero", key: "heroAvatar3Image", value: homeContent.heroAvatar3Image },
+          { page: "home", section: "hero", key: "heroAvatar4Image", value: homeContent.heroAvatar4Image },
+          { page: "home", section: "hero", key: "heroAvatar5Image", value: homeContent.heroAvatar5Image },
           { page: "home", section: "categories", key: "categoriesTitle", value: homeContent.categoriesTitle },
           { page: "home", section: "categories", key: "categoriesDescription", value: homeContent.categoriesDescription },
           { page: "home", section: "categories", key: "categoriesButton", value: homeContent.categoriesButton },
@@ -1614,6 +1631,78 @@ export default function ContentManagementPage({
               <div>
                 <Label>Hero Stats Text</Label>
                 <Input value={homeContent.heroStats} onChange={(e) => setHomeContent({ ...homeContent, heroStats: e.target.value })} />
+              </div>
+
+
+              {/* Hero Avatar Images */}
+              <div className="pt-6 border-t">
+                <h3 className="text-lg font-semibold mb-4">Hero Avatar Images (A, M, S, R, K circles)</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {[
+                    { num: 1, letter: "A" },
+                    { num: 2, letter: "M" },
+                    { num: 3, letter: "S" },
+                    { num: 4, letter: "R" },
+                    { num: 5, letter: "K" }
+                  ].map((avatar) => (
+                    <div key={avatar.num} className="space-y-3">
+                      <h4 className="font-medium text-center">Avatar {avatar.letter}</h4>
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center bg-gray-100">
+                          {(homeContent as any)[`heroAvatar${avatar.num}Image`] ? (
+                            <img
+                              src={(homeContent as any)[`heroAvatar${avatar.num}Image`]}
+                              alt={`Avatar ${avatar.letter}`}
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-lg font-bold text-gray-600">{avatar.letter}</span>
+                          )}
+                        </div>
+                        <div className="w-full">
+                          <Label className="text-xs">Image URL</Label>
+                          <Input
+                            value={(homeContent as any)[`heroAvatar${avatar.num}Image`] || ""}
+                            onChange={(e) => setHomeContent({ ...homeContent, [`heroAvatar${avatar.num}Image`]: e.target.value } as any)}
+                            placeholder={`https://example.com/avatar${avatar.num}.jpg`}
+                            className="text-xs"
+                          />
+                        </div>
+                        <div className="flex gap-1 w-full">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            id={`hero-avatar-${avatar.num}`}
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                try {
+                                  const imageUrl = await uploadContentImage(file, `hero-avatar-${avatar.num}`);
+                                  setHomeContent({ ...homeContent, [`heroAvatar${avatar.num}Image`]: imageUrl } as any);
+                                } catch (error) {
+                                  // Error already handled in uploadContentImage
+                                }
+                              }
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={uploadingImage === `hero-avatar-${avatar.num}`}
+                            onClick={() => document.getElementById(`hero-avatar-${avatar.num}`)?.click()}
+                            className="flex-1 text-xs"
+                          >
+                            <Upload className="w-3 h-3 mr-1" />
+                            {uploadingImage === `hero-avatar-${avatar.num}` ? "Uploading..." : "Upload"}
+                          </Button>
+                        </div>
+                        <p className="text-xs text-muted-foreground text-center">Optional custom avatar image. Leave empty to show letter.</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div>
                 <Label>Hero Background Image</Label>
@@ -2201,12 +2290,12 @@ export default function ContentManagementPage({
                       </div>
                       <div>
                         <Label>Rating (1-5)</Label>
-                        <Input
+                        <Input 
                           type="number"
                           min="1"
                           max="5"
-                          value={(homeContent as any)[`testimonial${num}Rating`] || "5"}
-                          onChange={(e) => setHomeContent({ ...homeContent, [`testimonial${num}Rating`]: e.target.value } as any)}
+                          value={(homeContent as any)[`testimonial${num}Rating`] || "5"} 
+                          onChange={(e) => setHomeContent({ ...homeContent, [`testimonial${num}Rating`]: e.target.value } as any)} 
                           placeholder="5"
                         />
                       </div>
