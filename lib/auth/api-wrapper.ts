@@ -5,6 +5,7 @@ export interface ApiCallOptions {
   timeout?: number;
   onRetry?: (attempt: number) => void;
   onAuthError?: () => void;
+  headers?: Record<string, string>;
 }
 
 export class ApiError extends Error {
