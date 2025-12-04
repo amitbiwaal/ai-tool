@@ -17,11 +17,13 @@ interface HomeContent {
   primaryButton: string;
   secondaryButton: string;
   heroStats: string;
+  heroImage: string;
   
   // Categories Section
   categoriesTitle: string;
   categoriesDescription: string;
   categoriesButton: string;
+  categoriesImage: string;
   
   // Trending Section
   trendingTitle: string;
@@ -34,12 +36,16 @@ interface HomeContent {
   // How It Works Cards
   step1Title: string;
   step1Description: string;
+  step1Image: string;
   step2Title: string;
   step2Description: string;
+  step2Image: string;
   step3Title: string;
   step3Description: string;
+  step3Image: string;
   step4Title: string;
   step4Description: string;
+  step4Image: string;
   
   // CTA Section
   ctaTitle: string;
@@ -51,6 +57,7 @@ interface HomeContent {
   ctaTrustIndicator1: string;
   ctaTrustIndicator2: string;
   ctaTrustIndicator3: string;
+  ctaImage: string;
   
   // Testimonials Section
   testimonialsTitle: string;
@@ -62,63 +69,63 @@ interface HomeContent {
   testimonial1Role: string;
   testimonial1Content: string;
   testimonial1Rating: string;
-  testimonial1Avatar: string;
   testimonial2Name: string;
   testimonial2Role: string;
   testimonial2Content: string;
   testimonial2Rating: string;
-  testimonial2Avatar: string;
   testimonial3Name: string;
   testimonial3Role: string;
   testimonial3Content: string;
   testimonial3Rating: string;
-  testimonial3Avatar: string;
   testimonial4Name: string;
   testimonial4Role: string;
   testimonial4Content: string;
   testimonial4Rating: string;
-  testimonial4Avatar: string;
   testimonial5Name: string;
   testimonial5Role: string;
   testimonial5Content: string;
   testimonial5Rating: string;
-  testimonial5Avatar: string;
   testimonial6Name: string;
   testimonial6Role: string;
   testimonial6Content: string;
   testimonial6Rating: string;
-  testimonial6Avatar: string;
   testimonial7Name: string;
   testimonial7Role: string;
   testimonial7Content: string;
   testimonial7Rating: string;
-  testimonial7Avatar: string;
   testimonial8Name: string;
   testimonial8Role: string;
   testimonial8Content: string;
   testimonial8Rating: string;
-  testimonial8Avatar: string;
   testimonial9Name: string;
   testimonial9Role: string;
   testimonial9Content: string;
   testimonial9Rating: string;
-  testimonial9Avatar: string;
   testimonial10Name: string;
   testimonial10Role: string;
   testimonial10Content: string;
   testimonial10Rating: string;
-  testimonial10Avatar: string;
   testimonial11Name: string;
   testimonial11Role: string;
   testimonial11Content: string;
   testimonial11Rating: string;
-  testimonial11Avatar: string;
   testimonial12Name: string;
   testimonial12Role: string;
   testimonial12Content: string;
   testimonial12Rating: string;
-  testimonial12Avatar: string;
-  
+  testimonial1Image: string;
+  testimonial2Image: string;
+  testimonial3Image: string;
+  testimonial4Image: string;
+  testimonial5Image: string;
+  testimonial6Image: string;
+  testimonial7Image: string;
+  testimonial8Image: string;
+  testimonial9Image: string;
+  testimonial10Image: string;
+  testimonial11Image: string;
+  testimonial12Image: string;
+
   // Newsletter Section
   newsletterTitle: string;
   newsletterDescription: string;
@@ -134,6 +141,7 @@ interface AboutContent {
   heroBadge: string;
   heroTitle: string;
   heroDescription: string;
+  heroImage: string;
   statsTitle1: string;
   statsValue1: string;
   statsTitle2: string;
@@ -146,11 +154,13 @@ interface AboutContent {
   directoryTitle: string;
   directoryDescription1: string;
   directoryDescription2: string;
+  globeImage: string;
   storyBadge: string;
   storyTitle: string;
   storyDescription1: string;
   storyDescription2: string;
   storyDescription3: string;
+  storyImage: string;
   exploreToolsButton: string;
   submitToolButton: string;
   valuesTitle: string;
@@ -168,13 +178,16 @@ interface AboutContent {
   missionPoint1: string;
   missionPoint2: string;
   missionPoint3: string;
+  missionImage: string;
   visionTitle: string;
   visionDescription: string;
   visionPoint1: string;
   visionPoint2: string;
   visionPoint3: string;
+  visionImage: string;
   ctaTitle: string;
   ctaDescription: string;
+  ctaImage: string;
   ctaSubmitButton: string;
   ctaContactButton: string;
 }
@@ -389,6 +402,8 @@ interface HeaderContent {
   siteName: string;
   siteTagline: string;
   logoUrl: string;
+  logoUrlLight: string;
+  logoUrlDark: string;
   topBarText: string;
   topBarContact: string;
   navigationItems: string; // JSON string for navigation array
@@ -399,6 +414,8 @@ interface HeaderContent {
 
 interface FooterContent {
   logoUrl: string;
+  logoUrlLight: string;
+  logoUrlDark: string;
   siteName: string;
   description: string;
   statsTools: string;
@@ -440,9 +457,11 @@ const defaultHomeContent: HomeContent = {
   primaryButton: "Explore Tools",
   secondaryButton: "Submit Your Tool",
   heroStats: "50,000+ innovators already discovering the future of AI tools • Join the community today",
+  heroImage: "",
   categoriesTitle: "Explore by Category",
   categoriesDescription: "Discover AI tools organized by their primary use cases and categories. Find the perfect tool for your specific needs.",
   categoriesButton: "View All Categories",
+  categoriesImage: "",
   trendingTitle: "Trending Now",
   trendingDescription: "Most popular tools this week",
   howItWorksTitle: "Simple Steps to Find Your Perfect AI Tool",
@@ -451,12 +470,16 @@ const defaultHomeContent: HomeContent = {
   // How It Works Cards
   step1Title: "Discover",
   step1Description: "Browse our curated collection of AI tools or search by keyword, category, or pricing type.",
+  step1Image: "",
   step2Title: "Compare",
   step2Description: "Compare multiple tools side-by-side, read detailed reviews, and check ratings to make informed decisions.",
+  step2Image: "",
   step3Title: "Choose",
   step3Description: "View detailed tool pages with features, pricing, screenshots, and user reviews to select the best option.",
+  step3Image: "",
   step4Title: "Use",
   step4Description: "Visit the tool's website directly, start using it, and save your favorites for easy access later.",
+  step4Image: "",
   ctaTitle: "Ready to Transform Your Workflow with AI?",
   ctaDescription: "Join thousands of innovators discovering cutting-edge AI tools daily. Get exclusive updates and early access to new features.",
   ctaButtonText: "Get Started Today",
@@ -466,6 +489,7 @@ const defaultHomeContent: HomeContent = {
   ctaTrustIndicator1: "1000+ AI Tools",
   ctaTrustIndicator2: "50K+ Active Users",
   ctaTrustIndicator3: "Updated Daily",
+  ctaImage: "",
   testimonialsTitle: "What Our Users Say",
   testimonialsDescription: "Join thousands of satisfied users who are discovering the best AI tools for their needs",
   testimonialsBadgeText: "Testimonials",
@@ -475,62 +499,62 @@ const defaultHomeContent: HomeContent = {
   testimonial1Role: "Content Creator",
   testimonial1Content: "This directory has been a game-changer for my content creation workflow. I discovered tools I never knew existed!",
   testimonial1Rating: "5",
-  testimonial1Avatar: "",
   testimonial2Name: "Michael Chen",
   testimonial2Role: "Software Developer",
   testimonial2Content: "The best curated list of AI tools I've found. Saved me hours of research and helped me find the perfect tools for my projects.",
   testimonial2Rating: "5",
-  testimonial2Avatar: "",
   testimonial3Name: "Emily Rodriguez",
   testimonial3Role: "Marketing Manager",
   testimonial3Content: "Incredible resource! The categorization makes it so easy to find exactly what I need. Highly recommend to any marketer.",
   testimonial3Rating: "5",
-  testimonial3Avatar: "",
   testimonial4Name: "David Kim",
   testimonial4Role: "Designer",
   testimonial4Content: "As a designer, I'm always looking for AI tools to enhance my workflow. This directory is my go-to resource now.",
   testimonial4Rating: "5",
-  testimonial4Avatar: "",
   testimonial5Name: "Jessica Taylor",
   testimonial5Role: "Business Owner",
   testimonial5Content: "Found amazing AI tools that have transformed my business operations. The quality of tools listed here is top-notch!",
   testimonial5Rating: "5",
-  testimonial5Avatar: "",
   testimonial6Name: "Alex Martinez",
   testimonial6Role: "Data Scientist",
   testimonial6Content: "Comprehensive collection of AI tools with detailed information. Makes comparing different options so much easier.",
   testimonial6Rating: "5",
-  testimonial6Avatar: "",
   testimonial7Name: "Rachel Green",
   testimonial7Role: "Freelance Writer",
   testimonial7Content: "This platform has helped me discover tools that doubled my productivity. The AI writing tools section is particularly impressive!",
   testimonial7Rating: "5",
-  testimonial7Avatar: "",
   testimonial8Name: "James Wilson",
   testimonial8Role: "Product Manager",
   testimonial8Content: "An invaluable resource for anyone working with AI. The regular updates and new tool additions keep it relevant and useful.",
   testimonial8Rating: "5",
-  testimonial8Avatar: "",
   testimonial9Name: "Lisa Anderson",
   testimonial9Role: "Social Media Manager",
   testimonial9Content: "Love how easy it is to navigate and find tools specific to my needs. The filtering system is brilliant!",
   testimonial9Rating: "5",
-  testimonial9Avatar: "",
   testimonial10Name: "Tom Brown",
   testimonial10Role: "Entrepreneur",
   testimonial10Content: "Best AI tools directory out there. Helped me find cost-effective solutions for my startup. Absolutely essential!",
   testimonial10Rating: "5",
-  testimonial10Avatar: "",
   testimonial11Name: "Nina Patel",
   testimonial11Role: "UX Designer",
   testimonial11Content: "The user experience of this directory is exceptional. Finding the right AI design tools has never been easier!",
   testimonial11Rating: "5",
-  testimonial11Avatar: "",
   testimonial12Name: "Chris Lee",
   testimonial12Role: "Video Editor",
   testimonial12Content: "Discovered some incredible AI video tools that cut my editing time in half. This directory is a goldmine!",
   testimonial12Rating: "5",
-  testimonial12Avatar: "",
+  testimonial1Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+  testimonial2Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
+  testimonial3Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
+  testimonial4Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+  testimonial5Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jessica",
+  testimonial6Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+  testimonial7Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rachel",
+  testimonial8Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=James",
+  testimonial9Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa",
+  testimonial10Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tom",
+  testimonial11Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Nina",
+  testimonial12Image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chris",
   newsletterTitle: "Stay Updated with AI Trends",
   newsletterDescription: "Get weekly updates on the latest AI tools, trends, and insights delivered straight to your inbox.",
   newsletterSubtext: "Join 10,000+ subscribers. No spam, ever. Unsubscribe anytime.",
@@ -543,6 +567,7 @@ const defaultAboutContent: AboutContent = {
   heroBadge: "About Us",
   heroTitle: "Empowering Your AI Journey",
   heroDescription: "We're on a mission to help you discover, compare, and choose the perfect AI tools that transform the way you work, create, and innovate.",
+  heroImage: "",
   statsTitle1: "AI Tools Listed",
   statsValue1: "500+",
   statsTitle2: "Active Users",
@@ -555,11 +580,13 @@ const defaultAboutContent: AboutContent = {
   directoryTitle: "The World's Best AI Tools Directory",
   directoryDescription1: "Lately, the site also posts articles that explain how each AI works. Found an AI tool that doesn't appear in the list? From now on, it is possible to submit new AIs so that they can be added to the ranking or the top 10.",
   directoryDescription2: "Actually, Aixploria is a kind of directory and search engine dedicated to AI. With its simple and clean style, you can easily search using keywords like on a search engine.",
+  globeImage: "",
   storyBadge: "Our Story",
   storyTitle: "Born from a passion for AI innovation",
   storyDescription1: "In 2025, we recognized a growing challenge: the AI tools landscape was becoming increasingly complex and overwhelming. Professionals, creators, and businesses were struggling to find the right tools for their specific needs.",
   storyDescription2: "We founded AI Tools Directory to bridge this gap. What started as a simple curated list has evolved into a comprehensive platform trusted by thousands of users worldwide.",
   storyDescription3: "Today, we're proud to be the go-to resource for anyone looking to harness the power of AI, offering detailed reviews, comparisons, and a vibrant community of AI enthusiasts.",
+  storyImage: "",
   exploreToolsButton: "Explore Tools",
   submitToolButton: "Submit a Tool",
   valuesTitle: "Our Core Values",
@@ -577,13 +604,16 @@ const defaultAboutContent: AboutContent = {
   missionPoint1: "Curate the highest quality AI tools",
   missionPoint2: "Provide honest, detailed reviews",
   missionPoint3: "Build a thriving AI community",
+  missionImage: "",
   visionTitle: "Our Vision",
   visionDescription: "To become the world's most trusted and comprehensive AI tools platform, where anyone—from beginners to experts—can confidently find, compare, and choose the perfect AI solutions to achieve their goals.",
   visionPoint1: "Global leader in AI tool discovery",
   visionPoint2: "Foster innovation and creativity",
   visionPoint3: "Shape the future of AI adoption",
+  visionImage: "",
   ctaTitle: "Join Our Community",
   ctaDescription: "Whether you're discovering AI tools or sharing your own, we'd love to have you as part of our growing community.",
+  ctaImage: "",
   ctaSubmitButton: "Submit Your Tool",
   ctaContactButton: "Get in Touch",
 };
@@ -798,6 +828,8 @@ const defaultHeaderContent: HeaderContent = {
   siteName: "AI Tools Directory",
   siteTagline: "EST. 2025",
   logoUrl: "",
+  logoUrlLight: "",
+  logoUrlDark: "",
   topBarText: "Curated tools • Premium insights •",
   topBarContact: "Business inquiries: partner@mostpopularaitools.com",
   navigationItems: JSON.stringify([
@@ -816,6 +848,8 @@ const defaultHeaderContent: HeaderContent = {
 
 const defaultFooterContent: FooterContent = {
   logoUrl: "",
+  logoUrlLight: "",
+  logoUrlDark: "",
   siteName: "AI Tools Directory",
   description: "Discover the best AI tools to supercharge your productivity. Our curated collection features cutting-edge artificial intelligence solutions for every need.",
   statsTools: "1000+",
@@ -899,6 +933,7 @@ export default function ContentManagementPage({
   const [compareContent, setCompareContent] = useState<CompareContent>(defaultCompareContent);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchAllContent();
@@ -1108,6 +1143,34 @@ export default function ContentManagementPage({
     }
   };
 
+  const uploadContentImage = async (file: File, type: string) => {
+    setUploadingImage(type);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("type", type);
+
+      const response = await fetch("/api/admin/upload-content-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to upload image");
+      }
+
+      const data = await response.json();
+      toast.success("Image uploaded successfully!");
+      return data.url;
+    } catch (error: any) {
+      toast.error(error.message || "Failed to upload image");
+      throw error;
+    } finally {
+      setUploadingImage(null);
+    }
+  };
+
   const saveContent = async (page: "home" | "about" | "contact" | "privacy" | "terms" | "blog" | "tools" | "submit" | "categories" | "header" | "footer" | "compare") => {
     setSaving(true);
     try {
@@ -1120,9 +1183,11 @@ export default function ContentManagementPage({
           { page: "home", section: "hero", key: "primaryButton", value: homeContent.primaryButton },
           { page: "home", section: "hero", key: "secondaryButton", value: homeContent.secondaryButton },
           { page: "home", section: "hero", key: "heroStats", value: homeContent.heroStats },
+          { page: "home", section: "hero", key: "heroImage", value: homeContent.heroImage },
           { page: "home", section: "categories", key: "categoriesTitle", value: homeContent.categoriesTitle },
           { page: "home", section: "categories", key: "categoriesDescription", value: homeContent.categoriesDescription },
           { page: "home", section: "categories", key: "categoriesButton", value: homeContent.categoriesButton },
+          { page: "home", section: "categories", key: "categoriesImage", value: homeContent.categoriesImage },
           { page: "home", section: "trending", key: "trendingTitle", value: homeContent.trendingTitle },
           { page: "home", section: "trending", key: "trendingDescription", value: homeContent.trendingDescription },
           { page: "home", section: "how-it-works", key: "howItWorksTitle", value: homeContent.howItWorksTitle },
@@ -1130,12 +1195,16 @@ export default function ContentManagementPage({
           { page: "home", section: "how-it-works", key: "ctaButton", value: homeContent.ctaButton },
           { page: "home", section: "how-it-works", key: "step1Title", value: homeContent.step1Title },
           { page: "home", section: "how-it-works", key: "step1Description", value: homeContent.step1Description },
+          { page: "home", section: "how-it-works", key: "step1Image", value: homeContent.step1Image },
           { page: "home", section: "how-it-works", key: "step2Title", value: homeContent.step2Title },
           { page: "home", section: "how-it-works", key: "step2Description", value: homeContent.step2Description },
+          { page: "home", section: "how-it-works", key: "step2Image", value: homeContent.step2Image },
           { page: "home", section: "how-it-works", key: "step3Title", value: homeContent.step3Title },
           { page: "home", section: "how-it-works", key: "step3Description", value: homeContent.step3Description },
+          { page: "home", section: "how-it-works", key: "step3Image", value: homeContent.step3Image },
           { page: "home", section: "how-it-works", key: "step4Title", value: homeContent.step4Title },
           { page: "home", section: "how-it-works", key: "step4Description", value: homeContent.step4Description },
+          { page: "home", section: "how-it-works", key: "step4Image", value: homeContent.step4Image },
           { page: "home", section: "cta", key: "ctaTitle", value: homeContent.ctaTitle },
           { page: "home", section: "cta", key: "ctaDescription", value: homeContent.ctaDescription },
           { page: "home", section: "cta", key: "ctaButtonText", value: homeContent.ctaButtonText },
@@ -1145,6 +1214,7 @@ export default function ContentManagementPage({
           { page: "home", section: "cta", key: "ctaTrustIndicator1", value: homeContent.ctaTrustIndicator1 },
           { page: "home", section: "cta", key: "ctaTrustIndicator2", value: homeContent.ctaTrustIndicator2 },
           { page: "home", section: "cta", key: "ctaTrustIndicator3", value: homeContent.ctaTrustIndicator3 },
+          { page: "home", section: "cta", key: "ctaImage", value: homeContent.ctaImage },
           { page: "home", section: "testimonials", key: "testimonialsTitle", value: homeContent.testimonialsTitle },
           { page: "home", section: "testimonials", key: "testimonialsDescription", value: homeContent.testimonialsDescription },
           { page: "home", section: "testimonials", key: "testimonialsBadgeText", value: homeContent.testimonialsBadgeText },
@@ -1153,62 +1223,62 @@ export default function ContentManagementPage({
           { page: "home", section: "testimonials", key: "testimonial1Role", value: homeContent.testimonial1Role },
           { page: "home", section: "testimonials", key: "testimonial1Content", value: homeContent.testimonial1Content },
           { page: "home", section: "testimonials", key: "testimonial1Rating", value: homeContent.testimonial1Rating },
-          { page: "home", section: "testimonials", key: "testimonial1Avatar", value: homeContent.testimonial1Avatar },
           { page: "home", section: "testimonials", key: "testimonial2Name", value: homeContent.testimonial2Name },
           { page: "home", section: "testimonials", key: "testimonial2Role", value: homeContent.testimonial2Role },
           { page: "home", section: "testimonials", key: "testimonial2Content", value: homeContent.testimonial2Content },
           { page: "home", section: "testimonials", key: "testimonial2Rating", value: homeContent.testimonial2Rating },
-          { page: "home", section: "testimonials", key: "testimonial2Avatar", value: homeContent.testimonial2Avatar },
           { page: "home", section: "testimonials", key: "testimonial3Name", value: homeContent.testimonial3Name },
           { page: "home", section: "testimonials", key: "testimonial3Role", value: homeContent.testimonial3Role },
           { page: "home", section: "testimonials", key: "testimonial3Content", value: homeContent.testimonial3Content },
           { page: "home", section: "testimonials", key: "testimonial3Rating", value: homeContent.testimonial3Rating },
-          { page: "home", section: "testimonials", key: "testimonial3Avatar", value: homeContent.testimonial3Avatar },
           { page: "home", section: "testimonials", key: "testimonial4Name", value: homeContent.testimonial4Name },
           { page: "home", section: "testimonials", key: "testimonial4Role", value: homeContent.testimonial4Role },
           { page: "home", section: "testimonials", key: "testimonial4Content", value: homeContent.testimonial4Content },
           { page: "home", section: "testimonials", key: "testimonial4Rating", value: homeContent.testimonial4Rating },
-          { page: "home", section: "testimonials", key: "testimonial4Avatar", value: homeContent.testimonial4Avatar },
           { page: "home", section: "testimonials", key: "testimonial5Name", value: homeContent.testimonial5Name },
           { page: "home", section: "testimonials", key: "testimonial5Role", value: homeContent.testimonial5Role },
           { page: "home", section: "testimonials", key: "testimonial5Content", value: homeContent.testimonial5Content },
           { page: "home", section: "testimonials", key: "testimonial5Rating", value: homeContent.testimonial5Rating },
-          { page: "home", section: "testimonials", key: "testimonial5Avatar", value: homeContent.testimonial5Avatar },
           { page: "home", section: "testimonials", key: "testimonial6Name", value: homeContent.testimonial6Name },
           { page: "home", section: "testimonials", key: "testimonial6Role", value: homeContent.testimonial6Role },
           { page: "home", section: "testimonials", key: "testimonial6Content", value: homeContent.testimonial6Content },
           { page: "home", section: "testimonials", key: "testimonial6Rating", value: homeContent.testimonial6Rating },
-          { page: "home", section: "testimonials", key: "testimonial6Avatar", value: homeContent.testimonial6Avatar },
           { page: "home", section: "testimonials", key: "testimonial7Name", value: homeContent.testimonial7Name },
           { page: "home", section: "testimonials", key: "testimonial7Role", value: homeContent.testimonial7Role },
           { page: "home", section: "testimonials", key: "testimonial7Content", value: homeContent.testimonial7Content },
           { page: "home", section: "testimonials", key: "testimonial7Rating", value: homeContent.testimonial7Rating },
-          { page: "home", section: "testimonials", key: "testimonial7Avatar", value: homeContent.testimonial7Avatar },
           { page: "home", section: "testimonials", key: "testimonial8Name", value: homeContent.testimonial8Name },
           { page: "home", section: "testimonials", key: "testimonial8Role", value: homeContent.testimonial8Role },
           { page: "home", section: "testimonials", key: "testimonial8Content", value: homeContent.testimonial8Content },
           { page: "home", section: "testimonials", key: "testimonial8Rating", value: homeContent.testimonial8Rating },
-          { page: "home", section: "testimonials", key: "testimonial8Avatar", value: homeContent.testimonial8Avatar },
           { page: "home", section: "testimonials", key: "testimonial9Name", value: homeContent.testimonial9Name },
           { page: "home", section: "testimonials", key: "testimonial9Role", value: homeContent.testimonial9Role },
           { page: "home", section: "testimonials", key: "testimonial9Content", value: homeContent.testimonial9Content },
           { page: "home", section: "testimonials", key: "testimonial9Rating", value: homeContent.testimonial9Rating },
-          { page: "home", section: "testimonials", key: "testimonial9Avatar", value: homeContent.testimonial9Avatar },
           { page: "home", section: "testimonials", key: "testimonial10Name", value: homeContent.testimonial10Name },
           { page: "home", section: "testimonials", key: "testimonial10Role", value: homeContent.testimonial10Role },
           { page: "home", section: "testimonials", key: "testimonial10Content", value: homeContent.testimonial10Content },
           { page: "home", section: "testimonials", key: "testimonial10Rating", value: homeContent.testimonial10Rating },
-          { page: "home", section: "testimonials", key: "testimonial10Avatar", value: homeContent.testimonial10Avatar },
           { page: "home", section: "testimonials", key: "testimonial11Name", value: homeContent.testimonial11Name },
           { page: "home", section: "testimonials", key: "testimonial11Role", value: homeContent.testimonial11Role },
           { page: "home", section: "testimonials", key: "testimonial11Content", value: homeContent.testimonial11Content },
           { page: "home", section: "testimonials", key: "testimonial11Rating", value: homeContent.testimonial11Rating },
-          { page: "home", section: "testimonials", key: "testimonial11Avatar", value: homeContent.testimonial11Avatar },
           { page: "home", section: "testimonials", key: "testimonial12Name", value: homeContent.testimonial12Name },
           { page: "home", section: "testimonials", key: "testimonial12Role", value: homeContent.testimonial12Role },
           { page: "home", section: "testimonials", key: "testimonial12Content", value: homeContent.testimonial12Content },
           { page: "home", section: "testimonials", key: "testimonial12Rating", value: homeContent.testimonial12Rating },
-          { page: "home", section: "testimonials", key: "testimonial12Avatar", value: homeContent.testimonial12Avatar },
+          { page: "home", section: "testimonials", key: "testimonial1Image", value: homeContent.testimonial1Image },
+          { page: "home", section: "testimonials", key: "testimonial2Image", value: homeContent.testimonial2Image },
+          { page: "home", section: "testimonials", key: "testimonial3Image", value: homeContent.testimonial3Image },
+          { page: "home", section: "testimonials", key: "testimonial4Image", value: homeContent.testimonial4Image },
+          { page: "home", section: "testimonials", key: "testimonial5Image", value: homeContent.testimonial5Image },
+          { page: "home", section: "testimonials", key: "testimonial6Image", value: homeContent.testimonial6Image },
+          { page: "home", section: "testimonials", key: "testimonial7Image", value: homeContent.testimonial7Image },
+          { page: "home", section: "testimonials", key: "testimonial8Image", value: homeContent.testimonial8Image },
+          { page: "home", section: "testimonials", key: "testimonial9Image", value: homeContent.testimonial9Image },
+          { page: "home", section: "testimonials", key: "testimonial10Image", value: homeContent.testimonial10Image },
+          { page: "home", section: "testimonials", key: "testimonial11Image", value: homeContent.testimonial11Image },
+          { page: "home", section: "testimonials", key: "testimonial12Image", value: homeContent.testimonial12Image },
           { page: "home", section: "newsletter", key: "newsletterTitle", value: homeContent.newsletterTitle },
           { page: "home", section: "newsletter", key: "newsletterDescription", value: homeContent.newsletterDescription },
           { page: "home", section: "newsletter", key: "newsletterSubtext", value: homeContent.newsletterSubtext },
@@ -1545,6 +1615,54 @@ export default function ContentManagementPage({
                 <Label>Hero Stats Text</Label>
                 <Input value={homeContent.heroStats} onChange={(e) => setHomeContent({ ...homeContent, heroStats: e.target.value })} />
               </div>
+              <div>
+                <Label>Hero Background Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={homeContent.heroImage}
+                    onChange={(e) => setHomeContent({ ...homeContent, heroImage: e.target.value })}
+                    placeholder="https://example.com/hero-image.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="hero-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "hero");
+                            setHomeContent({ ...homeContent, heroImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "hero"}
+                      onClick={() => document.getElementById("hero-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "hero" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {homeContent.heroImage && (
+                  <div className="mt-2">
+                    <img
+                      src={homeContent.heroImage}
+                      alt="Hero background"
+                      className="w-32 h-20 object-cover rounded border"
+                    />
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
 
@@ -1568,6 +1686,54 @@ export default function ContentManagementPage({
               <div>
                 <Label>Button Text</Label>
                 <Input value={homeContent.categoriesButton} onChange={(e) => setHomeContent({ ...homeContent, categoriesButton: e.target.value })} />
+              </div>
+              <div>
+                <Label>Categories Background Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={homeContent.categoriesImage}
+                    onChange={(e) => setHomeContent({ ...homeContent, categoriesImage: e.target.value })}
+                    placeholder="https://example.com/categories-image.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="categories-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "categories");
+                            setHomeContent({ ...homeContent, categoriesImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "categories"}
+                      onClick={() => document.getElementById("categories-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "categories" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {homeContent.categoriesImage && (
+                  <div className="mt-2">
+                    <img
+                      src={homeContent.categoriesImage}
+                      alt="Categories background"
+                      className="w-32 h-20 object-cover rounded border"
+                    />
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -1629,6 +1795,54 @@ export default function ContentManagementPage({
                     <Label>Step 1 Description</Label>
                     <Textarea value={homeContent.step1Description} onChange={(e) => setHomeContent({ ...homeContent, step1Description: e.target.value })} rows={2} />
                   </div>
+                  <div>
+                    <Label>Step 1 Image</Label>
+                    <div className="flex gap-2 items-center">
+                      <Input
+                        value={homeContent.step1Image}
+                        onChange={(e) => setHomeContent({ ...homeContent, step1Image: e.target.value })}
+                        placeholder="https://example.com/step1-image.jpg"
+                      />
+                      <div className="flex gap-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          id="step1-image"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              try {
+                                const imageUrl = await uploadContentImage(file, "step1");
+                                setHomeContent({ ...homeContent, step1Image: imageUrl });
+                              } catch (error) {
+                                // Error already handled in uploadContentImage
+                              }
+                            }
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          disabled={uploadingImage === "step1"}
+                          onClick={() => document.getElementById("step1-image")?.click()}
+                        >
+                          <Upload className="w-4 h-4 mr-1" />
+                          {uploadingImage === "step1" ? "Uploading..." : "Upload"}
+                        </Button>
+                      </div>
+                    </div>
+                    {homeContent.step1Image && (
+                      <div className="mt-2">
+                        <img
+                          src={homeContent.step1Image}
+                          alt="Step 1"
+                          className="w-16 h-16 object-cover rounded border"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Step 2 */}
@@ -1641,6 +1855,54 @@ export default function ContentManagementPage({
                   <div>
                     <Label>Step 2 Description</Label>
                     <Textarea value={homeContent.step2Description} onChange={(e) => setHomeContent({ ...homeContent, step2Description: e.target.value })} rows={2} />
+                  </div>
+                  <div>
+                    <Label>Step 2 Image</Label>
+                    <div className="flex gap-2 items-center">
+                      <Input
+                        value={homeContent.step2Image}
+                        onChange={(e) => setHomeContent({ ...homeContent, step2Image: e.target.value })}
+                        placeholder="https://example.com/step2-image.jpg"
+                      />
+                      <div className="flex gap-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          id="step2-image"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              try {
+                                const imageUrl = await uploadContentImage(file, "step2");
+                                setHomeContent({ ...homeContent, step2Image: imageUrl });
+                              } catch (error) {
+                                // Error already handled in uploadContentImage
+                              }
+                            }
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          disabled={uploadingImage === "step2"}
+                          onClick={() => document.getElementById("step2-image")?.click()}
+                        >
+                          <Upload className="w-4 h-4 mr-1" />
+                          {uploadingImage === "step2" ? "Uploading..." : "Upload"}
+                        </Button>
+                      </div>
+                    </div>
+                    {homeContent.step2Image && (
+                      <div className="mt-2">
+                        <img
+                          src={homeContent.step2Image}
+                          alt="Step 2"
+                          className="w-16 h-16 object-cover rounded border"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1655,6 +1917,54 @@ export default function ContentManagementPage({
                     <Label>Step 3 Description</Label>
                     <Textarea value={homeContent.step3Description} onChange={(e) => setHomeContent({ ...homeContent, step3Description: e.target.value })} rows={2} />
                   </div>
+                  <div>
+                    <Label>Step 3 Image</Label>
+                    <div className="flex gap-2 items-center">
+                      <Input
+                        value={homeContent.step3Image}
+                        onChange={(e) => setHomeContent({ ...homeContent, step3Image: e.target.value })}
+                        placeholder="https://example.com/step3-image.jpg"
+                      />
+                      <div className="flex gap-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          id="step3-image"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              try {
+                                const imageUrl = await uploadContentImage(file, "step3");
+                                setHomeContent({ ...homeContent, step3Image: imageUrl });
+                              } catch (error) {
+                                // Error already handled in uploadContentImage
+                              }
+                            }
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          disabled={uploadingImage === "step3"}
+                          onClick={() => document.getElementById("step3-image")?.click()}
+                        >
+                          <Upload className="w-4 h-4 mr-1" />
+                          {uploadingImage === "step3" ? "Uploading..." : "Upload"}
+                        </Button>
+                      </div>
+                    </div>
+                    {homeContent.step3Image && (
+                      <div className="mt-2">
+                        <img
+                          src={homeContent.step3Image}
+                          alt="Step 3"
+                          className="w-16 h-16 object-cover rounded border"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Step 4 */}
@@ -1667,6 +1977,54 @@ export default function ContentManagementPage({
                   <div>
                     <Label>Step 4 Description</Label>
                     <Textarea value={homeContent.step4Description} onChange={(e) => setHomeContent({ ...homeContent, step4Description: e.target.value })} rows={2} />
+                  </div>
+                  <div>
+                    <Label>Step 4 Image</Label>
+                    <div className="flex gap-2 items-center">
+                      <Input
+                        value={homeContent.step4Image}
+                        onChange={(e) => setHomeContent({ ...homeContent, step4Image: e.target.value })}
+                        placeholder="https://example.com/step4-image.jpg"
+                      />
+                      <div className="flex gap-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          id="step4-image"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              try {
+                                const imageUrl = await uploadContentImage(file, "step4");
+                                setHomeContent({ ...homeContent, step4Image: imageUrl });
+                              } catch (error) {
+                                // Error already handled in uploadContentImage
+                              }
+                            }
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          disabled={uploadingImage === "step4"}
+                          onClick={() => document.getElementById("step4-image")?.click()}
+                        >
+                          <Upload className="w-4 h-4 mr-1" />
+                          {uploadingImage === "step4" ? "Uploading..." : "Upload"}
+                        </Button>
+                      </div>
+                    </div>
+                    {homeContent.step4Image && (
+                      <div className="mt-2">
+                        <img
+                          src={homeContent.step4Image}
+                          alt="Step 4"
+                          className="w-16 h-16 object-cover rounded border"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1724,6 +2082,56 @@ export default function ContentManagementPage({
                     <Input value={homeContent.ctaTrustIndicator3} onChange={(e) => setHomeContent({ ...homeContent, ctaTrustIndicator3: e.target.value })} placeholder="Updated Daily" />
                   </div>
                 </div>
+              </div>
+
+              {/* Background Image */}
+              <div className="pt-4 border-t">
+                <Label>CTA Background Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={homeContent.ctaImage}
+                    onChange={(e) => setHomeContent({ ...homeContent, ctaImage: e.target.value })}
+                    placeholder="https://example.com/cta-image.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="cta-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "cta");
+                            setHomeContent({ ...homeContent, ctaImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "cta"}
+                      onClick={() => document.getElementById("cta-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "cta" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {homeContent.ctaImage && (
+                  <div className="mt-2">
+                    <img
+                      src={homeContent.ctaImage}
+                      alt="CTA background"
+                      className="w-32 h-20 object-cover rounded border"
+                    />
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -1804,80 +2212,51 @@ export default function ContentManagementPage({
                       </div>
                       <div>
                         <Label>Avatar Image</Label>
-                        <div className="space-y-2">
-                          {/* Current Avatar Preview */}
-                          {(homeContent as any)[`testimonial${num}Avatar`] && (
-                            <div className="flex items-center gap-2">
-                              <img
-                                src={(homeContent as any)[`testimonial${num}Avatar`]}
-                                alt={`Testimonial ${num} avatar`}
-                                className="w-12 h-12 rounded-full object-cover"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                }}
-                              />
-                              <span className="text-sm text-slate-600 dark:text-slate-400">Current avatar</span>
-                            </div>
-                          )}
-
-                          {/* Image URL Input */}
+                        <div className="flex gap-2 items-center">
                           <Input
-                            value={(homeContent as any)[`testimonial${num}Avatar`] || ""}
-                            onChange={(e) => setHomeContent({ ...homeContent, [`testimonial${num}Avatar`]: e.target.value } as any)}
-                            placeholder="Image URL or leave empty for DiceBear avatar"
+                            value={(homeContent as any)[`testimonial${num}Image`] || ""}
+                            onChange={(e) => setHomeContent({ ...homeContent, [`testimonial${num}Image`]: e.target.value } as any)}
+                            placeholder="https://example.com/avatar.jpg"
                           />
-
-                          {/* Upload Button */}
-                          <div className="flex gap-2">
+                          <div className="flex gap-1">
                             <input
                               type="file"
                               accept="image/*"
+                              className="hidden"
+                              id={`testimonial-${num}-image`}
                               onChange={async (e) => {
                                 const file = e.target.files?.[0];
-                                if (!file) return;
-
-                                try {
-                                  const formData = new FormData();
-                                  formData.append('file', file);
-
-                                  const response = await fetch('/api/upload/testimonial', {
-                                    method: 'POST',
-                                    body: formData,
-                                  });
-
-                                  if (response.ok) {
-                                    const data = await response.json();
-                                    setHomeContent({
-                                      ...homeContent,
-                                      [`testimonial${num}Avatar`]: data.url
-                                    } as any);
-                                    toast.success('Avatar uploaded successfully!');
-                                  } else {
-                                    const errorData = await response.json().catch(() => ({}));
-                                    toast.error(errorData.error || 'Failed to upload avatar');
+                                if (file) {
+                                  try {
+                                    const imageUrl = await uploadContentImage(file, `testimonial-${num}`);
+                                    setHomeContent({ ...homeContent, [`testimonial${num}Image`]: imageUrl } as any);
+                                  } catch (error) {
+                                    // Error already handled in uploadContentImage
                                   }
-                                } catch (error) {
-                                  console.error('Upload error:', error);
-                                  toast.error('Failed to upload avatar');
                                 }
-
-                                // Reset file input
-                                e.target.value = '';
                               }}
-                              className="hidden"
-                              id={`testimonial-${num}-avatar`}
                             />
                             <Button
                               type="button"
                               variant="outline"
                               size="sm"
-                              onClick={() => document.getElementById(`testimonial-${num}-avatar`)?.click()}
+                              disabled={uploadingImage === `testimonial-${num}`}
+                              onClick={() => document.getElementById(`testimonial-${num}-image`)?.click()}
                             >
-                              <Upload className="h-4 w-4 mr-2" />
-                              Upload Image
+                              <Upload className="w-4 h-4 mr-1" />
+                              {uploadingImage === `testimonial-${num}` ? "Uploading..." : "Upload"}
                             </Button>
                           </div>
                         </div>
+                        {(homeContent as any)[`testimonial${num}Image`] && (
+                          <div className="mt-2">
+                            <img
+                              src={(homeContent as any)[`testimonial${num}Image`]}
+                              alt={`Testimonial ${num} avatar`}
+                              className="w-12 h-12 rounded-full border-2 border-blue-500/20 object-cover"
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -1961,6 +2340,55 @@ export default function ContentManagementPage({
                 <Label>Hero Description</Label>
                 <Textarea value={aboutContent.heroDescription} onChange={(e) => setAboutContent({ ...aboutContent, heroDescription: e.target.value })} rows={3} placeholder="We're on a mission to help you discover, compare, and choose the perfect AI tools..." />
               </div>
+              <div>
+                <Label>Hero Background Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={aboutContent.heroImage}
+                    onChange={(e) => setAboutContent({ ...aboutContent, heroImage: e.target.value })}
+                    placeholder="https://example.com/hero-background.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="about-hero-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "about-hero");
+                            setAboutContent({ ...aboutContent, heroImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "about-hero"}
+                      onClick={() => document.getElementById("about-hero-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "about-hero" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {aboutContent.heroImage && (
+                  <div className="mt-2">
+                    <img
+                      src={aboutContent.heroImage}
+                      alt="Hero background"
+                      className="w-32 h-20 object-cover rounded border"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Optional background image for the hero section. Leave empty to use default gradient.</p>
+              </div>
             </CardContent>
           </Card>
 
@@ -2029,6 +2457,55 @@ export default function ContentManagementPage({
                 <Label>Description 2</Label>
                 <Textarea value={aboutContent.directoryDescription2} onChange={(e) => setAboutContent({ ...aboutContent, directoryDescription2: e.target.value })} rows={3} placeholder="Actually, Aixploria is a kind of directory..." />
               </div>
+              <div>
+                <Label>Globe Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={aboutContent.globeImage}
+                    onChange={(e) => setAboutContent({ ...aboutContent, globeImage: e.target.value })}
+                    placeholder="https://example.com/globe-image.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="about-globe-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "about-globe");
+                            setAboutContent({ ...aboutContent, globeImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "about-globe"}
+                      onClick={() => document.getElementById("about-globe-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "about-globe" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {aboutContent.globeImage && (
+                  <div className="mt-2">
+                    <img
+                      src={aboutContent.globeImage}
+                      alt="Globe illustration"
+                      className="w-16 h-16 object-cover rounded border"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Optional custom globe image. Leave empty to use animated SVG globe.</p>
+              </div>
             </CardContent>
           </Card>
 
@@ -2070,6 +2547,55 @@ export default function ContentManagementPage({
                     <Input value={aboutContent.submitToolButton} onChange={(e) => setAboutContent({ ...aboutContent, submitToolButton: e.target.value })} placeholder="Submit a Tool" />
                   </div>
                 </div>
+              </div>
+              <div>
+                <Label>Story Background Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={aboutContent.storyImage}
+                    onChange={(e) => setAboutContent({ ...aboutContent, storyImage: e.target.value })}
+                    placeholder="https://example.com/story-background.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="about-story-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "about-story");
+                            setAboutContent({ ...aboutContent, storyImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "about-story"}
+                      onClick={() => document.getElementById("about-story-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "about-story" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {aboutContent.storyImage && (
+                  <div className="mt-2">
+                    <img
+                      src={aboutContent.storyImage}
+                      alt="Story background"
+                      className="w-32 h-20 object-cover rounded border"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Optional background image for the story section. Leave empty to use default gradient.</p>
               </div>
             </CardContent>
           </Card>
@@ -2182,6 +2708,55 @@ export default function ContentManagementPage({
                   </div>
                 </div>
               </div>
+              <div>
+                <Label>Mission Background Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={aboutContent.missionImage}
+                    onChange={(e) => setAboutContent({ ...aboutContent, missionImage: e.target.value })}
+                    placeholder="https://example.com/mission-background.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="about-mission-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "about-mission");
+                            setAboutContent({ ...aboutContent, missionImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "about-mission"}
+                      onClick={() => document.getElementById("about-mission-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "about-mission" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {aboutContent.missionImage && (
+                  <div className="mt-2">
+                    <img
+                      src={aboutContent.missionImage}
+                      alt="Mission background"
+                      className="w-32 h-20 object-cover rounded border"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Optional background image for the mission card. Leave empty to use default gradient.</p>
+              </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Vision</h3>
               <div>
@@ -2210,6 +2785,55 @@ export default function ContentManagementPage({
                   </div>
                 </div>
               </div>
+              <div>
+                <Label>Vision Background Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={aboutContent.visionImage}
+                    onChange={(e) => setAboutContent({ ...aboutContent, visionImage: e.target.value })}
+                    placeholder="https://example.com/vision-background.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="about-vision-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "about-vision");
+                            setAboutContent({ ...aboutContent, visionImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "about-vision"}
+                      onClick={() => document.getElementById("about-vision-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "about-vision" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {aboutContent.visionImage && (
+                  <div className="mt-2">
+                    <img
+                      src={aboutContent.visionImage}
+                      alt="Vision background"
+                      className="w-32 h-20 object-cover rounded border"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Optional background image for the vision card. Leave empty to use default gradient.</p>
+              </div>
             </CardContent>
           </Card>
 
@@ -2236,6 +2860,55 @@ export default function ContentManagementPage({
                   <Label>CTA Contact Button</Label>
                   <Input value={aboutContent.ctaContactButton} onChange={(e) => setAboutContent({ ...aboutContent, ctaContactButton: e.target.value })} placeholder="Get in Touch" />
                 </div>
+              </div>
+              <div>
+                <Label>CTA Background Image</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={aboutContent.ctaImage}
+                    onChange={(e) => setAboutContent({ ...aboutContent, ctaImage: e.target.value })}
+                    placeholder="https://example.com/cta-background.jpg"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="about-cta-image"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "about-cta");
+                            setAboutContent({ ...aboutContent, ctaImage: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "about-cta"}
+                      onClick={() => document.getElementById("about-cta-image")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "about-cta" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {aboutContent.ctaImage && (
+                  <div className="mt-2">
+                    <img
+                      src={aboutContent.ctaImage}
+                      alt="CTA background"
+                      className="w-32 h-20 object-cover rounded border"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Optional background image for the CTA section. Leave empty to use default gradient.</p>
               </div>
             </CardContent>
           </Card>
@@ -3495,9 +4168,103 @@ export default function ContentManagementPage({
                 <Input value={headerContent.siteTagline} onChange={(e) => setHeaderContent({ ...headerContent, siteTagline: e.target.value })} placeholder="EST. 2025" />
               </div>
               <div>
-                <Label>Logo URL</Label>
-                <Input value={headerContent.logoUrl} onChange={(e) => setHeaderContent({ ...headerContent, logoUrl: e.target.value })} placeholder="https://example.com/logo.png" />
-                <p className="text-xs text-muted-foreground mt-1">Leave empty to use default icon</p>
+                <Label>Logo URL (Light Mode)</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={headerContent.logoUrlLight}
+                    onChange={(e) => setHeaderContent({ ...headerContent, logoUrlLight: e.target.value })}
+                    placeholder="https://example.com/logo-light.png"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="header-logo-light"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "header-logo-light");
+                            setHeaderContent({ ...headerContent, logoUrlLight: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "header-logo-light"}
+                      onClick={() => document.getElementById("header-logo-light")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "header-logo-light" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {headerContent.logoUrlLight && (
+                  <div className="mt-2">
+                    <img
+                      src={headerContent.logoUrlLight}
+                      alt="Header logo (light mode)"
+                      className="w-16 h-8 object-contain border rounded"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Logo for light mode. Leave empty to use default icon</p>
+              </div>
+
+              <div>
+                <Label>Logo URL (Dark Mode)</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={headerContent.logoUrlDark}
+                    onChange={(e) => setHeaderContent({ ...headerContent, logoUrlDark: e.target.value })}
+                    placeholder="https://example.com/logo-dark.png"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="header-logo-dark"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "header-logo-dark");
+                            setHeaderContent({ ...headerContent, logoUrlDark: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "header-logo-dark"}
+                      onClick={() => document.getElementById("header-logo-dark")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "header-logo-dark" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {headerContent.logoUrlDark && (
+                  <div className="mt-2">
+                    <img
+                      src={headerContent.logoUrlDark}
+                      alt="Header logo (dark mode)"
+                      className="w-16 h-8 object-contain border rounded bg-gray-900 p-1"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Logo for dark mode. Leave empty to use default icon</p>
               </div>
             </CardContent>
           </Card>
@@ -3581,9 +4348,103 @@ export default function ContentManagementPage({
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Logo URL</Label>
-                <Input value={footerContent.logoUrl} onChange={(e) => setFooterContent({ ...footerContent, logoUrl: e.target.value })} placeholder="https://example.com/logo.png" />
-                <p className="text-xs text-muted-foreground mt-1">Leave empty to use default icon</p>
+                <Label>Logo URL (Light Mode)</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={footerContent.logoUrlLight}
+                    onChange={(e) => setFooterContent({ ...footerContent, logoUrlLight: e.target.value })}
+                    placeholder="https://example.com/logo-light.png"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="footer-logo-light"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "footer-logo-light");
+                            setFooterContent({ ...footerContent, logoUrlLight: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "footer-logo-light"}
+                      onClick={() => document.getElementById("footer-logo-light")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "footer-logo-light" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {footerContent.logoUrlLight && (
+                  <div className="mt-2">
+                    <img
+                      src={footerContent.logoUrlLight}
+                      alt="Footer logo (light mode)"
+                      className="w-16 h-8 object-contain border rounded"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Logo for light mode. Leave empty to use default icon</p>
+              </div>
+
+              <div>
+                <Label>Logo URL (Dark Mode)</Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    value={footerContent.logoUrlDark}
+                    onChange={(e) => setFooterContent({ ...footerContent, logoUrlDark: e.target.value })}
+                    placeholder="https://example.com/logo-dark.png"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="footer-logo-dark"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          try {
+                            const imageUrl = await uploadContentImage(file, "footer-logo-dark");
+                            setFooterContent({ ...footerContent, logoUrlDark: imageUrl });
+                          } catch (error) {
+                            // Error already handled in uploadContentImage
+                          }
+                        }
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={uploadingImage === "footer-logo-dark"}
+                      onClick={() => document.getElementById("footer-logo-dark")?.click()}
+                    >
+                      <Upload className="w-4 h-4 mr-1" />
+                      {uploadingImage === "footer-logo-dark" ? "Uploading..." : "Upload"}
+                    </Button>
+                  </div>
+                </div>
+                {footerContent.logoUrlDark && (
+                  <div className="mt-2">
+                    <img
+                      src={footerContent.logoUrlDark}
+                      alt="Footer logo (dark mode)"
+                      className="w-16 h-8 object-contain border rounded bg-gray-900 p-1"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">Logo for dark mode. Leave empty to use default icon</p>
               </div>
               <div>
                 <Label>Site Name</Label>

@@ -94,7 +94,7 @@ export default function AboutPage({
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20 border-b">
+      <div className={`relative overflow-hidden border-b ${pageContent.heroImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20'}`} style={pageContent.heroImage ? { backgroundImage: `url(${pageContent.heroImage})` } : undefined}>
         <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16 lg:py-24 text-center">
           <Badge className="mb-4 sm:mb-6 bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 text-xs sm:text-sm">
@@ -134,78 +134,88 @@ export default function AboutPage({
         
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-            {/* Left side - Animated Rotating Globe */}
+            {/* Left side - Globe Illustration */}
             <div className="relative flex items-center justify-center min-h-[300px] sm:min-h-[400px] lg:min-h-[500px]">
-              <div className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px] animate-spin" style={{ animationDuration: '30s' }}>
-                {/* Globe circles - multiple layers for 3D effect */}
-                <div className="absolute inset-0 rounded-full border-2 border-blue-500/40 dark:border-blue-400/40"></div>
-                <div className="absolute inset-[30px] rounded-full border-2 border-blue-500/30 dark:border-blue-400/30"></div>
-                <div className="absolute inset-[60px] rounded-full border-2 border-blue-500/25 dark:border-blue-400/25"></div>
-                <div className="absolute inset-[90px] rounded-full border-2 border-blue-500/20 dark:border-blue-400/20"></div>
-                <div className="absolute inset-[120px] rounded-full border-2 border-blue-500/15 dark:border-blue-400/15"></div>
-                
-                {/* Latitude lines */}
-                <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
-                <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 dark:via-blue-400/50 to-transparent"></div>
-                <div className="absolute top-3/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
-                
-                {/* Longitude lines */}
-                <div className="absolute top-0 bottom-0 left-1/4 w-px bg-gradient-to-b from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
-                <div className="absolute top-0 bottom-0 left-1/2 w-px bg-gradient-to-b from-transparent via-blue-500/50 dark:via-blue-400/50 to-transparent"></div>
-                <div className="absolute top-0 bottom-0 left-3/4 w-px bg-gradient-to-b from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
-                
-                {/* Animated connection dots representing global reach */}
-                <div className="absolute top-1/3 left-1/4 w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse shadow-lg shadow-blue-500/50"></div>
-                <div className="absolute top-1/2 right-1/3 w-2.5 h-2.5 rounded-full bg-purple-500 dark:bg-purple-400 animate-pulse shadow-lg shadow-purple-500/50" style={{ animationDelay: '0.3s' }}></div>
-                <div className="absolute bottom-1/3 left-2/3 w-3 h-3 rounded-full bg-indigo-500 dark:bg-indigo-400 animate-pulse shadow-lg shadow-indigo-500/50" style={{ animationDelay: '0.7s' }}></div>
-                <div className="absolute top-2/3 right-1/4 w-2 h-2 rounded-full bg-blue-400 dark:bg-blue-300 animate-pulse shadow-lg shadow-blue-400/50" style={{ animationDelay: '0.5s' }}></div>
-                <div className="absolute top-1/4 right-1/2 w-2.5 h-2.5 rounded-full bg-purple-400 dark:bg-purple-300 animate-pulse shadow-lg shadow-purple-400/50" style={{ animationDelay: '1s' }}></div>
-                <div className="absolute bottom-1/4 left-1/3 w-2 h-2 rounded-full bg-indigo-400 dark:bg-indigo-300 animate-pulse shadow-lg shadow-indigo-400/50" style={{ animationDelay: '1.2s' }}></div>
-                
-                {/* Connection lines between dots */}
-                <svg className="absolute inset-0 w-full h-full" style={{ overflow: 'visible' }}>
-                  <line x1="25%" y1="33%" x2="66%" y2="50%" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1" className="animate-pulse" />
-                  <line x1="66%" y1="50%" x2="66%" y2="66%" stroke="rgba(147, 51, 234, 0.3)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
-                  <line x1="66%" y1="66%" x2="75%" y2="66%" stroke="rgba(99, 102, 241, 0.3)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '1s' }} />
-                </svg>
-                
-                {/* AI Tool Icons orbiting around the globe */}
-                <div className="absolute inset-[-30px] sm:inset-[-40px] lg:inset-[-50px]">
-                  {/* Top icons */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-blue-500/30 to-indigo-500/30 dark:from-blue-500/20 dark:to-indigo-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse">
-                    <span className="text-lg sm:text-xl lg:text-2xl">✍️</span>
-                  </div>
-                  
-                  {/* Right side icons */}
-                  <div className="absolute top-1/4 right-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 dark:from-purple-500/20 dark:to-pink-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '0.5s' }}>
-                    <span className="text-lg sm:text-xl lg:text-2xl">🎨</span>
-                  </div>
-                  <div className="absolute top-1/2 right-[-15px] sm:right-[-20px] w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-green-500/30 to-emerald-500/30 dark:from-green-500/20 dark:to-emerald-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '1s' }}>
-                    <span className="text-lg sm:text-xl lg:text-2xl">💻</span>
-                  </div>
-                  <div className="absolute bottom-1/4 right-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-orange-500/30 to-amber-500/30 dark:from-orange-500/20 dark:to-amber-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '1.5s' }}>
-                    <span className="text-lg sm:text-xl lg:text-2xl">🎬</span>
-                  </div>
-                  
-                  {/* Bottom icons */}
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 dark:from-cyan-500/20 dark:to-blue-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '2s' }}>
-                    <span className="text-lg sm:text-xl lg:text-2xl">🎵</span>
-                  </div>
-                  
-                  {/* Left side icons */}
-                  <div className="absolute bottom-1/4 left-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-red-500/30 to-pink-500/30 dark:from-red-500/20 dark:to-pink-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '2.5s' }}>
-                    <span className="text-lg sm:text-xl lg:text-2xl">📊</span>
-                  </div>
-                  <div className="absolute top-1/2 left-[-15px] sm:left-[-20px] w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-teal-500/30 to-cyan-500/30 dark:from-teal-500/20 dark:to-cyan-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '3s' }}>
-                    <span className="text-lg sm:text-xl lg:text-2xl">💬</span>
-                  </div>
-                  <div className="absolute top-1/4 left-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-yellow-500/30 to-orange-500/30 dark:from-yellow-500/20 dark:to-orange-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '3.5s' }}>
-                    <span className="text-lg sm:text-xl lg:text-2xl">🔍</span>
+              {pageContent.globeImage ? (
+                <div className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px]">
+                  <img
+                    src={pageContent.globeImage}
+                    alt="Global AI Platform"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px] animate-spin" style={{ animationDuration: '30s' }}>
+                  {/* Globe circles - multiple layers for 3D effect */}
+                  <div className="absolute inset-0 rounded-full border-2 border-blue-500/40 dark:border-blue-400/40"></div>
+                  <div className="absolute inset-[30px] rounded-full border-2 border-blue-500/30 dark:border-blue-400/30"></div>
+                  <div className="absolute inset-[60px] rounded-full border-2 border-blue-500/25 dark:border-blue-400/25"></div>
+                  <div className="absolute inset-[90px] rounded-full border-2 border-blue-500/20 dark:border-blue-400/20"></div>
+                  <div className="absolute inset-[120px] rounded-full border-2 border-blue-500/15 dark:border-blue-400/15"></div>
+
+                  {/* Latitude lines */}
+                  <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
+                  <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 dark:via-blue-400/50 to-transparent"></div>
+                  <div className="absolute top-3/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
+
+                  {/* Longitude lines */}
+                  <div className="absolute top-0 bottom-0 left-1/4 w-px bg-gradient-to-b from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
+                  <div className="absolute top-0 bottom-0 left-1/2 w-px bg-gradient-to-b from-transparent via-blue-500/50 dark:via-blue-400/50 to-transparent"></div>
+                  <div className="absolute top-0 bottom-0 left-3/4 w-px bg-gradient-to-b from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
+
+                  {/* Animated connection dots representing global reach */}
+                  <div className="absolute top-1/3 left-1/4 w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse shadow-lg shadow-blue-500/50"></div>
+                  <div className="absolute top-1/2 right-1/3 w-2.5 h-2.5 rounded-full bg-purple-500 dark:bg-purple-400 animate-pulse shadow-lg shadow-purple-500/50" style={{ animationDelay: '0.3s' }}></div>
+                  <div className="absolute bottom-1/3 left-2/3 w-3 h-3 rounded-full bg-indigo-500 dark:bg-indigo-400 animate-pulse shadow-lg shadow-indigo-500/50" style={{ animationDelay: '0.7s' }}></div>
+                  <div className="absolute top-2/3 right-1/4 w-2 h-2 rounded-full bg-blue-400 dark:bg-blue-300 animate-pulse shadow-lg shadow-blue-400/50" style={{ animationDelay: '0.5s' }}></div>
+                  <div className="absolute top-1/4 right-1/2 w-2.5 h-2.5 rounded-full bg-purple-400 dark:bg-purple-300 animate-pulse shadow-lg shadow-purple-400/50" style={{ animationDelay: '1s' }}></div>
+                  <div className="absolute bottom-1/4 left-1/3 w-2 h-2 rounded-full bg-indigo-400 dark:bg-indigo-300 animate-pulse shadow-lg shadow-indigo-400/50" style={{ animationDelay: '1.2s' }}></div>
+
+                  {/* Connection lines between dots */}
+                  <svg className="absolute inset-0 w-full h-full" style={{ overflow: 'visible' }}>
+                    <line x1="25%" y1="33%" x2="66%" y2="50%" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1" className="animate-pulse" />
+                    <line x1="66%" y1="50%" x2="66%" y2="66%" stroke="rgba(147, 51, 234, 0.3)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
+                    <line x1="66%" y1="66%" x2="75%" y2="66%" stroke="rgba(99, 102, 241, 0.3)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '1s' }} />
+                  </svg>
+
+                  {/* AI Tool Icons orbiting around the globe */}
+                  <div className="absolute inset-[-30px] sm:inset-[-40px] lg:inset-[-50px]">
+                    {/* Top icons */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-blue-500/30 to-indigo-500/30 dark:from-blue-500/20 dark:to-indigo-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse">
+                      <span className="text-lg sm:text-xl lg:text-2xl">✍️</span>
+                    </div>
+
+                    {/* Right side icons */}
+                    <div className="absolute top-1/4 right-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 dark:from-purple-500/20 dark:to-pink-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '0.5s' }}>
+                      <span className="text-lg sm:text-xl lg:text-2xl">🎨</span>
+                    </div>
+                    <div className="absolute top-1/2 right-[-15px] sm:right-[-20px] w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-green-500/30 to-emerald-500/30 dark:from-green-500/20 dark:to-emerald-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '1s' }}>
+                      <span className="text-lg sm:text-xl lg:text-2xl">💻</span>
+                    </div>
+                    <div className="absolute bottom-1/4 right-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-orange-500/30 to-amber-500/30 dark:from-orange-500/20 dark:to-amber-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '1.5s' }}>
+                      <span className="text-lg sm:text-xl lg:text-2xl">🎬</span>
+                    </div>
+
+                    {/* Bottom icons */}
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 dark:from-cyan-500/20 dark:to-blue-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '2s' }}>
+                      <span className="text-lg sm:text-xl lg:text-2xl">🎵</span>
+                    </div>
+
+                    {/* Left side icons */}
+                    <div className="absolute bottom-1/4 left-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-red-500/30 to-pink-500/30 dark:from-red-500/20 dark:to-pink-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '2.5s' }}>
+                      <span className="text-lg sm:text-xl lg:text-2xl">📊</span>
+                    </div>
+                    <div className="absolute top-1/2 left-[-15px] sm:left-[-20px] w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-teal-500/30 to-cyan-500/30 dark:from-teal-500/20 dark:to-cyan-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '3s' }}>
+                      <span className="text-lg sm:text-xl lg:text-2xl">💬</span>
+                    </div>
+                    <div className="absolute top-1/4 left-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-yellow-500/30 to-orange-500/30 dark:from-yellow-500/20 dark:to-orange-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '3.5s' }}>
+                      <span className="text-lg sm:text-xl lg:text-2xl">🔍</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
-            
+
             {/* Right side - Content */}
             <div className="space-y-4 sm:space-y-6 px-4 sm:px-0">
               <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 border border-blue-200/50 dark:border-blue-800/50">
@@ -273,7 +283,7 @@ export default function AboutPage({
               </div>
             </div>
             <div className="relative px-4 sm:px-0">
-              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden border-2 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-950 dark:to-purple-950 p-6 sm:p-8 h-[300px] sm:h-[350px] lg:h-[400px] flex items-center justify-center">
+              <div className={`relative rounded-xl sm:rounded-2xl overflow-hidden border-2 p-6 sm:p-8 h-[300px] sm:h-[350px] lg:h-[400px] flex items-center justify-center ${pageContent.storyImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-950 dark:to-purple-950'}`} style={pageContent.storyImage ? { backgroundImage: `url(${pageContent.storyImage})` } : undefined}>
                 <div className="text-center">
                   <Globe className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 text-primary mx-auto mb-3 sm:mb-4 opacity-20" />
                   <div className="text-lg sm:text-xl lg:text-2xl font-bold">Connecting you with</div>
@@ -311,7 +321,7 @@ export default function AboutPage({
 
         {/* Mission & Vision */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-12 sm:mb-16 lg:mb-20 px-4 sm:px-0">
-          <Card className="bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 border-2">
+          <Card className={`border-2 ${pageContent.missionImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20'}`} style={pageContent.missionImage ? { backgroundImage: `url(${pageContent.missionImage})` } : undefined}>
             <CardContent className="pt-4 sm:pt-6">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-4">
                 <Target className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
@@ -337,7 +347,7 @@ export default function AboutPage({
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/20 border-2">
+          <Card className={`border-2 ${pageContent.visionImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/20'}`} style={pageContent.visionImage ? { backgroundImage: `url(${pageContent.visionImage})` } : undefined}>
             <CardContent className="pt-4 sm:pt-6">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-purple-500/10 flex items-center justify-center mb-3 sm:mb-4">
                 <TrendingUp className="w-6 h-6 sm:w-7 sm:h-7 text-purple-600 dark:text-purple-400" />
@@ -365,7 +375,7 @@ export default function AboutPage({
         </div>
 
         {/* CTA Section */}
-        <Card className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white border-0 overflow-hidden relative mx-4 sm:mx-0">
+        <Card className={`text-white border-0 overflow-hidden relative mx-4 sm:mx-0 ${pageContent.ctaImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600'}`} style={pageContent.ctaImage ? { backgroundImage: `url(${pageContent.ctaImage})` } : undefined}>
           <div className="absolute inset-0 bg-grid-white/[0.05]" />
           <CardContent className="relative pt-8 sm:pt-12 pb-8 sm:pb-12 text-center px-4 sm:px-6">
             <Sparkles className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 opacity-90" />

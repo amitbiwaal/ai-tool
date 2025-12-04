@@ -403,7 +403,7 @@ export default function SubmitToolPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     // Both free and paid listings submit directly (paid listings get premium features for 1 month)
     await submitTool();
   };
@@ -1091,9 +1091,9 @@ export default function SubmitToolPage() {
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
                       <span className="text-white text-sm">✓</span>
-                    </div>
+                </div>
                     <h4 className="font-bold text-base sm:text-lg text-blue-900 dark:text-blue-100">Free Tool Listing</h4>
-                  </div>
+                    </div>
                   <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
                     Submit your AI tool to our directory completely free of charge.
                   </p>
@@ -1101,7 +1101,7 @@ export default function SubmitToolPage() {
                     <div className="flex items-center gap-2 text-sm">
                       <span className="text-green-600">✓</span>
                       <span>Instant publication after review</span>
-                    </div>
+                      </div>
                     <div className="flex items-center gap-2 text-sm">
                       <span className="text-green-600">✓</span>
                       <span>SEO-optimized listing</span>
