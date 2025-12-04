@@ -2062,23 +2062,27 @@ export default function HomePage() {
       <section className="relative overflow-hidden py-16 bg-gradient-to-r from-blue-50 via-white to-purple-50 dark:from-[#0a0f23] dark:via-[#101633] dark:to-[#16143b]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,197,94,0.15),_transparent_55%)] dark:bg-[radial-gradient(circle_at_top,_rgba(34,197,94,0.25),_transparent_55%)] pointer-events-none" />
         <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-2">
-                <span className="inline-flex items-center gap-2">
-                  <TrendingUp className="h-8 w-8 text-green-500" />
-                  {heroContent.trendingTitle || "Trending Now"}
+          <div className="flex flex-col items-center text-center sm:flex-row sm:items-start sm:justify-between sm:text-left gap-6 sm:gap-8 mb-8 sm:mb-12">
+            <div className="flex-1 max-w-2xl sm:max-w-none">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white mb-3 sm:mb-4 leading-tight">
+                <span className="inline-flex items-center justify-center sm:justify-start gap-2 sm:gap-3 mb-2">
+                  <TrendingUp className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-green-500 flex-shrink-0" />
+                  <span className="text-center sm:text-left leading-tight">
+                    This Week's Buzzing AI Tools
+                  </span>
                 </span>
               </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-300">
-                {heroContent.trendingDescription || "Most popular tools this week"}
+              <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed text-center sm:text-left">
+                See which most popular AI tools are making waves this week and attracting massive global interest.
               </p>
             </div>
-            <Link href="/tools?sort=popular">
-              <Button variant="outline" className="border border-green-500 text-green-600 hover:bg-green-50 dark:text-green-200 dark:hover:bg-green-500/10">
-                View All
-              </Button>
-            </Link>
+            <div className="flex-shrink-0">
+              <Link href="/tools?sort=popular">
+                <Button variant="outline" className="border border-green-500 text-green-600 hover:bg-green-50 dark:text-green-200 dark:hover:bg-green-500/10 whitespace-nowrap">
+                  View All
+                </Button>
+              </Link>
+            </div>
           </div>
           
           {/* Carousel Container */}
@@ -2200,23 +2204,27 @@ export default function HomePage() {
       <section className="relative overflow-hidden py-16 bg-[#f5f6ff] dark:bg-[#0f1732]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(99,102,241,0.2),_transparent_60%)] pointer-events-none" />
         <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                <span className="inline-flex items-center gap-2">
-                  <Clock className="h-8 w-8 text-indigo-500" />
-                  {heroContent.recentlyAddedTitle || "Recently Added"}
+          <div className="flex flex-col items-center text-center sm:flex-row sm:items-start sm:justify-between sm:text-left gap-6 sm:gap-8 mb-8 sm:mb-12">
+            <div className="flex-1 max-w-2xl sm:max-w-none">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 leading-tight">
+                <span className="inline-flex items-center justify-center sm:justify-start gap-2 sm:gap-3 mb-2">
+                  <Clock className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-indigo-500 flex-shrink-0" />
+                  <span className="text-center sm:text-left leading-tight">
+                    Newly Added AI Tools
+                  </span>
                 </span>
               </h2>
-              <p className="text-lg text-gray-600 dark:text-slate-300">
-                {heroContent.recentlyAddedDescription || "Latest tools in our directory"}
+              <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-slate-300 leading-relaxed text-center sm:text-left">
+                We have just added more popular AI tools to our directory that empower you to accomplish more. Check them out.
               </p>
             </div>
-            <Link href="/tools?sort=newest">
-              <Button variant="outline" className="border-indigo-500 text-indigo-600 hover:border-indigo-600 hover:bg-indigo-50 dark:text-indigo-200 dark:hover:bg-indigo-500/10">
-                {heroContent.recentlyAddedButtonText || "View All"}
-              </Button>
-            </Link>
+            <div className="flex-shrink-0">
+              <Link href="/tools?sort=newest">
+                <Button variant="outline" className="border-indigo-500 text-indigo-600 hover:border-indigo-600 hover:bg-indigo-50 dark:text-indigo-200 dark:hover:bg-indigo-500/10 whitespace-nowrap">
+                  {heroContent.recentlyAddedButtonText || "View All"}
+                </Button>
+              </Link>
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {recentTools.slice(0, 4).map((tool: any) => (

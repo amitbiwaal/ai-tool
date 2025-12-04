@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Sparkles, Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const footerLinks = {
   product: [
@@ -18,26 +18,12 @@ const footerLinks = {
     { name: "Privacy Policy", href: "/privacy" },
     { name: "Terms of Service", href: "/terms" },
   ],
-  resources: [
-    { name: "Documentation", href: "/docs" },
-    { name: "API", href: "/api" },
-    { name: "Support", href: "/support" },
+  support: [
+    { name: "Help Center", href: "/support" },
+    { name: "Contact Us", href: "/contact" },
     { name: "Sitemap", href: "/sitemap.xml" },
   ],
-  community: [
-    { name: "Discord", href: "#" },
-    { name: "Twitter", href: "#" },
-    { name: "GitHub", href: "#" },
-    { name: "Newsletter", href: "#" },
-  ],
 };
-
-const socialLinks = [
-  { name: "Twitter", href: "#", icon: Twitter },
-  { name: "GitHub", href: "#", icon: Github },
-  { name: "LinkedIn", href: "#", icon: Linkedin },
-  { name: "Email", href: "#", icon: Mail },
-];
 
 export function Footer() {
   const [currentYear, setCurrentYear] = useState<number>(2024);
@@ -48,136 +34,120 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="relative overflow-hidden bg-slate-900 dark:bg-[#0a0f1e] border-t border-slate-800/50 dark:border-slate-800/50">
+    <footer className="relative bg-gradient-to-b from-slate-900 via-slate-900 to-black dark:from-[#0a0f1e] dark:via-[#0a0f1e] dark:to-black border-t border-slate-800/50">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.1),_transparent_70%)] pointer-events-none" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-[100px]" />
-      
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(59,130,246,0.08),_transparent_50%)] dark:bg-[radial-gradient(circle_at_30%_20%,_rgba(59,130,246,0.12),_transparent_50%)] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/5 rounded-full blur-[100px]" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-12 lg:gap-8">
+        <div className="grid grid-cols-1 gap-8 sm:gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Brand Column */}
-          <div className="lg:col-span-4 space-y-3 sm:space-y-4 lg:space-y-6">
-            <Link href="/" className="inline-flex items-center gap-2 group">
-              <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 group-hover:from-blue-600 group-hover:to-purple-700 transition-all duration-300">
-                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-              </div>
-              <span className="text-lg sm:text-xl font-bold text-white">
-                AI Tools Directory
-              </span>
-            </Link>
-            <p className="text-xs sm:text-sm leading-relaxed text-slate-400">
+          <div className="lg:col-span-5 space-y-6">
+            <div className="space-y-4">
+              <Link href="/" className="inline-flex items-center gap-3 group">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 group-hover:from-blue-600 group-hover:to-purple-700 transition-all duration-300 shadow-lg group-hover:shadow-blue-500/25">
+                  <Sparkles className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <span className="text-2xl font-bold text-white group-hover:text-blue-100 transition-colors">
+                    AI Tools Directory
+                  </span>
+                  <div className="text-xs text-blue-400 font-medium">EST. 2025</div>
+                </div>
+              </Link>
+
+            <p className="text-base leading-relaxed text-slate-300 max-w-lg">
               Discover the best AI tools to supercharge your productivity. Our curated collection features cutting-edge artificial intelligence solutions for every need.
             </p>
-            
-            {/* Stats */}
-            <div className="flex flex-wrap gap-4 sm:gap-6 text-xs sm:text-sm">
-              <div>
-                <div className="font-bold text-white text-sm sm:text-base">1000+</div>
-                <div className="text-slate-400">AI Tools</div>
-              </div>
-              <div>
-                <div className="font-bold text-white text-sm sm:text-base">50K+</div>
-                <div className="text-slate-400">Users</div>
-              </div>
-              <div>
-                <div className="font-bold text-white text-sm sm:text-base">25+</div>
-                <div className="text-slate-400">Categories</div>
-              </div>
-            </div>
-            
-            {/* Social Links */}
-            <div className="flex gap-2 sm:gap-3">
-              {socialLinks.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="group p-2 sm:p-2.5 rounded-lg bg-slate-800/50 border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 sm:hover:scale-110"
-                >
-                  <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 group-hover:text-blue-400 transition-colors" />
-                </a>
-              ))}
-            </div>
+          </div>
           </div>
 
           {/* Links Columns */}
-          <div className="lg:col-span-8 grid grid-cols-2 gap-4 sm:gap-6 lg:gap-8 sm:grid-cols-4">
-            {/* Product */}
-            <div>
-              <h3 className="text-xs sm:text-sm font-semibold text-white mb-3 sm:mb-4">Product</h3>
-              <ul role="list" className="space-y-2 sm:space-y-3">
-                {footerLinks.product.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className="text-xs sm:text-sm text-slate-400 hover:text-blue-400 transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
+            {/* Product Column */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-white mb-4 relative">
+                  Product
+                  <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+                </h3>
+                <ul className="space-y-3">
+                  {footerLinks.product.map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        className="text-slate-300 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block group"
+                      >
+                        <span className="relative">
+                          {item.name}
+                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-200"></span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            {/* Company */}
-            <div>
-              <h3 className="text-xs sm:text-sm font-semibold text-white mb-3 sm:mb-4">Company</h3>
-              <ul role="list" className="space-y-2 sm:space-y-3">
-                {footerLinks.company.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className="text-xs sm:text-sm text-slate-400 hover:text-blue-400 transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            {/* Company Column */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-white mb-4 relative">
+                  Company
+                  <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                </h3>
+                <ul className="space-y-3">
+                  {footerLinks.company.map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        className="text-slate-300 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block group"
+                      >
+                        <span className="relative">
+                          {item.name}
+                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 group-hover:w-full transition-all duration-200"></span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            {/* Resources */}
-            <div>
-              <h3 className="text-xs sm:text-sm font-semibold text-white mb-3 sm:mb-4">Resources</h3>
-              <ul role="list" className="space-y-2 sm:space-y-3">
-                {footerLinks.resources.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className="text-xs sm:text-sm text-slate-400 hover:text-blue-400 transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* Support Column */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-white mb-4 relative">
+                  Support
+                  <div className="absolute -bottom-1 left-0 w-8 h-0.5 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full"></div>
+                </h3>
+                <ul className="space-y-3">
+                  {footerLinks.support.map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        className="text-slate-300 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block group"
+                      >
+                        <span className="relative">
+                          {item.name}
+                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-400 group-hover:w-full transition-all duration-200"></span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-            {/* Community */}
-            <div>
-              <h3 className="text-xs sm:text-sm font-semibold text-white mb-3 sm:mb-4">Community</h3>
-              <ul role="list" className="space-y-2 sm:space-y-3">
-                {footerLinks.community.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className="text-xs sm:text-sm text-slate-400 hover:text-blue-400 transition-colors"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-8 sm:mt-12 lg:mt-16 pt-4 sm:pt-6 lg:pt-8 border-t border-slate-800/50">
+        <div className="mt-12 sm:mt-16 pt-8 border-t border-slate-800/50">
           <div className="text-center">
-            <p className="text-xs sm:text-sm text-slate-400 px-4">
+            <p className="text-sm text-slate-400">
               &copy; {currentYear} AI Tools Directory. All rights reserved.
             </p>
           </div>
