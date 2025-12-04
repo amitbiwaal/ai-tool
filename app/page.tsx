@@ -2068,7 +2068,7 @@ export default function HomePage() {
                 <span className="inline-flex items-center justify-center sm:justify-start gap-2 sm:gap-3 mb-2">
                   <TrendingUp className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-green-500 flex-shrink-0" />
                   <span className="text-center sm:text-left leading-tight">
-                    This Week's Buzzing AI Tools
+                    This Week&apos;s Buzzing AI Tools
                   </span>
                 </span>
               </h2>
