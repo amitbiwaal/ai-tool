@@ -61,7 +61,7 @@ export function useAdminAuth() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty dependency array - only run once
 
-  const checkAdminAuth = async () => {
+  const checkAdminAuth = async (retryCount = 0) => {
     // Prevent multiple simultaneous checks
     if (isCheckingRef.current) {
       return;
@@ -79,21 +79,37 @@ export function useAdminAuth() {
         return;
       }
 
+      console.log(`Checking admin auth (attempt ${retryCount + 1})`);
       setIsLoading(true);
 
       // Add timeout to prevent infinite loading
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error("Auth check timeout")), 10000); // 10 second timeout
+        setTimeout(() => reject(new Error("Auth check timeout")), 15000); // 15 second timeout
       });
 
       // First check if user is authenticated using getUser (more reliable)
-      const authCheck = supabase.auth.getUser();
-      const {
-        data: { user },
-        error: userError,
-      } = await Promise.race([authCheck, timeoutPromise]) as any;
+      // Try getUser first, but fall back to getSession if it fails
+      let user, userError;
+
+      try {
+        const authResult = await Promise.race([supabase.auth.getUser(), timeoutPromise]) as any;
+        user = authResult.data?.user;
+        userError = authResult.error;
+      } catch (error: any) {
+        // If getUser fails, try getSession as fallback
+        console.warn("getUser failed, trying getSession:", error.message);
+        try {
+          const sessionResult = await Promise.race([supabase.auth.getSession(), timeoutPromise]) as any;
+          user = sessionResult.data?.session?.user;
+          userError = sessionResult.error;
+        } catch (sessionError: any) {
+          console.error("Both getUser and getSession failed:", sessionError.message);
+          userError = sessionError;
+        }
+      }
 
       if (userError || !user) {
+        console.warn("No authenticated user found:", userError?.message || "No user");
         setIsAuthenticated(false);
         setIsAdmin(false);
         setIsLoading(false);
@@ -109,20 +125,23 @@ export function useAdminAuth() {
 
       // Check if user is admin by fetching profile
       // Use direct Supabase query instead of API call for faster response
-      const profileCheck = supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
+      let profile, profileError;
 
-      const { data: profile, error: profileError } = await Promise.race([
-        profileCheck,
-        timeoutPromise
-      ]) as any;
+      try {
+        const profileResult = await Promise.race([
+          supabase.from("profiles").select("role").eq("id", user.id).single(),
+          timeoutPromise
+        ]) as any;
+        profile = profileResult.data;
+        profileError = profileResult.error;
+      } catch (error: any) {
+        console.error("Profile fetch failed:", error.message);
+        profileError = error;
+      }
 
       if (profileError) {
-        console.error("Error fetching profile:", profileError);
-        // If profile doesn't exist, user is not admin
+        console.error("Error fetching profile:", profileError.message || profileError);
+        // If profile doesn't exist or fetch fails, assume user is not admin
         setIsAdmin(false);
         setIsLoading(false);
         isCheckingRef.current = false;
@@ -144,11 +163,21 @@ export function useAdminAuth() {
       }
     } catch (error: any) {
       console.error("Error checking admin auth:", error);
+
+      // Retry logic for timeout errors
+      if (error?.message?.includes("timeout") && retryCount < 2) {
+        console.warn(`Auth check timed out (attempt ${retryCount + 1}), retrying...`);
+        isCheckingRef.current = false;
+        setTimeout(() => checkAdminAuth(retryCount + 1), 2000); // Wait 2 seconds before retry
+        return;
+      }
+
+      // Final failure
       setIsAdmin(false);
       setIsAuthenticated(false);
-      // On timeout or error, still set loading to false
+
       if (error?.message?.includes("timeout")) {
-        console.warn("Auth check timed out, user may not be authenticated");
+        console.warn("Auth check timed out after retries, user may not be authenticated");
         if (typeof window !== "undefined" && !window.location.pathname.includes("/admin/login")) {
           router.push("/admin/login");
         }
