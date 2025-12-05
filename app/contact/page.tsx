@@ -141,9 +141,8 @@ export default function ContactPage({
            MozUserSelect: 'none',
            msUserSelect: 'none',
            touchAction: 'pan-y',
-           WebkitTouchCallout: 'none',
-           WebkitUserDrag: 'none'
-         }}>
+           WebkitTouchCallout: 'none'
+         } as React.CSSProperties}>
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20 border-b">
         <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03]" />
