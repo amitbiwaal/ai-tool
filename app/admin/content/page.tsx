@@ -577,7 +577,6 @@ const defaultAboutContent: AboutContent = {
   statsValue3: "25+",
   statsTitle4: "User Reviews",
   statsValue4: "10K+",
-  globeImage: "",
   storyBadge: "Our Story",
   storyTitle: "Born from a passion for AI innovation",
   storyDescription1: "In 2025, we recognized a growing challenge: the AI tools landscape was becoming increasingly complex and overwhelming. Professionals, creators, and businesses were struggling to find the right tools for their specific needs.",
