@@ -156,11 +156,6 @@ interface AboutContent {
   statsValue3: string;
   statsTitle4: string;
   statsValue4: string;
-  directoryBadge: string;
-  directoryTitle: string;
-  directoryDescription1: string;
-  directoryDescription2: string;
-  globeImage: string;
   storyBadge: string;
   storyTitle: string;
   storyDescription1: string;
@@ -407,9 +402,6 @@ interface CategoriesContent {
 interface HeaderContent {
   siteName: string;
   siteTagline: string;
-  logoUrl: string;
-  logoUrlLight: string;
-  logoUrlDark: string;
   topBarText: string;
   topBarContact: string;
   navigationItems: string; // JSON string for navigation array
@@ -419,9 +411,6 @@ interface HeaderContent {
 }
 
 interface FooterContent {
-  logoUrl: string;
-  logoUrlLight: string;
-  logoUrlDark: string;
   siteName: string;
   description: string;
   statsTools: string;
@@ -588,10 +577,6 @@ const defaultAboutContent: AboutContent = {
   statsValue3: "25+",
   statsTitle4: "User Reviews",
   statsValue4: "10K+",
-  directoryBadge: "Global AI Platform",
-  directoryTitle: "The World's Best AI Tools Directory",
-  directoryDescription1: "Lately, the site also posts articles that explain how each AI works. Found an AI tool that doesn't appear in the list? From now on, it is possible to submit new AIs so that they can be added to the ranking or the top 10.",
-  directoryDescription2: "Actually, Aixploria is a kind of directory and search engine dedicated to AI. With its simple and clean style, you can easily search using keywords like on a search engine.",
   globeImage: "",
   storyBadge: "Our Story",
   storyTitle: "Born from a passion for AI innovation",
@@ -839,9 +824,6 @@ const defaultCategoriesContent: CategoriesContent = {
 const defaultHeaderContent: HeaderContent = {
   siteName: "AI Tools Directory",
   siteTagline: "EST. 2025",
-  logoUrl: "",
-  logoUrlLight: "",
-  logoUrlDark: "",
   topBarText: "Curated tools • Premium insights •",
   topBarContact: "Business inquiries: partner@mostpopularaitools.com",
   navigationItems: JSON.stringify([
@@ -859,9 +841,6 @@ const defaultHeaderContent: HeaderContent = {
 };
 
 const defaultFooterContent: FooterContent = {
-  logoUrl: "",
-  logoUrlLight: "",
-  logoUrlDark: "",
   siteName: "AI Tools Directory",
   description: "Discover the best AI tools to supercharge your productivity. Our curated collection features cutting-edge artificial intelligence solutions for every need.",
   statsTools: "1000+",
@@ -2524,79 +2503,6 @@ export default function ContentManagementPage({
             </CardContent>
           </Card>
 
-          {/* Directory Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Directory Section</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label>Directory Badge</Label>
-                <Input value={aboutContent.directoryBadge} onChange={(e) => setAboutContent({ ...aboutContent, directoryBadge: e.target.value })} placeholder="Global AI Platform" />
-              </div>
-              <div>
-                <Label>Directory Title</Label>
-                <Input value={aboutContent.directoryTitle} onChange={(e) => setAboutContent({ ...aboutContent, directoryTitle: e.target.value })} placeholder="The World's Best AI Tools Directory" />
-              </div>
-              <div>
-                <Label>Description 1</Label>
-                <Textarea value={aboutContent.directoryDescription1} onChange={(e) => setAboutContent({ ...aboutContent, directoryDescription1: e.target.value })} rows={3} placeholder="Lately, the site also posts articles..." />
-              </div>
-              <div>
-                <Label>Description 2</Label>
-                <Textarea value={aboutContent.directoryDescription2} onChange={(e) => setAboutContent({ ...aboutContent, directoryDescription2: e.target.value })} rows={3} placeholder="Actually, Aixploria is a kind of directory..." />
-              </div>
-              <div>
-                <Label>Globe Image</Label>
-                <div className="flex gap-2 items-center">
-                  <Input
-                    value={aboutContent.globeImage}
-                    onChange={(e) => setAboutContent({ ...aboutContent, globeImage: e.target.value })}
-                    placeholder="https://example.com/globe-image.jpg"
-                  />
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="about-globe-image"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          try {
-                            const imageUrl = await uploadContentImage(file, "about-globe");
-                            setAboutContent({ ...aboutContent, globeImage: imageUrl });
-                          } catch (error) {
-                            // Error already handled in uploadContentImage
-                          }
-                        }
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      disabled={uploadingImage === "about-globe"}
-                      onClick={() => document.getElementById("about-globe-image")?.click()}
-                    >
-                      <Upload className="w-4 h-4 mr-1" />
-                      {uploadingImage === "about-globe" ? "Uploading..." : "Upload"}
-                    </Button>
-                  </div>
-                </div>
-                {aboutContent.globeImage && (
-                  <div className="mt-2">
-                    <img
-                      src={aboutContent.globeImage}
-                      alt="Globe illustration"
-                      className="w-16 h-16 object-cover rounded border"
-                    />
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground mt-1">Optional custom globe image. Leave empty to use animated SVG globe.</p>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Our Story Section */}
           <Card>
@@ -4256,105 +4162,6 @@ export default function ContentManagementPage({
                 <Label>Site Tagline</Label>
                 <Input value={headerContent.siteTagline} onChange={(e) => setHeaderContent({ ...headerContent, siteTagline: e.target.value })} placeholder="EST. 2025" />
               </div>
-              <div>
-                <Label>Logo URL (Light Mode)</Label>
-                <div className="flex gap-2 items-center">
-                  <Input
-                    value={headerContent.logoUrlLight}
-                    onChange={(e) => setHeaderContent({ ...headerContent, logoUrlLight: e.target.value })}
-                    placeholder="https://example.com/logo-light.png"
-                  />
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="header-logo-light"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          try {
-                            const imageUrl = await uploadContentImage(file, "header-logo-light");
-                            setHeaderContent({ ...headerContent, logoUrlLight: imageUrl });
-                          } catch (error) {
-                            // Error already handled in uploadContentImage
-                          }
-                        }
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      disabled={uploadingImage === "header-logo-light"}
-                      onClick={() => document.getElementById("header-logo-light")?.click()}
-                    >
-                      <Upload className="w-4 h-4 mr-1" />
-                      {uploadingImage === "header-logo-light" ? "Uploading..." : "Upload"}
-                    </Button>
-                  </div>
-                </div>
-                {headerContent.logoUrlLight && (
-                  <div className="mt-2">
-                    <img
-                      src={headerContent.logoUrlLight}
-                      alt="Header logo (light mode)"
-                      className="w-16 h-8 object-contain border rounded"
-                    />
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground mt-1">Logo for light mode. Leave empty to use default icon</p>
-              </div>
-
-              <div>
-                <Label>Logo URL (Dark Mode)</Label>
-                <div className="flex gap-2 items-center">
-                  <Input
-                    value={headerContent.logoUrlDark}
-                    onChange={(e) => setHeaderContent({ ...headerContent, logoUrlDark: e.target.value })}
-                    placeholder="https://example.com/logo-dark.png"
-                  />
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="header-logo-dark"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          try {
-                            const imageUrl = await uploadContentImage(file, "header-logo-dark");
-                            setHeaderContent({ ...headerContent, logoUrlDark: imageUrl });
-                          } catch (error) {
-                            // Error already handled in uploadContentImage
-                          }
-                        }
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      disabled={uploadingImage === "header-logo-dark"}
-                      onClick={() => document.getElementById("header-logo-dark")?.click()}
-                    >
-                      <Upload className="w-4 h-4 mr-1" />
-                      {uploadingImage === "header-logo-dark" ? "Uploading..." : "Upload"}
-                    </Button>
-                  </div>
-                </div>
-                {headerContent.logoUrlDark && (
-                  <div className="mt-2">
-                    <img
-                      src={headerContent.logoUrlDark}
-                      alt="Header logo (dark mode)"
-                      className="w-16 h-8 object-contain border rounded bg-gray-900 p-1"
-                    />
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground mt-1">Logo for dark mode. Leave empty to use default icon</p>
-              </div>
             </CardContent>
           </Card>
 
@@ -4436,105 +4243,6 @@ export default function ContentManagementPage({
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div>
-                <Label>Logo URL (Light Mode)</Label>
-                <div className="flex gap-2 items-center">
-                  <Input
-                    value={footerContent.logoUrlLight}
-                    onChange={(e) => setFooterContent({ ...footerContent, logoUrlLight: e.target.value })}
-                    placeholder="https://example.com/logo-light.png"
-                  />
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="footer-logo-light"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          try {
-                            const imageUrl = await uploadContentImage(file, "footer-logo-light");
-                            setFooterContent({ ...footerContent, logoUrlLight: imageUrl });
-                          } catch (error) {
-                            // Error already handled in uploadContentImage
-                          }
-                        }
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      disabled={uploadingImage === "footer-logo-light"}
-                      onClick={() => document.getElementById("footer-logo-light")?.click()}
-                    >
-                      <Upload className="w-4 h-4 mr-1" />
-                      {uploadingImage === "footer-logo-light" ? "Uploading..." : "Upload"}
-                    </Button>
-                  </div>
-                </div>
-                {footerContent.logoUrlLight && (
-                  <div className="mt-2">
-                    <img
-                      src={footerContent.logoUrlLight}
-                      alt="Footer logo (light mode)"
-                      className="w-16 h-8 object-contain border rounded"
-                    />
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground mt-1">Logo for light mode. Leave empty to use default icon</p>
-              </div>
-
-              <div>
-                <Label>Logo URL (Dark Mode)</Label>
-                <div className="flex gap-2 items-center">
-                  <Input
-                    value={footerContent.logoUrlDark}
-                    onChange={(e) => setFooterContent({ ...footerContent, logoUrlDark: e.target.value })}
-                    placeholder="https://example.com/logo-dark.png"
-                  />
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="footer-logo-dark"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          try {
-                            const imageUrl = await uploadContentImage(file, "footer-logo-dark");
-                            setFooterContent({ ...footerContent, logoUrlDark: imageUrl });
-                          } catch (error) {
-                            // Error already handled in uploadContentImage
-                          }
-                        }
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      disabled={uploadingImage === "footer-logo-dark"}
-                      onClick={() => document.getElementById("footer-logo-dark")?.click()}
-                    >
-                      <Upload className="w-4 h-4 mr-1" />
-                      {uploadingImage === "footer-logo-dark" ? "Uploading..." : "Upload"}
-                    </Button>
-                  </div>
-                </div>
-                {footerContent.logoUrlDark && (
-                  <div className="mt-2">
-                    <img
-                      src={footerContent.logoUrlDark}
-                      alt="Footer logo (dark mode)"
-                      className="w-16 h-8 object-contain border rounded bg-gray-900 p-1"
-                    />
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground mt-1">Logo for dark mode. Leave empty to use default icon</p>
-              </div>
               <div>
                 <Label>Site Name</Label>
                 <Input value={footerContent.siteName} onChange={(e) => setFooterContent({ ...footerContent, siteName: e.target.value })} placeholder="AI Tools Directory" />

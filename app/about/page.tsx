@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Sparkles, 
-  Target, 
-  Users, 
-  Heart, 
+import {
+  Sparkles,
+  Target,
+  Users,
+  Heart,
   Rocket,
   Shield,
   TrendingUp,
@@ -19,7 +19,9 @@ import {
   ArrowRight,
   Mail,
   MessageCircle,
-  Star
+  Star,
+  Eye,
+  Lightbulb
 } from "lucide-react";
 import Link from "next/link";
 
@@ -32,6 +34,7 @@ export default function AboutPage({
 }) {
   // Content from database
   const [pageContent, setPageContent] = useState<Record<string, string>>({});
+  const [contentLoaded, setContentLoaded] = useState(false);
 
   // Fetch page content from database
   useEffect(() => {
@@ -54,6 +57,8 @@ export default function AboutPage({
       setPageContent(content);
     } catch (error) {
       console.error("Error fetching page content:", error);
+    } finally {
+      setContentLoaded(true);
     }
   };
 
@@ -66,25 +71,25 @@ export default function AboutPage({
 
   const values = [
     {
-      icon: Shield,
+      icon: Eye,
       title: pageContent.value1Title || "Transparency",
       description: pageContent.value1Description || "We provide honest, unbiased reviews and comparisons to help you make informed decisions.",
       color: "text-blue-600 dark:text-blue-400"
     },
     {
-      icon: Award,
+      icon: Star,
       title: pageContent.value2Title || "Quality",
       description: pageContent.value2Description || "Every tool in our directory is carefully vetted and evaluated by our expert team.",
       color: "text-purple-600 dark:text-purple-400"
     },
     {
-      icon: Heart,
+      icon: Users,
       title: pageContent.value3Title || "Community First",
       description: pageContent.value3Description || "Built by the community, for the community. Your feedback shapes our platform.",
       color: "text-pink-600 dark:text-pink-400"
     },
     {
-      icon: Zap,
+      icon: Lightbulb,
       title: pageContent.value4Title || "Innovation",
       description: pageContent.value4Description || "We stay ahead of the curve, constantly updating with the latest AI tools and technologies.",
       color: "text-orange-600 dark:text-orange-400"
@@ -97,152 +102,51 @@ export default function AboutPage({
       <div className={`relative overflow-hidden border-b ${pageContent.heroImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20'}`} style={pageContent.heroImage ? { backgroundImage: `url(${pageContent.heroImage})` } : undefined}>
         <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16 lg:py-24 text-center">
-          <Badge className="mb-4 sm:mb-6 bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 text-xs sm:text-sm">
-            {pageContent.heroBadge || "About Us"}
-          </Badge>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent px-4">
-            {pageContent.heroTitle || "Empowering Your AI Journey"}
-          </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
-            {pageContent.heroDescription || "We're on a mission to help you discover, compare, and choose the perfect AI tools that transform the way you work, create, and innovate."}
-          </p>
+          {!contentLoaded ? (
+            <div className="space-y-4">
+              <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+              <div className="h-12 w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+              <div className="h-4 w-80 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+            </div>
+          ) : (
+            <>
+              <Badge className="mb-4 sm:mb-6 bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 text-xs sm:text-sm">
+                {pageContent.heroBadge || "About Us"}
+              </Badge>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent px-4">
+                {pageContent.heroTitle || "Empowering Your AI Journey"}
+              </h1>
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
+                {pageContent.heroDescription || "We're on a mission to help you discover, compare, and choose the perfect AI tools that transform the way you work, create, and innovate."}
+              </p>
+            </>
+          )}
           
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto mt-8 sm:mt-12 px-4">
-            {stats.map((stat, index) => (
-              <div key={index} className="bg-white/80 dark:bg-white/5 backdrop-blur rounded-xl sm:rounded-2xl p-4 sm:p-6 border hover:shadow-lg transition-all">
-                <stat.icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary mx-auto mb-2" />
-                <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1">{stat.value}</div>
-                <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+          {!contentLoaded ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto mt-8 sm:mt-12 px-4">
+              {[...Array(4)].map((_, index) => (
+                <div key={index} className="bg-white/80 dark:bg-white/5 backdrop-blur rounded-xl sm:rounded-2xl p-4 sm:p-6 border animate-pulse">
+                  <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded mx-auto mb-2"></div>
+                  <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded mx-auto mb-1"></div>
+                  <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded mx-auto"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto mt-8 sm:mt-12 px-4">
+              {stats.map((stat, index) => (
+                <div key={index} className="bg-white/80 dark:bg-white/5 backdrop-blur rounded-xl sm:rounded-2xl p-4 sm:p-6 border hover:shadow-lg transition-all">
+                  <stat.icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary mx-auto mb-2" />
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1">{stat.value}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* World's Best AI Tools Directory Section */}
-      <section className="relative overflow-hidden py-12 sm:py-16 lg:py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-[#0a0f1e] dark:via-[#0d1228] dark:to-[#0f0e2a]">
-        {/* Premium gradient overlays */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.08),_transparent_70%)] dark:bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.15),_transparent_70%)] pointer-events-none" />
-        
-        {/* Animated gradient orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/8 rounded-full blur-[120px] animate-pulse dark:bg-blue-500/15" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-400/8 rounded-full blur-[100px] animate-pulse delay-700 dark:bg-purple-500/15" />
-        
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_60%,transparent_100%)] dark:bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] opacity-40"></div>
-        
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-            {/* Left side - Globe Illustration */}
-            <div className="relative flex items-center justify-center min-h-[300px] sm:min-h-[400px] lg:min-h-[500px]">
-              {pageContent.globeImage ? (
-                <div className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px]">
-                  <img
-                    src={pageContent.globeImage}
-                    alt="Global AI Platform"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              ) : (
-                <div className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px] animate-spin" style={{ animationDuration: '30s' }}>
-                  {/* Globe circles - multiple layers for 3D effect */}
-                  <div className="absolute inset-0 rounded-full border-2 border-blue-500/40 dark:border-blue-400/40"></div>
-                  <div className="absolute inset-[30px] rounded-full border-2 border-blue-500/30 dark:border-blue-400/30"></div>
-                  <div className="absolute inset-[60px] rounded-full border-2 border-blue-500/25 dark:border-blue-400/25"></div>
-                  <div className="absolute inset-[90px] rounded-full border-2 border-blue-500/20 dark:border-blue-400/20"></div>
-                  <div className="absolute inset-[120px] rounded-full border-2 border-blue-500/15 dark:border-blue-400/15"></div>
-
-                  {/* Latitude lines */}
-                  <div className="absolute top-1/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
-                  <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 dark:via-blue-400/50 to-transparent"></div>
-                  <div className="absolute top-3/4 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
-
-                  {/* Longitude lines */}
-                  <div className="absolute top-0 bottom-0 left-1/4 w-px bg-gradient-to-b from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
-                  <div className="absolute top-0 bottom-0 left-1/2 w-px bg-gradient-to-b from-transparent via-blue-500/50 dark:via-blue-400/50 to-transparent"></div>
-                  <div className="absolute top-0 bottom-0 left-3/4 w-px bg-gradient-to-b from-transparent via-blue-500/40 dark:via-blue-400/40 to-transparent"></div>
-
-                  {/* Animated connection dots representing global reach */}
-                  <div className="absolute top-1/3 left-1/4 w-3 h-3 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse shadow-lg shadow-blue-500/50"></div>
-                  <div className="absolute top-1/2 right-1/3 w-2.5 h-2.5 rounded-full bg-purple-500 dark:bg-purple-400 animate-pulse shadow-lg shadow-purple-500/50" style={{ animationDelay: '0.3s' }}></div>
-                  <div className="absolute bottom-1/3 left-2/3 w-3 h-3 rounded-full bg-indigo-500 dark:bg-indigo-400 animate-pulse shadow-lg shadow-indigo-500/50" style={{ animationDelay: '0.7s' }}></div>
-                  <div className="absolute top-2/3 right-1/4 w-2 h-2 rounded-full bg-blue-400 dark:bg-blue-300 animate-pulse shadow-lg shadow-blue-400/50" style={{ animationDelay: '0.5s' }}></div>
-                  <div className="absolute top-1/4 right-1/2 w-2.5 h-2.5 rounded-full bg-purple-400 dark:bg-purple-300 animate-pulse shadow-lg shadow-purple-400/50" style={{ animationDelay: '1s' }}></div>
-                  <div className="absolute bottom-1/4 left-1/3 w-2 h-2 rounded-full bg-indigo-400 dark:bg-indigo-300 animate-pulse shadow-lg shadow-indigo-400/50" style={{ animationDelay: '1.2s' }}></div>
-
-                  {/* Connection lines between dots */}
-                  <svg className="absolute inset-0 w-full h-full" style={{ overflow: 'visible' }}>
-                    <line x1="25%" y1="33%" x2="66%" y2="50%" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1" className="animate-pulse" />
-                    <line x1="66%" y1="50%" x2="66%" y2="66%" stroke="rgba(147, 51, 234, 0.3)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '0.5s' }} />
-                    <line x1="66%" y1="66%" x2="75%" y2="66%" stroke="rgba(99, 102, 241, 0.3)" strokeWidth="1" className="animate-pulse" style={{ animationDelay: '1s' }} />
-                  </svg>
-
-                  {/* AI Tool Icons orbiting around the globe */}
-                  <div className="absolute inset-[-30px] sm:inset-[-40px] lg:inset-[-50px]">
-                    {/* Top icons */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-blue-500/30 to-indigo-500/30 dark:from-blue-500/20 dark:to-indigo-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse">
-                      <span className="text-lg sm:text-xl lg:text-2xl">✍️</span>
-                    </div>
-
-                    {/* Right side icons */}
-                    <div className="absolute top-1/4 right-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 dark:from-purple-500/20 dark:to-pink-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '0.5s' }}>
-                      <span className="text-lg sm:text-xl lg:text-2xl">🎨</span>
-                    </div>
-                    <div className="absolute top-1/2 right-[-15px] sm:right-[-20px] w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-green-500/30 to-emerald-500/30 dark:from-green-500/20 dark:to-emerald-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '1s' }}>
-                      <span className="text-lg sm:text-xl lg:text-2xl">💻</span>
-                    </div>
-                    <div className="absolute bottom-1/4 right-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-orange-500/30 to-amber-500/30 dark:from-orange-500/20 dark:to-amber-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '1.5s' }}>
-                      <span className="text-lg sm:text-xl lg:text-2xl">🎬</span>
-                    </div>
-
-                    {/* Bottom icons */}
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 dark:from-cyan-500/20 dark:to-blue-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '2s' }}>
-                      <span className="text-lg sm:text-xl lg:text-2xl">🎵</span>
-                    </div>
-
-                    {/* Left side icons */}
-                    <div className="absolute bottom-1/4 left-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-red-500/30 to-pink-500/30 dark:from-red-500/20 dark:to-pink-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '2.5s' }}>
-                      <span className="text-lg sm:text-xl lg:text-2xl">📊</span>
-                    </div>
-                    <div className="absolute top-1/2 left-[-15px] sm:left-[-20px] w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-teal-500/30 to-cyan-500/30 dark:from-teal-500/20 dark:to-cyan-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '3s' }}>
-                      <span className="text-lg sm:text-xl lg:text-2xl">💬</span>
-                    </div>
-                    <div className="absolute top-1/4 left-0 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-yellow-500/30 to-orange-500/30 dark:from-yellow-500/20 dark:to-orange-500/20 backdrop-blur-md border border-white/30 dark:border-white/20 flex items-center justify-center shadow-lg animate-pulse" style={{ animationDelay: '3.5s' }}>
-                      <span className="text-lg sm:text-xl lg:text-2xl">🔍</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Right side - Content */}
-            <div className="space-y-4 sm:space-y-6 px-4 sm:px-0">
-              <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 border border-blue-200/50 dark:border-blue-800/50">
-                <span className="text-xl sm:text-2xl">🌍</span>
-                <span className="text-[10px] sm:text-xs font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 uppercase tracking-wider">
-                  {pageContent.directoryBadge || "Global AI Platform"}
-                </span>
-              </div>
-              
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-400">
-                  {pageContent.directoryTitle || "The World's Best AI Tools Directory"}
-                </span>
-              </h2>
-              
-              <div className="space-y-3 sm:space-y-4 text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
-                <p>
-                  {pageContent.directoryDescription1 || "Lately, the site also posts articles that explain how each AI works. Found an AI tool that doesn't appear in the list? From now on, it is possible to submit new AIs so that they can be added to the ranking or the top 10."}
-                </p>
-                <p>
-                  {pageContent.directoryDescription2 || "Actually, Aixploria is a kind of directory and search engine dedicated to AI. With its simple and clean style, you can easily search using keywords like on a search engine."}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
         {/* Our Story */}

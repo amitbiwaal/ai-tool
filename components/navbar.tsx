@@ -12,6 +12,7 @@ import { getAvatarUrl, isDicebearUrl } from "@/lib/utils/images";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTheme } from "next-themes";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -23,6 +24,15 @@ const navigation = [
   { name: "Contact", href: "/contact" },
 ];
 
+interface HeaderContent {
+  siteName?: string;
+  siteTagline?: string;
+  logoUrlLight?: string;
+  logoUrlDark?: string;
+  topBarText?: string;
+  topBarContact?: string;
+}
+
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -31,9 +41,14 @@ export function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userAvatar, setUserAvatar] = useState(getAvatarUrl(null, undefined, "User"));
   const [avatarLoaded, setAvatarLoaded] = useState(false);
+  const [headerContent, setHeaderContent] = useState<HeaderContent>({});
+  const [headerContentLoaded, setHeaderContentLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { theme } = useTheme();
 
   useEffect(() => {
     checkAuth();
+    fetchHeaderContent();
     
     // Listen for storage changes
     const handleStorageChange = () => {
@@ -84,6 +99,31 @@ export function Navbar() {
     }
   };
 
+  const fetchHeaderContent = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/public/settings");
+      if (response.ok) {
+        const data = await response.json();
+        if (data.settings && data.settings.site) {
+          setHeaderContent({
+            siteName: data.settings.site.name,
+            siteTagline: data.settings.site.siteTagline,
+            logoUrlLight: data.settings.site.logoUrlLight,
+            logoUrlDark: data.settings.site.logoUrlDark,
+            topBarText: data.settings.site.topBarText,
+            topBarContact: data.settings.site.topBarContact,
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching header settings:", error);
+    } finally {
+      setHeaderContentLoaded(true);
+      setIsLoading(false);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       // Sign out from Supabase
@@ -130,29 +170,36 @@ export function Navbar() {
       <div className="hidden md:block bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white text-sm py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
           <span className="uppercase tracking-[0.2em] text-xs font-semibold">
-            AI Tools Directory
+            {headerContent.siteName || "AI Tools Directory"}
           </span>
           <span className="text-white/80 text-xs sm:text-sm text-center sm:text-left">
-            <span className="hidden lg:inline">Curated tools • Premium insights • </span>Business inquiries: partner@mostpopularaitools.com
+            <span className="hidden lg:inline">{headerContent.topBarText || "Curated tools • Premium insights • "}</span>{headerContent.topBarContact || "Business inquiries: partner@mostpopularaitools.com"}
           </span>
         </div>
       </div>
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-3 sm:py-4">
+        <div className="flex items-center justify-between py-0">
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/"
-              className="flex items-center gap-2 sm:gap-3 rounded-full border border-slate-200 bg-white px-2 sm:px-4 py-1.5 sm:py-2 shadow-sm hover:shadow-md transition-shadow dark:border-white/10 dark:bg-white/5"
+              className="flex items-center"
             >
-              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 dark:text-blue-300 flex-shrink-0" />
-              <div className="hidden sm:block">
-                <p className="text-xs sm:text-sm font-semibold leading-tight text-slate-900 dark:text-white">
-                  AI Tools Directory
-                </p>
-                <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-slate-500 dark:text-slate-300">
-                  EST. 2025
-                </p>
+              {isLoading ? (
+                <div className="flex-shrink-0 h-24 w-36 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+              ) : headerContentLoaded && (headerContent.logoUrlLight || headerContent.logoUrlDark) ? (
+                <div className="flex-shrink-0">
+                  <Image
+                    src={theme === 'dark' && headerContent.logoUrlDark ? headerContent.logoUrlDark : (headerContent.logoUrlLight || headerContent.logoUrlDark || '')}
+                    alt={headerContent.siteName || "Logo"}
+                    width={144}
+                    height={96}
+                    className="h-24 w-36 object-contain"
+                    unoptimized
+                  />
               </div>
+              ) : (
+                <Sparkles className="h-24 w-36 text-blue-600 dark:text-blue-300 flex-shrink-0" />
+              )}
             </Link>
           </div>
 

@@ -2,7 +2,18 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Sparkles } from "lucide-react";
+import { useTheme } from "next-themes";
+
+interface FooterContent {
+  siteName?: string;
+  description?: string;
+  logoUrl?: string;
+  logoUrlLight?: string;
+  logoUrlDark?: string;
+  copyrightText?: string;
+}
 
 const footerLinks = {
   product: [
@@ -26,12 +37,52 @@ const footerLinks = {
 };
 
 export function Footer() {
-  const [currentYear, setCurrentYear] = useState<number>(2024);
+  const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
+  const [footerContent, setFooterContent] = useState<FooterContent>({});
+  const [footerContentLoaded, setFooterContentLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { theme } = useTheme();
+
+  // Safe function to replace year placeholder
+  const replaceYearPlaceholder = (text: string, year: number): string => {
+    if (!text || typeof text !== 'string') return '';
+    try {
+      return text.split('{year}').join(year.toString());
+    } catch {
+      return text;
+    }
+  };
 
   useEffect(() => {
-    // Set year on client side to avoid hydration mismatch
+    // Set year on client side to avoid hydration mismatch (though we initialize with current year now)
     setCurrentYear(new Date().getFullYear());
+    // Fetch footer content
+    fetchFooterContent();
   }, []);
+
+  const fetchFooterContent = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/public/settings");
+      if (response.ok) {
+        const data = await response.json();
+        if (data.settings && data.settings.site) {
+          setFooterContent({
+            siteName: data.settings.site.name,
+            description: data.settings.site.description,
+            logoUrlLight: data.settings.site.logoUrlLight,
+            logoUrlDark: data.settings.site.logoUrlDark,
+            copyrightText: data.settings.site.copyrightText,
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching footer settings:", error);
+    } finally {
+      setFooterContentLoaded(true);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <footer className="relative bg-gradient-to-b from-slate-900 via-slate-900 to-black dark:from-[#0a0f1e] dark:via-[#0a0f1e] dark:to-black border-t border-slate-800/50">
@@ -44,22 +95,29 @@ export function Footer() {
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 gap-8 sm:gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Brand Column */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="space-y-4">
-              <Link href="/" className="inline-flex items-center gap-3 group">
-                <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 group-hover:from-blue-600 group-hover:to-purple-700 transition-all duration-300 shadow-lg group-hover:shadow-blue-500/25">
-                  <Sparkles className="h-6 w-6 text-white" />
+          <div className="lg:col-span-5 space-y-2">
+            <div className="space-y-0.5">
+              <Link href="/" className="inline-flex items-center group">
+                {isLoading ? (
+                  <div className="flex-shrink-0 h-24 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                ) : footerContentLoaded && (footerContent.logoUrlLight || footerContent.logoUrlDark) ? (
+                  <div className="flex-shrink-0">
+                    <Image
+                      src={theme === 'dark' && footerContent.logoUrlDark ? footerContent.logoUrlDark : (footerContent.logoUrlLight || footerContent.logoUrlDark || '')}
+                      alt={footerContent.siteName || "Logo"}
+                      width={128}
+                      height={96}
+                      className="h-24 w-32 object-contain"
+                      unoptimized
+                    />
                 </div>
-                <div>
-                  <span className="text-2xl font-bold text-white group-hover:text-blue-100 transition-colors">
-                    AI Tools Directory
-                  </span>
-                  <div className="text-xs text-blue-400 font-medium">EST. 2025</div>
-                </div>
+                ) : (
+                  <Sparkles className="h-24 w-32 text-white flex-shrink-0" />
+                )}
               </Link>
 
             <p className="text-base leading-relaxed text-slate-300 max-w-lg">
-              Discover the best AI tools to supercharge your productivity. Our curated collection features cutting-edge artificial intelligence solutions for every need.
+              {footerContent.description || "Discover the best AI tools to supercharge your productivity. Our curated collection features cutting-edge artificial intelligence solutions for every need."}
             </p>
           </div>
           </div>
@@ -148,7 +206,10 @@ export function Footer() {
         <div className="mt-12 sm:mt-16 pt-8 border-t border-slate-800/50">
           <div className="text-center">
             <p className="text-sm text-slate-400">
-              &copy; {currentYear} AI Tools Directory. All rights reserved.
+              {footerContentLoaded && footerContent.copyrightText
+                ? footerContent.copyrightText.split('{year}').join((currentYear || 2024).toString())
+                : `© ${currentYear || 2024} ${footerContent.siteName || "AI Tools Directory"}. All rights reserved.`
+              }
             </p>
           </div>
         </div>

@@ -42,6 +42,7 @@ export default function ContactPage({
 
   // Content from database
   const [pageContent, setPageContent] = useState<Record<string, string>>({});
+  const [contentLoaded, setContentLoaded] = useState(false);
 
   // Fetch page content from database
   useEffect(() => {
@@ -64,6 +65,8 @@ export default function ContactPage({
       setPageContent(content);
     } catch (error) {
       console.error("Error fetching page content:", error);
+    } finally {
+      setContentLoaded(true);
     }
   };
 
@@ -131,61 +134,129 @@ export default function ContactPage({
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden select-none"
+         style={{
+           userSelect: 'none',
+           WebkitUserSelect: 'none',
+           MozUserSelect: 'none',
+           msUserSelect: 'none',
+           touchAction: 'pan-y',
+           WebkitTouchCallout: 'none',
+           WebkitUserDrag: 'none'
+         }}>
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20 border-b">
         <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16 lg:py-24 text-center">
-          <Badge className="mb-4 sm:mb-6 bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 text-xs sm:text-sm">
-            {pageContent.heroBadge || "Get in Touch"}
-          </Badge>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent px-4">
-            {pageContent.heroTitle || "We're Here to Help"}
-          </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
-            {pageContent.heroDescription || "Have a question, suggestion, or just want to say hello? We'd love to hear from you."}
-          </p>
+          {!contentLoaded ? (
+            <div className="space-y-4">
+              <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+              <div className="h-12 w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+              <div className="h-4 w-80 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+            </div>
+          ) : (
+            <>
+              <Badge className="mb-4 sm:mb-6 bg-primary/10 text-primary hover:bg-primary/20 border-primary/20 text-xs sm:text-sm">
+                {pageContent.heroBadge || "Get in Touch"}
+              </Badge>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                {pageContent.heroTitle || "We're Here to Help"}
+              </h1>
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto">
+                {pageContent.heroDescription || "Have a question, suggestion, or just want to say hello? We'd love to hear from you."}
+              </p>
+            </>
+          )}
         </div>
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16">
         {/* Contact Reasons */}
         <div className="mb-12 sm:mb-16">
-          <div className="text-center mb-8 sm:mb-12 px-4">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">{pageContent.howCanWeHelpTitle || "How Can We Help?"}</h2>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
-              {pageContent.howCanWeHelpDescription || "Choose the best way to reach us based on your needs"}
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-4 sm:px-0">
-            {contactReasons.map((reason, index) => (
-              <Card key={index} className="border-2 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group">
-                <CardContent className="pt-6 text-center">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${reason.color.includes('blue') ? 'from-blue-500/10 to-blue-600/10' : reason.color.includes('purple') ? 'from-purple-500/10 to-purple-600/10' : reason.color.includes('pink') ? 'from-pink-500/10 to-pink-600/10' : 'from-orange-500/10 to-orange-600/10'} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
-                    <reason.icon className={`w-7 h-7 ${reason.color}`} />
-                  </div>
-                  <h3 className="font-bold mb-2">{reason.title}</h3>
-                  <p className="text-sm text-muted-foreground">{reason.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {!contentLoaded ? (
+            <div className="space-y-8">
+              <div className="text-center mb-8 sm:mb-12 px-4">
+                <div className="h-8 w-48 sm:w-80 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-4"></div>
+                <div className="h-4 w-64 sm:w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-4 sm:px-0">
+                {[...Array(4)].map((_, index) => (
+                  <Card key={index} className="border-2">
+                    <CardContent className="pt-6 text-center">
+                      <div className="w-14 h-14 bg-gray-200 dark:bg-gray-700 rounded-2xl mx-auto mb-4 animate-pulse"></div>
+                      <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto mb-2"></div>
+                      <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mx-auto"></div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="text-center mb-8 sm:mb-12 px-4">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">{pageContent.howCanWeHelpTitle || "How Can We Help?"}</h2>
+                <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+                  {pageContent.howCanWeHelpDescription || "Choose the best way to reach us based on your needs"}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                {contactReasons.map((reason, index) => (
+                  <Card key={index} className="border-2 hover:shadow-xl transition-all hover:-translate-y-1 cursor-pointer group">
+                    <CardContent className="pt-6 text-center">
+                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${reason.color.includes('blue') ? 'from-blue-500/10 to-blue-600/10' : reason.color.includes('purple') ? 'from-purple-500/10 to-purple-600/10' : reason.color.includes('pink') ? 'from-pink-500/10 to-pink-600/10' : 'from-orange-500/10 to-orange-600/10'} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                        <reason.icon className={`w-7 h-7 ${reason.color}`} />
+                      </div>
+                      <h3 className="font-bold mb-2">{reason.title}</h3>
+                      <p className="text-sm text-muted-foreground">{reason.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Main Contact Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 px-4 sm:px-0">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <Card className="border-2">
-              <CardHeader className="p-4 sm:p-6">
-                <CardTitle className="text-xl sm:text-2xl flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-                  {pageContent.formTitle || "Send Us a Message"}
-                </CardTitle>
-                <CardDescription className="text-sm">
-                  {pageContent.formDescription || "Fill out the form below and we'll get back to you as soon as possible"}
-                </CardDescription>
-              </CardHeader>
+            {!contentLoaded ? (
+              <Card className="border-2">
+                <CardHeader className="p-4 sm:p-6">
+                  <div className="h-8 w-48 sm:w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+                  <div className="h-4 w-64 sm:w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                </CardHeader>
+                <CardContent className="p-4 sm:p-6">
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                        <div className="h-12 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                        <div className="h-12 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                      <div className="h-24 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                    </div>
+                    <div className="h-12 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-2">
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-xl sm:text-2xl flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                    {pageContent.formTitle || "Send Us a Message"}
+                  </CardTitle>
+                  <CardDescription className="text-sm">
+                    {pageContent.formDescription || "Fill out the form below and we'll get back to you as soon as possible"}
+                  </CardDescription>
+                </CardHeader>
               <CardContent className="p-4 sm:p-6">
                 <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                   <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2">
@@ -306,29 +377,70 @@ export default function ContactPage({
                 </form>
               </CardContent>
             </Card>
+            )}
           </div>
 
           {/* Contact Info Sidebar */}
           <div className="space-y-4 sm:space-y-6">
-            {/* Email Card */}
-            <Card className="border-2 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20">
-              <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-4">
-                  <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                </div>
-                <h3 className="font-bold text-base sm:text-lg mb-2">{pageContent.emailLabelText || "Email Us"}</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground mb-3">
-                  {pageContent.emailDescription || "For general inquiries and support"}
-                </p>
-                <a
-                  href={`mailto:${pageContent.emailValue || "hello@mostpopularaitools.com"}`}
-                  className="text-primary hover:underline font-medium flex items-center gap-1 text-sm sm:text-base break-all"
-                >
-                  {pageContent.emailValue || "hello@mostpopularaitools.com"}
-                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                </a>
-              </CardContent>
-            </Card>
+            {!contentLoaded ? (
+              <>
+                {/* Loading Email Card */}
+                <Card className="border-2">
+                  <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse mb-4"></div>
+                    <div className="h-5 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+                    <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-3"></div>
+                    <div className="h-4 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                  </CardContent>
+                </Card>
+
+                {/* Loading Response Time Card */}
+                <Card className="border-2">
+                  <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse mb-4"></div>
+                    <div className="h-5 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4"></div>
+                    <div className="space-y-2">
+                      <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                      <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                      <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Loading Quick Links Card */}
+                <Card className="border-2">
+                  <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse mb-4"></div>
+                    <div className="h-5 w-28 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4"></div>
+                    <div className="space-y-2">
+                      <div className="h-4 w-36 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                      <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                      <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            ) : (
+              <>
+                {/* Email Card */}
+                <Card className="border-2 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20">
+                  <CardContent className="pt-4 sm:pt-6 p-4 sm:p-6">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 sm:mb-4">
+                      <Mail className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                    </div>
+                    <h3 className="font-bold text-base sm:text-lg mb-2">{pageContent.emailLabelText || "Email Us"}</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-3">
+                      {pageContent.emailDescription || "For general inquiries and support"}
+                    </p>
+                    <a
+                      href={`mailto:${pageContent.emailValue || "hello@mostpopularaitools.com"}`}
+                      className="text-primary hover:underline font-medium flex items-center gap-1 text-sm sm:text-base break-all"
+                    >
+                      {pageContent.emailValue || "hello@mostpopularaitools.com"}
+                      <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                    </a>
+                  </CardContent>
+                </Card>
 
             {/* Response Time Card */}
             <Card className="border-2">
@@ -383,31 +495,49 @@ export default function ContactPage({
                 </div>
               </CardContent>
             </Card>
+              </>
+            )}
           </div>
         </div>
 
         {/* FAQ Prompt */}
-        <Card className="mt-12 sm:mt-16 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white border-0 overflow-hidden relative mx-4 sm:mx-0">
-          <div className="absolute inset-0 bg-grid-white/[0.05]" />
-          <CardContent className="relative pt-6 sm:pt-8 pb-6 sm:pb-8 px-4 sm:px-6">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
-              <div className="text-center md:text-left">
-                <h3 className="text-lg sm:text-xl font-bold mb-2">{pageContent.faqTitle || "Looking for Quick Answers?"}</h3>
-                <p className="text-sm sm:text-base text-white/90">
-                  {pageContent.faqDescription || "Check out our FAQ section or browse our help documentation"}
-                </p>
+        {!contentLoaded ? (
+          <Card className="mt-12 sm:mt-16 border-2 mx-4 sm:mx-0">
+            <CardContent className="pt-6 sm:pt-8 pb-6 sm:pb-8 px-4 sm:px-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
+                <div className="text-center md:text-left flex-1">
+                  <div className="h-6 w-48 sm:w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+                  <div className="h-4 w-60 sm:w-80 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                </div>
+                <div className="w-full sm:w-auto">
+                  <div className="h-12 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                </div>
               </div>
-              <div className="flex gap-3 flex-shrink-0 w-full sm:w-auto">
-                <Link href="/tools">
-                  <Button size="lg" variant="secondary" className="gap-2">
-                    {pageContent.faqButton || "Browse Tools"}
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="mt-12 sm:mt-16 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white border-0 overflow-hidden relative mx-4 sm:mx-0">
+            <div className="absolute inset-0 bg-grid-white/[0.05]" />
+            <CardContent className="relative pt-6 sm:pt-8 pb-6 sm:pb-8 px-4 sm:px-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
+                <div className="text-center md:text-left">
+                  <h3 className="text-lg sm:text-xl font-bold mb-2">{pageContent.faqTitle || "Looking for Quick Answers?"}</h3>
+                  <p className="text-sm sm:text-base text-white/90">
+                    {pageContent.faqDescription || "Check out our FAQ section or browse our help documentation"}
+                  </p>
+                </div>
+                <div className="flex gap-3 flex-shrink-0 w-full sm:w-auto">
+                  <Link href="/tools">
+                    <Button size="lg" variant="secondary" className="gap-2">
+                      {pageContent.faqButton || "Browse Tools"}
+                      <ArrowRight className="w-4 h-4" />
+                    </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

@@ -259,15 +259,15 @@ export default function CategoriesPage() {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16 lg:px-8 lg:py-24">
       {/* Header */}
           <div className="max-w-3xl mx-auto text-center">
-            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-              <div className="p-2 sm:p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
-                <Grid3x3 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-          </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <div className="p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg flex-shrink-0">
+                <Grid3x3 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
                 {pageContent.heroTitle || "Browse Categories"}
-          </h1>
-        </div>
-            <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-6 sm:mb-8 px-4">
+              </h1>
+            </div>
+            <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
               {(pageContent.heroDescription || `Discover ${totalTools.toLocaleString()}+ AI tools organized by their primary use cases. Find the perfect solution for your needs.`).replace("{totalTools}", totalTools.toLocaleString())}
             </p>
 

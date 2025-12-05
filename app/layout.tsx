@@ -4,6 +4,7 @@ import "./globals.css";
 import { LayoutWrapper } from "@/components/layout-wrapper";
 import { Providers } from "@/components/providers";
 import { GoogleAnalytics } from "@/components/google-analytics";
+import { DynamicFavicon } from "@/components/dynamic-favicon";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -44,6 +45,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <DynamicFavicon />
+      </head>
       <body className={poppins.className} suppressHydrationWarning>
         <GoogleAnalytics />
         <Providers>

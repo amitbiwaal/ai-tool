@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
       settingsObj[setting.category][setting.key] = setting.value;
     });
 
+
     return NextResponse.json({ settings: settingsObj, raw: data || [] });
   } catch (error: any) {
     console.error("Unexpected error:", error);
@@ -179,6 +180,7 @@ export async function POST(request: NextRequest) {
         { status: 207 } // Multi-Status
       );
     }
+
 
     return NextResponse.json({
       message: "Settings saved successfully",
